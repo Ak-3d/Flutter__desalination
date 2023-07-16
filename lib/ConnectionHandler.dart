@@ -69,8 +69,8 @@ class ConnectionHandler{
     try {
       var multiCast =
       // Endpoint.broadcast(port: const Port(54321));
-      // Endpoint.multicast(InternetAddress("239.1.2.3"), port: const Port(54321));
-      Endpoint.multicast(InternetAddress("0.0.0.0"), port: const Port(53));
+      Endpoint.multicast(InternetAddress("239.1.2.3"), port: const Port(54321));
+      // Endpoint.multicast(InternetAddress("0.0.0.0"), port: const Port(53));
 
       receiver = await UDP.bind(multiCast);
       _streamUDP = receiver.asStream().listen((data) {
