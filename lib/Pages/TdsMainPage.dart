@@ -1,13 +1,10 @@
-
-
-
 import 'dart:async';
 import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:final_project/ChartTds_page.dart';
+import 'package:final_project/Components/ChartTds_page.dart';
 import 'package:udp/udp.dart';
-import 'CardDash.dart';
+import '../Components/CardDash.dart';
 
 
 
@@ -46,7 +43,7 @@ class TdsMainPage extends StatelessWidget {
                 txt: status,
                 rows: 3,
                 cols: 4,
-                widget: ChartTdsPage(),
+                child: ChartTds(),
               ),
               CardDash(txt: status),
               CardDash(txt: status),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'TdsMainPage.dart';
-import 'Dashboard.dart';
+import 'Pages/TdsMainPage.dart';
+import 'Pages/Dashboard.dart';
 
 void main() => runApp(const MyApp());
 

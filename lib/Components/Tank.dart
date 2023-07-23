@@ -1,14 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:final_project/Resources.dart';
 
 class Tank extends StatelessWidget {
-  const Tank({Key? key, this.value = 0, this.width, this.height})
+  const Tank({Key? key, this.value = 0})
       : super(key: key);
 
-  final double? width;
-  final double? height;
   final double value;
 
   @override
@@ -33,8 +29,8 @@ class Tank extends StatelessWidget {
             .toInt());
 
     return Container(
-      height: MediaQuery.of(context).size.height / 5,
-      width: MediaQuery.of(context).size.width / 7,
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width / 6,
       decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.bottomCenter,

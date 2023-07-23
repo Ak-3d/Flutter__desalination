@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:async';
-import 'Resources.dart';
+import '../Resources.dart';
 import 'dart:math' as math;
 
-class ChartTdsPage extends StatefulWidget {
+class ChartTds extends StatefulWidget {
   @override
-  _ChartTdsPageState createState() => _ChartTdsPageState();
+  _ChartTdsState createState() => _ChartTdsState();
 }
 
-class _ChartTdsPageState extends State<ChartTdsPage> {
+class _ChartTdsState extends State<ChartTds> {
   late List<LiveData> chartData;
   late ChartSeriesController _chartSeriesController;
 

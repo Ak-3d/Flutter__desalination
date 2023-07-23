@@ -6,8 +6,8 @@ import 'package:udp/udp.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'CardDash.dart';
-import 'TankCard.dart';
+import '../Components/CardDash.dart';
+import '../Components/TankCard.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({
@@ -126,7 +126,7 @@ class _Dashboard extends State<Dashboard> {
               CardDash(txt: status),
               CardDash(
                 txt: status,
-                widget: ElevatedButton(
+                child: ElevatedButton(
                   onPressed: () {
                     // Navigate to the second page when the button is pressed
                     Navigator.pushNamed(context, '/TdsMainPage');
@@ -144,7 +144,7 @@ class _Dashboard extends State<Dashboard> {
                 txt: status,
                 cols: 3,
                 rows: 2,
-                widget: TankCard(v1: value, v2: value),
+                child: TankCard(v1: value, v2: value),
               ),
               CardDash(
                 txt: status,
@@ -152,7 +152,7 @@ class _Dashboard extends State<Dashboard> {
               ),
               CardDash(
                 txt: status,
-                widget: Slider(
+                child: Slider(
                     value: value,
                     min: 0,
                     max: 100,
@@ -200,38 +200,9 @@ class _Dashboard extends State<Dashboard> {
                 }
               },
             ),
-            // Form(
-            //   child: TextFormField(
-            //     controller: _controller,
-            //     decoration: const InputDecoration(labelText: 'Send a message'),
-            //   ),
-            // ),
-            // const SizedBox(height: 24),
-            // Text("status: $status"),
-            // Text("UDP datagram found: $datagramUDP"),
-            // Text("Connected to: $connectedIP"),
-            // Text("Receiving: \n$msgs"),
-            // Text("debug: $debugTxt"),
-            // Text("Error: $errTxt"),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     // if(!ConnectionHandler.isWebsocketCreated) {
-      //     //   ConnectionHandler.connectWebSocket(
-      //     //       listen: listenWebsocket, interrupted: inturUDP);
-      //     // }
-      //     // else {
-      //     //   ConnectionHandler.closeWebsocket();
-      //     //   setState(() {
-      //     //     errTxt = "done";
-      //     //   });
-      //     // }
-      //   },//_sendMessage,
-      //   tooltip: 'Send message',
-      //   child: const Icon(Icons.send),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
