@@ -23,7 +23,6 @@ class CardDash extends StatelessWidget {
     return StaggeredGridTile.count(
       crossAxisCellCount: cols,
       mainAxisCellCount: rows,
-      
       child: Container(
         decoration: const BoxDecoration(
             color: Resources.bgcolor_100,
@@ -35,12 +34,13 @@ class CardDash extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-              child: Text(txt, 
+              child: Text(
+                txt,
                 textAlign: TextAlign.left,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             Expanded(

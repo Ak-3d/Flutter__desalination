@@ -1,4 +1,5 @@
 import 'dart:async';
+// import 'dart:html';
 import 'package:final_project/Components/Common.dart';
 import 'package:udp/udp.dart';
 import 'package:flutter/material.dart';
@@ -16,75 +17,15 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _Dashboard();
 }
 
-class _Dashboard extends State<Dashboard> {
+class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   String status = "";
-  String connectedIP = "";
-  String foundIP = "";
   String msgs = "";
-
   double value = 0;
-
-  void listenWebsocket(data) {
-    setState(() {
-      status = "Connected and Receiving messages";
-      connectedIP = foundIP;
-      msgs = '${data.toString()}\n';
-    });
-  }
-
-  void listenUDP(data) {
-    var r = RegExp(r"^(\d{1,3}\.){3}\d{1,3}$");
-    var substr = data.toString().substring(4);
-    setState(() {
-      status = "Searching UDP multicast";
-    });
-
-    if (r.hasMatch(substr)) {
-      setState(() {
-        status = "trying to Connect to potential IP";
-        foundIP = substr;
-      });
-      ConnectionHandler.closeUDP();
-      ConnectionHandler.connectWebSocket(
-          ipaddress: substr,
-          listen: listenWebsocket,
-          interrupted: inturWebsocket);
-    }
-  }
-
-  void inturUDP(intur) {
-    setState(() {
-      status = "Error in UDP connection";
-      ConnectionHandler.dispose();
-    });
-  }
-
-  void inturWebsocket(intur) {
-    setState(() {
-      status = "Error in Websocket connection";
-      ConnectionHandler.dispose();
-    });
-  }
-
-  void clearMsg() {
-    connectedIP = "";
-    // msgs = "";
-  }
 
   @override
   void initState() {
-    ConnectionHandler.connectUDP(
-        listen: listenUDP,
-        interrupted: inturUDP,
-        connected: () {
-          setState(() {
-            status = "Connected successfully";
-          });
-        }).then((value) {
-      setState(() {
-        status = "Connecting to UDP";
-      });
-    });
+    ConnectionHandler.setInterface(this);
+    ConnectionHandler.connectUDP();
     super.initState();
   }
 
@@ -96,35 +37,37 @@ class _Dashboard extends State<Dashboard> {
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(txt: status),
-          CardDash(txt: status),
+          CardDash(txt: 'Message', child: Text(msgs)),
           CardDash(
-            txt: status,
+            txt: 'status',
+            child: Text(status),
+          ),
+          CardDash(
+            txt: 'TDS',
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/TdsMainPage');
+                pushEdited(
+                    context: context,
+                    connectionInterface: this,
+                    namedRoute: '/TdsMainPage');
               },
-              child: Text('TDS'),
+              child: const Text('TDS'),
             ),
           ),
-          CardDash(txt: status),
-          CardDash(txt: status),
+          CardDash(txt: 'Degree'),
+          CardDash(txt: 'Duration'),
           CardDash(
-            txt: status,
             rows: 2,
           ),
           CardDash(
-            txt: status,
             cols: 3,
             rows: 2,
             child: TankCard(v1: value, v2: value),
           ),
           CardDash(
-            txt: status,
             rows: 2,
           ),
           CardDash(
-            txt: status,
             child: Slider(
                 value: value,
                 min: 0,
@@ -149,5 +92,28 @@ class _Dashboard extends State<Dashboard> {
   void dispose() {
     super.dispose();
     ConnectionHandler.dispose();
+  }
+
+  @override
+  void connected() {
+    setState(() {
+      status = 'Connected';
+    });
+  }
+
+  @override
+  void interrupted(data) {
+    setState(() {
+      status = 'Disconnect: $data';
+    });
+  }
+
+  @override
+  void listen(data) {
+    List<String> d = data.toString().split(':');
+    setState(() {
+      msgs = data;
+      value = double.parse(d[1]);
+    });
   }
 }

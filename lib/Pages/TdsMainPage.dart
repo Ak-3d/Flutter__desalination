@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:final_project/Components/Common.dart';
+import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -13,9 +14,16 @@ class TdsMainPage extends StatefulWidget {
   State<TdsMainPage> createState() => _TdsMainPageState();
 }
 
-class _TdsMainPageState extends State<TdsMainPage> {
+class _TdsMainPageState extends State<TdsMainPage>
+    implements ConnectionInterface {
   String status = "";
   double value = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    ConnectionHandler.setInterface(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class _TdsMainPageState extends State<TdsMainPage> {
           CardDash(txt: status),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              popEdited(context);
             },
             child: Text('Go Back'),
           ),
@@ -48,5 +56,20 @@ class _TdsMainPageState extends State<TdsMainPage> {
         ],
       ),
     ]);
+  }
+
+  @override
+  void connected() {}
+
+  @override
+  void interrupted(data) {
+    // TODO: implement interrupted
+  }
+
+  @override
+  void listen(data) {
+    setState(() {
+      status = data;
+    });
   }
 }
