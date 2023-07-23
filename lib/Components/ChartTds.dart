@@ -18,7 +18,7 @@ class _ChartTdsState extends State<ChartTds> {
   @override
   void initState() {
     chartData = getChartData();
-    Timer.periodic(const Duration(milliseconds: 1000), updateDataSource);
+    Timer.periodic(const Duration(milliseconds: 100), updateDataSource);
     super.initState();
   }
 
@@ -29,8 +29,8 @@ class _ChartTdsState extends State<ChartTds> {
             backgroundColor: Resources.bgcolor_100,
             body: SfCartesianChart(
                 title: ChartTitle(text: "Total Dissolved Solid Chart"),
-                series: <LineSeries<LiveData, double>>[
-                  LineSeries<LiveData, double>(
+                series: <SplineSeries<LiveData, double>>[
+                  SplineSeries<LiveData, double>(
                     onRendererCreated: (ChartSeriesController controller) {
                       _chartSeriesController = controller;
                     },
