@@ -17,18 +17,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  final TextEditingController _controller = TextEditingController();
-
   String status = "";
-  String foundIP = "";
-  String datagramUDP = "";
   String connectedIP = "";
+  String foundIP = "";
   String msgs = "";
 
-  String errTxt = "";
-  String debugTxt = "";
-
-  late UDP receiver;
   double value = 0;
 
   void listenWebsocket(data) {
@@ -44,7 +37,6 @@ class _Dashboard extends State<Dashboard> {
     var substr = data.toString().substring(4);
     setState(() {
       status = "Searching UDP multicast";
-      datagramUDP = data;
     });
 
     if (r.hasMatch(substr)) {
@@ -63,7 +55,6 @@ class _Dashboard extends State<Dashboard> {
   void inturUDP(intur) {
     setState(() {
       status = "Error in UDP connection";
-      errTxt = "Error UDP: $intur";
       ConnectionHandler.dispose();
     });
   }
@@ -71,13 +62,11 @@ class _Dashboard extends State<Dashboard> {
   void inturWebsocket(intur) {
     setState(() {
       status = "Error in Websocket connection";
-      errTxt = intur;
       ConnectionHandler.dispose();
     });
   }
 
   void clearMsg() {
-    datagramUDP = "";
     connectedIP = "";
     // msgs = "";
   }
@@ -146,7 +135,7 @@ class _Dashboard extends State<Dashboard> {
                   });
                 }),
           ),
-          StaggeredGridTile.extent(
+          const StaggeredGridTile.extent(
             mainAxisExtent: 500,
             crossAxisCellCount: 3,
             child: Text(""),
@@ -154,12 +143,6 @@ class _Dashboard extends State<Dashboard> {
         ],
       ),
     ]);
-  }
-
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      // _channel.sink.add(_controller.text);
-    }
   }
 
   @override

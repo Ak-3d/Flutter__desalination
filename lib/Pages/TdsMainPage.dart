@@ -4,23 +4,19 @@ import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:final_project/Components/ChartTds.dart';
-import 'package:udp/udp.dart';
 import '../Components/CardDash.dart';
 
-class TdsMainPage extends StatelessWidget {
+class TdsMainPage extends StatefulWidget {
+  const TdsMainPage({Key? key}) : super(key: key);
+
+  @override
+  State<TdsMainPage> createState() => _TdsMainPageState();
+}
+
+class _TdsMainPageState extends State<TdsMainPage> {
   String status = "";
-  String foundIP = "";
-  String datagramUDP = "";
-  String connectedIP = "";
-  String msgs = "";
-
-  String errTxt = "";
-  int _num = 0;
-  String debugTxt = "";
-
-  late StreamSubscription _stream;
-  late UDP receiver;
   double value = 0;
+
   @override
   Widget build(BuildContext context) {
     return AppScofflding(title: 'TDS', listView: [
@@ -40,7 +36,6 @@ class TdsMainPage extends StatelessWidget {
           CardDash(txt: status),
           ElevatedButton(
             onPressed: () {
-              // Navigate back to the previous page when the button is pressed
               Navigator.pop(context);
             },
             child: Text('Go Back'),

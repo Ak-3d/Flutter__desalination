@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:final_project/Resources.dart';
 
 class Tank extends StatelessWidget {
-  const Tank({Key? key, this.value = 0})
+  const Tank({Key? key, this.value = 0, this.isFilling = false})
       : super(key: key);
 
   final double value;
+  final bool isFilling;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class Tank extends StatelessWidget {
           gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-              colors: [actualColor, Colors.grey],
+              colors: [actualColor, Resources.tankNeutralColor],
               stops: [actualValue - 0.1, actualValue]),
           borderRadius: const BorderRadius.all(Radius.circular(20))),
       child: Center(

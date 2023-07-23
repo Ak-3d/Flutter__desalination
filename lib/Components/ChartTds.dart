@@ -5,6 +5,8 @@ import '../Resources.dart';
 import 'dart:math' as math;
 
 class ChartTds extends StatefulWidget {
+  const ChartTds({Key? key}) : super(key: key);
+
   @override
   _ChartTdsState createState() => _ChartTdsState();
 }
