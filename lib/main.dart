@@ -12,9 +12,7 @@ class MyApp extends StatelessWidget {
     const title = 'Water Desalination Project';
     return MaterialApp(
       title: title,
-      home: const Dashboard(
-        title: title,
-      ),
+      home: const Dashboard(),
       routes: {
         '/TdsMainPage': (context) => TdsMainPage(),
       },

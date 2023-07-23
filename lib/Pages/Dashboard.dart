@@ -1,7 +1,5 @@
-
-
 import 'dart:async';
-import 'package:final_project/Resources.dart';
+import 'package:final_project/Components/Common.dart';
 import 'package:udp/udp.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/ConnectionHandler.dart';
@@ -12,10 +10,7 @@ import '../Components/TankCard.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({
     super.key,
-    required this.title,
   });
-
-  final String title;
 
   @override
   State<Dashboard> createState() => _Dashboard();
@@ -31,10 +26,8 @@ class _Dashboard extends State<Dashboard> {
   String msgs = "";
 
   String errTxt = "";
-  int _num = 0;
   String debugTxt = "";
 
-  late StreamSubscription _stream;
   late UDP receiver;
   double value = 0;
 
@@ -108,102 +101,59 @@ class _Dashboard extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Resources.bgcolor,
-      appBar: AppBar(
-        title: Text(widget.title), // add it to resources
-        backgroundColor: Resources.bgcolor_100,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(children: [
-          StaggeredGrid.count(
-            crossAxisCount: 5,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            children: [
-              CardDash(txt: status),
-              CardDash(txt: status),
-              CardDash(
-                txt: status,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the second page when the button is pressed
-                    Navigator.pushNamed(context, '/TdsMainPage');
-                  },
-                  child: Text('TDS'),
-                ),
-              ),
-              CardDash(txt: status),
-              CardDash(txt: status),
-              CardDash(
-                txt: status,
-                rows: 2,
-              ),
-              CardDash(
-                txt: status,
-                cols: 3,
-                rows: 2,
-                child: TankCard(v1: value, v2: value),
-              ),
-              CardDash(
-                txt: status,
-                rows: 2,
-              ),
-              CardDash(
-                txt: status,
-                child: Slider(
-                    value: value,
-                    min: 0,
-                    max: 100,
-                    onChanged: (v) {
-                      setState(() {
-                        value = v;
-                      });
-                    }),
-              ),
-              StaggeredGridTile.extent(
-                mainAxisExtent: 500,
-                crossAxisCellCount: 3,
-                child: Text(""),
-              )
-            ],
-          ),
-        ]),
-      ),
-      bottomSheet: Container(
-        child: Row(
-          children: [
-            TextButton(
-              child: const Text('reconnect'),
+    return AppScofflding(title: 'Dashboard', listView: [
+      StaggeredGrid.count(
+        crossAxisCount: 5,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        children: [
+          CardDash(txt: status),
+          CardDash(txt: status),
+          CardDash(
+            txt: status,
+            child: ElevatedButton(
               onPressed: () {
-                if (ConnectionHandler.isWebsocketCreated ||
-                    ConnectionHandler.isUDPCreated) {
-                  setState(() {
-                    status = "Connection is off";
-                  });
-                  clearMsg();
-                  ConnectionHandler.dispose();
-                } else {
-                  ConnectionHandler.connectUDP(
-                      listen: listenUDP,
-                      interrupted: inturUDP,
-                      connected: () {
-                        setState(() {
-                          status = "Connected successfully";
-                        });
-                      }).then((value) {
-                    setState(() {
-                      status = "Connecting to UDP";
-                    });
-                  });
-                }
+                Navigator.pushNamed(context, '/TdsMainPage');
               },
+              child: Text('TDS'),
             ),
-          ],
-        ),
+          ),
+          CardDash(txt: status),
+          CardDash(txt: status),
+          CardDash(
+            txt: status,
+            rows: 2,
+          ),
+          CardDash(
+            txt: status,
+            cols: 3,
+            rows: 2,
+            child: TankCard(v1: value, v2: value),
+          ),
+          CardDash(
+            txt: status,
+            rows: 2,
+          ),
+          CardDash(
+            txt: status,
+            child: Slider(
+                value: value,
+                min: 0,
+                max: 100,
+                onChanged: (v) {
+                  setState(() {
+                    value = v;
+                  });
+                }),
+          ),
+          StaggeredGridTile.extent(
+            mainAxisExtent: 500,
+            crossAxisCellCount: 3,
+            child: Text(""),
+          )
+        ],
       ),
-    );
+    ]);
   }
 
   void _sendMessage() {

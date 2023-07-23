@@ -1,26 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import '../ConnectionHandler.dart';
+import '../Resources.dart';
 
 class AppScofflding extends StatelessWidget {
-  const AppScofflding({Key? key, final String this.title = 'title', required this.widget}) : super(key: key);
+  const AppScofflding(
+      {Key? key, final this.title = 'title', required this.listView})
+      : super(key: key);
 
   final String title;
-  final Widget widget;
+  final List<Widget> listView;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar:AppBar(
-          title: Title(
-            color: Colors.black,
-            title: title,
-            child: Text(title),
-            ),
-          ),
-          body: widget,
+    return Scaffold(
+      backgroundColor: Resources.bgcolor,
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Resources.bgcolor,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: listView,
         ),
+      ),
+      bottomSheet: Row(
+        //TODO this is temprary
+        children: [
+          TextButton(
+            child: const Text('reconnect'),
+            onPressed: () {
+              if (ConnectionHandler.isWebsocketCreated ||
+                  ConnectionHandler.isUDPCreated) {
+                ConnectionHandler.dispose();
+              } else {
+                ConnectionHandler.connectUDP();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
