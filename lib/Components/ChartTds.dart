@@ -2,23 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:async';
 import '../Resources.dart';
-import 'dart:math' as math;
 
 class ChartTds extends StatefulWidget {
-  const ChartTds({Key? key}) : super(key: key);
+  final List<LiveData> chartData;
+  final void Function(ChartSeriesController controller) onRendererCreated;
+
+  final double? xMin;
+  final double? xMax;
+  final double? yMin;
+  final double? yMax;
+
+  const ChartTds(
+      {Key? key,
+      required this.chartData,
+      required this.onRendererCreated,
+      this.xMax,
+      this.xMin,
+      this.yMax,
+      this.yMin})
+      : super(key: key);
 
   @override
   _ChartTdsState createState() => _ChartTdsState();
 }
 
 class _ChartTdsState extends State<ChartTds> {
-  late List<LiveData> chartData;
-  late ChartSeriesController _chartSeriesController;
-
   @override
   void initState() {
-    chartData = getChartData();
-    Timer.periodic(const Duration(milliseconds: 100), updateDataSource);
     super.initState();
   }
 
@@ -29,12 +39,10 @@ class _ChartTdsState extends State<ChartTds> {
             backgroundColor: Resources.bgcolor_100,
             body: SfCartesianChart(
                 title: ChartTitle(text: "Total Dissolved Solid Chart"),
-                series: <SplineSeries<LiveData, double>>[
-                  SplineSeries<LiveData, double>(
-                    onRendererCreated: (ChartSeriesController controller) {
-                      _chartSeriesController = controller;
-                    },
-                    dataSource: chartData,
+                series: <LineSeries<LiveData, double>>[
+                  LineSeries<LiveData, double>(
+                    onRendererCreated: widget.onRendererCreated,
+                    dataSource: widget.chartData,
                     color: Resources.chartColor,
                     xValueMapper: (LiveData sales, _) => sales.time,
                     yValueMapper: (LiveData sales, _) => sales.speed,
@@ -43,49 +51,20 @@ class _ChartTdsState extends State<ChartTds> {
                 enableAxisAnimation: true,
                 plotAreaBorderColor: Color(22),
                 primaryXAxis: NumericAxis(
-                    majorGridLines: const MajorGridLines(
-                        width: 0.5,
-                        color: Resources.chartColorGrid,
-                        dashArray: [3, 3]),
+                    edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    maximum: widget.xMin,
+                    minimum: widget.xMax,
                     axisLine: const AxisLine(
                         width: 1, color: Resources.chartAxisColor),
-                    edgeLabelPlacement: EdgeLabelPlacement.shift,
-                    interval: 1,
-                    title: AxisTitle(text: 'Time (seconds)')),
+                    title: AxisTitle(
+                      text: 'Time (seconds)',
+                    )),
                 primaryYAxis: NumericAxis(
-                    majorGridLines: const MajorGridLines(
-                        width: 0.5,
-                        color: Resources.chartColorGrid,
-                        dashArray: [3, 3]),
+                    maximum: widget.yMax,
+                    minimum: widget.yMin,
                     axisLine: const AxisLine(
                         width: 1, color: Resources.chartAxisColor),
                     title: AxisTitle(text: 'TDS (ppm)')))));
-  }
-
-  double time = 0;
-  void updateDataSource(Timer timer) {
-    time = time + 2;
-    chartData.add(LiveData(time, (math.Random().nextInt(700) + 0)));
-    chartData.removeAt(0);
-    _chartSeriesController.updateDataSource(
-        addedDataIndex: chartData.length - 1, removedDataIndex: 0);
-  }
-
-  List<LiveData> getChartData() {
-    return <LiveData>[
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0),
-      LiveData(0, 0)
-    ];
   }
 }
 

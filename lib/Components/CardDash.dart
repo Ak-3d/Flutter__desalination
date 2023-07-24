@@ -8,7 +8,7 @@ class CardDash extends StatelessWidget {
       this.txt = "card",
       this.color = Resources.bgcolor_100,
       this.cols = 1,
-      this.rows = 1,
+      this.rows = 0.5,
       this.child = const Text('')})
       : super(key: key);
 
