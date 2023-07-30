@@ -7,6 +7,7 @@ import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
 import '../Components/TankCard.dart';
+import '../main.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({
@@ -26,6 +27,7 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   void initState() {
     ConnectionHandler.setInterface(this);
     ConnectionHandler.connectUDP();
+
     super.initState();
   }
 
@@ -92,6 +94,7 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   void dispose() {
     super.dispose();
     ConnectionHandler.dispose();
+    admin.close();
   }
 
   @override
@@ -111,9 +114,9 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   @override
   void listen(data) {
     List<String> d = data.toString().split(':');
+    // value = double.parse(d[1]);
     setState(() {
       msgs = data;
-      value = double.parse(d[1]);
     });
   }
 }

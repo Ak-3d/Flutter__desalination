@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:final_project/Models/WaterFlow.dart';
 import 'package:final_project/Resources.dart';
+import 'package:final_project/main.dart';
+import 'package:final_project/objectbox.g.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -25,13 +28,25 @@ class _TdsMainPageState extends State<TdsMainPage>
   double step = 2;
   int max = 1000;
 
-  List<LiveData> chartData = [];
+  late List<LiveData> chartData;
   late ChartSeriesController chartController;
 
   @override
   void initState() {
     super.initState();
+
     ConnectionHandler.setInterface(this);
+
+    //database query
+    Query<WaterFlow> q =
+        objectbox.waterFlow.query().build(); //~/ gives interger
+    q.limit = (max ~/ 2);
+
+    chartData = q.find().map<LiveData>((e) {
+      double temp = time;
+      time += step;
+      return LiveData(temp, e.tds);
+    }).toList();
 
     //TODO this is will be used for testing
 
@@ -50,7 +65,7 @@ class _TdsMainPageState extends State<TdsMainPage>
         children: [
           CardDash(
             txt: status,
-            child: Column(
+            child: ListView(
               children: [
                 Slider(
                     value: tValue,
@@ -75,7 +90,7 @@ class _TdsMainPageState extends State<TdsMainPage>
             child: ChartTds(
                 chartData: chartData,
                 xMin: 0,
-                xMax: 1000,
+                xMax: max.toDouble(),
                 yMin: 0,
                 yMax: 1000,
                 onRendererCreated: (ChartSeriesController cc) =>
@@ -110,12 +125,29 @@ class _TdsMainPageState extends State<TdsMainPage>
   @override
   void listen(data) {
     List<String> pairs = data.toString().split(',');
+    double tdsV = 0;
+    double tmp = 23;
+    double f1 = 10;
+    double f2 = 20;
+
     for (var p in pairs) {
       List<String> pair = p.split(":");
-      if (pair[0] == 'TDS') {
-        updateDataSource(double.parse(pair[1]));
-        break;
+      switch (pair[0]) {
+        case 'TDS':
+          tdsV = double.parse(pair[1]);
+          updateDataSource(tdsV);
+          break;
+
+        case 'F1':
+          f1 = double.parse(pair[1]);
+          break;
+        default:
       }
+    }
+    if (tdsV > 1) {
+      WaterFlow w = WaterFlow(tdsV, f1, f2, tmp);
+      objectbox.waterFlow.put(w);
+      debugPrint('new tds inserted: ${w.tds}, F1:${w.flow1}');
     }
   }
 

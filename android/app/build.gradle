@@ -57,3 +57,17 @@ android {
 flutter {
     source '../..'
 }
+//TODO comming both Objects are for developments for database and should be deleted for production
+configurations {
+    debugImplementation {
+        exclude group: 'io.objectbox', module: 'objectbox-android'
+    }
+}
+dependencies {
+    // Add objectbox-android-objectbrowser only for debug builds.
+    // Replace <version> with the included objectbox-android version,
+    // e.g. check https://github.com/objectbox/objectbox-dart/releases
+    // Warning: when ObjectBox for Dart updates check if <version>
+    // needs to be updated.
+    debugImplementation("io.objectbox:objectbox-android-objectbrowser:3.5.1")
+}
