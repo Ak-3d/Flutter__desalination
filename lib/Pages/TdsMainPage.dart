@@ -31,11 +31,55 @@ class _TdsMainPageState extends State<TdsMainPage>
   late List<LiveData> chartData;
   late ChartSeriesController chartController;
 
+  late List<CardDash> _cards;
+  int colsN = 5;
+  num defaultRows = 3;
+  void _initCards() {
+    if (screenSize.width > 500) return;
+    CardDash.defaultRows = 1; //0.5 is for large
+    colsN = 3;
+    _cards = [
+      CardDash(
+        txt: status,
+        child: ListView(
+          children: [
+            Slider(
+                value: tValue,
+                min: 0,
+                max: 500,
+                onChanged: (v) {
+                  setState(() {
+                    tValue = v;
+                  });
+                  updateDataSource(v);
+                }),
+            ElevatedButton(
+                onPressed: () => updateDataSource(tValue),
+                child: const Text('add Point'))
+          ],
+        ),
+      ),
+      CardDash(txt: status),
+      CardDash(txt: status),
+      CardDash(
+        txt: status,
+        rows: 3,
+        cols: 4,
+        child: ChartTds(
+            chartData: chartData,
+            xMin: 0,
+            xMax: max.toDouble(),
+            yMin: 0,
+            yMax: 1000,
+            onRendererCreated: (ChartSeriesController cc) =>
+                chartController = cc),
+      ),
+    ];
+  }
+
   @override
   void initState() {
     super.initState();
-
-    ConnectionHandler.setInterface(this);
 
     //database query
     Query<WaterFlow> q =
@@ -48,6 +92,10 @@ class _TdsMainPageState extends State<TdsMainPage>
       return LiveData(temp, e.tds);
     }).toList();
 
+    _initCards();
+
+    ConnectionHandler.setInterface(this);
+
     //TODO this is will be used for testing
 
     // Timer.periodic(Duration(milliseconds: 1), (timer) {
@@ -59,50 +107,16 @@ class _TdsMainPageState extends State<TdsMainPage>
   Widget build(BuildContext context) {
     return AppScofflding(title: 'TDS', listView: [
       StaggeredGrid.count(
-        crossAxisCount: 5,
+        crossAxisCount: colsN,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(
-            txt: status,
-            child: ListView(
-              children: [
-                Slider(
-                    value: tValue,
-                    min: 0,
-                    max: 500,
-                    onChanged: (v) {
-                      setState(() {
-                        tValue = v;
-                      });
-                      updateDataSource(v);
-                    }),
-                ElevatedButton(
-                    onPressed: () => updateDataSource(tValue),
-                    child: Text('add Point'))
-              ],
-            ),
-          ),
-          CardDash(
-            txt: status,
-            rows: 1.5,
-            cols: 4,
-            child: ChartTds(
-                chartData: chartData,
-                xMin: 0,
-                xMax: max.toDouble(),
-                yMin: 0,
-                yMax: 1000,
-                onRendererCreated: (ChartSeriesController cc) =>
-                    chartController = cc),
-          ),
-          CardDash(txt: status),
-          CardDash(txt: status),
+          ..._cards,
           ElevatedButton(
             onPressed: () {
               popEdited(context);
             },
-            child: Text('Go Back'),
+            child: const Text('Go Back'),
           ),
           const StaggeredGridTile.extent(
             mainAxisExtent: 1000,

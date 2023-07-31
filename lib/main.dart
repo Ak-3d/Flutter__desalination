@@ -6,6 +6,7 @@ import 'Pages/Dashboard.dart';
 
 late ObjectBox objectbox;
 late Admin admin;
+late Size screenSize;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const title = 'Water Desalination Project';
+    screenSize = MediaQuery.of(context).size;
+
     return MaterialApp(
       title: title,
       home: const Dashboard(),

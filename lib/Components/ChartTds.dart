@@ -35,36 +35,36 @@ class _ChartTdsState extends State<ChartTds> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            backgroundColor: Resources.bgcolor_100,
-            body: SfCartesianChart(
-                title: ChartTitle(text: "Total Dissolved Solid Chart"),
-                series: <LineSeries<LiveData, double>>[
-                  LineSeries<LiveData, double>(
-                    onRendererCreated: widget.onRendererCreated,
-                    dataSource: widget.chartData,
-                    color: Resources.chartColor,
-                    xValueMapper: (LiveData sales, _) => sales.time,
-                    yValueMapper: (LiveData sales, _) => sales.speed,
-                  )
-                ],
-                enableAxisAnimation: true,
-                plotAreaBorderColor: Color(22),
-                primaryXAxis: NumericAxis(
-                    edgeLabelPlacement: EdgeLabelPlacement.shift,
-                    maximum: widget.xMin,
-                    minimum: widget.xMax,
-                    axisLine: const AxisLine(
-                        width: 1, color: Resources.chartAxisColor),
-                    title: AxisTitle(
-                      text: 'Time (seconds)',
-                    )),
-                primaryYAxis: NumericAxis(
-                    maximum: widget.yMax,
-                    minimum: widget.yMin,
-                    axisLine: const AxisLine(
-                        width: 1, color: Resources.chartAxisColor),
-                    title: AxisTitle(text: 'TDS (ppm)')))));
+        child: SfCartesianChart(
+            title: ChartTitle(text: "Total Dissolved Solid Chart"),
+            series: <LineSeries<LiveData, double>>[
+              LineSeries<LiveData, double>(
+                onRendererCreated: widget.onRendererCreated,
+                dataSource: widget.chartData,
+                color: Resources.chartColor,
+                xValueMapper: (LiveData sales, _) => sales.time,
+                yValueMapper: (LiveData sales, _) => sales.speed,
+              )
+            ],
+            enableAxisAnimation: true,
+            plotAreaBorderColor: Color(22),
+            primaryXAxis: NumericAxis(
+                edgeLabelPlacement: EdgeLabelPlacement.shift,
+                maximum: widget.xMin,
+                minimum: widget.xMax,
+                axisLine:
+                    const AxisLine(width: 1, color: Resources.chartAxisColor),
+                title: AxisTitle(
+                  text: 'Time (seconds)',
+                )),
+            primaryYAxis: NumericAxis(
+              maximum: widget.yMax,
+              minimum: widget.yMin,
+              associatedAxisName: '',
+              axisLine:
+                  const AxisLine(width: 1, color: Resources.chartAxisColor),
+              // title: AxisTitle(text: 'TDS (ppm)')
+            )));
   }
 }
 

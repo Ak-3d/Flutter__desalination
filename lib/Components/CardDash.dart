@@ -3,26 +3,28 @@ import 'package:final_project/Resources.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class CardDash extends StatelessWidget {
+  static num defaultRows = 0.5;
+
   const CardDash(
       {Key? key,
       this.txt = "card",
       this.color = Resources.bgcolor_100,
       this.cols = 1,
-      this.rows = 1,
+      this.rows,
       this.child = const Text('')})
       : super(key: key);
 
   final String txt;
   final Color color;
   final int cols;
-  final num rows;
+  final num? rows;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return StaggeredGridTile.count(
       crossAxisCellCount: cols,
-      mainAxisCellCount: rows,
+      mainAxisCellCount: rows ?? defaultRows,
       child: Container(
         decoration: const BoxDecoration(
             color: Resources.bgcolor_100,

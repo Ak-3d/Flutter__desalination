@@ -19,15 +19,70 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> implements ConnectionInterface {
+  List<Widget> _cards = [];
+
   String status = "";
   String msgs = "";
   double value = 0;
+
+  int colsN = 5;
+  void _initCards() {
+    if (screenSize.width > 500) return;
+    colsN = 2;
+    CardDash.defaultRows = 1;
+    _cards = [
+      CardDash(txt: 'Message', child: Text(msgs)),
+      CardDash(
+        txt: 'status',
+        child: Text(status),
+      ),
+      const CardDash(txt: 'Degree'),
+      const CardDash(txt: 'Duration'),
+      CardDash(
+        txt: 'TDS',
+        cols: 2,
+        child: ElevatedButton(
+          onPressed: () => pushEdited(
+              context: context,
+              connectionInterface: this,
+              namedRoute: '/TdsMainPage'),
+          child: const Text('TDS'),
+        ),
+      ),
+      CardDash(
+        cols: 2,
+        rows: 1,
+        child: TankCard(v1: value, v2: value),
+      ),
+      const CardDash(txt: 'flow 1'),
+      const CardDash(
+        txt: 'flow 2',
+      ),
+      CardDash(
+        child: Slider(
+            value: value,
+            min: 0,
+            max: 100,
+            onChanged: (v) {
+              setState(() {
+                value = v;
+              });
+            }),
+      ),
+      const StaggeredGridTile.extent(
+        mainAxisExtent: 500,
+        crossAxisCellCount: 3,
+        child: Text(""),
+      )
+    ];
+  }
 
   @override
   void initState() {
     ConnectionHandler.setInterface(this);
     ConnectionHandler.connectUDP();
 
+    _initCards();
     super.initState();
   }
 
@@ -35,57 +90,10 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   Widget build(BuildContext context) {
     return AppScofflding(title: 'Dashboard', listView: [
       StaggeredGrid.count(
-        crossAxisCount: 5,
+        crossAxisCount: colsN,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
-        children: [
-          CardDash(txt: 'Message', child: Text(msgs)),
-          CardDash(
-            txt: 'status',
-            child: Text(status),
-          ),
-          CardDash(
-            txt: 'TDS',
-            child: ElevatedButton(
-              onPressed: () {
-                pushEdited(
-                    context: context,
-                    connectionInterface: this,
-                    namedRoute: '/TdsMainPage');
-              },
-              child: const Text('TDS'),
-            ),
-          ),
-          CardDash(txt: 'Degree'),
-          CardDash(txt: 'Duration'),
-          CardDash(
-            rows: 2,
-          ),
-          CardDash(
-            cols: 3,
-            rows: 2,
-            child: TankCard(v1: value, v2: value),
-          ),
-          CardDash(
-            rows: 2,
-          ),
-          CardDash(
-            child: Slider(
-                value: value,
-                min: 0,
-                max: 100,
-                onChanged: (v) {
-                  setState(() {
-                    value = v;
-                  });
-                }),
-          ),
-          const StaggeredGridTile.extent(
-            mainAxisExtent: 500,
-            crossAxisCellCount: 3,
-            child: Text(""),
-          )
-        ],
+        children: _cards,
       ),
     ]);
   }
