@@ -4,47 +4,411 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:16362958127695941",
-      "lastPropertyId": "3:3448840239003537534",
-      "name": "User",
+      "id": "1:6814787951170876873",
+      "lastPropertyId": "4:3961439216337755830",
+      "name": "Days",
       "properties": [
         {
-          "id": "1:5840304490490336619",
+          "id": "1:5106726588398547708",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:989356043196714544",
-          "name": "name",
+          "id": "2:9193730328685963363",
+          "name": "day",
+          "type": 6
+        },
+        {
+          "id": "3:3107371969409481929",
+          "name": "isDeleted",
+          "type": 1
+        },
+        {
+          "id": "4:3961439216337755830",
+          "name": "scheduleId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:6739052640249906160",
+          "relationTarget": "Schedule"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7741936366088563556",
+      "lastPropertyId": "7:2580832312988936998",
+      "name": "Electricity",
+      "properties": [
+        {
+          "id": "1:7939350763688591046",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9178833328612517862",
+          "name": "voltageIn",
+          "type": 8
+        },
+        {
+          "id": "3:6801253022205465342",
+          "name": "voltageOut",
+          "type": 8
+        },
+        {
+          "id": "4:4830471370510969310",
+          "name": "currentIn",
+          "type": 8
+        },
+        {
+          "id": "5:2225067438853991970",
+          "name": "currentOut",
+          "type": 8
+        },
+        {
+          "id": "6:2405766373638890904",
+          "name": "batteryLevel",
+          "type": 8
+        },
+        {
+          "id": "7:2580832312988936998",
+          "name": "isBattery",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:7206153797043677622",
+      "lastPropertyId": "8:5456767793561786092",
+      "name": "Irrigation",
+      "properties": [
+        {
+          "id": "1:871801221808341370",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1952060050239838252",
+          "name": "isDeleted",
+          "type": 1
+        },
+        {
+          "id": "3:1059837251246291865",
+          "name": "tdsValue",
+          "type": 8
+        },
+        {
+          "id": "4:2016554475880809985",
+          "name": "plantName",
           "type": 9
         },
         {
-          "id": "3:3448840239003537534",
-          "name": "date",
+          "id": "5:4252626244114327339",
+          "name": "irrigationVolume",
+          "type": 8
+        },
+        {
+          "id": "6:6334201738520960893",
+          "name": "tankPort",
+          "type": 6
+        },
+        {
+          "id": "7:1693010307306759343",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "8:5456767793561786092",
+          "name": "scheduleId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:4670297298757932302",
+          "relationTarget": "Schedule"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:1387098201385301757",
+      "lastPropertyId": "7:3086492028957596128",
+      "name": "Production",
+      "properties": [
+        {
+          "id": "1:5881854136284123475",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4084392229103498359",
+          "name": "tdsValue",
+          "type": 8
+        },
+        {
+          "id": "3:3887909150905741786",
+          "name": "temperatureValue",
+          "type": 8
+        },
+        {
+          "id": "4:8805944315644350047",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "5:8822558076375324822",
+          "name": "flowWaterPermeate",
+          "type": 8
+        },
+        {
+          "id": "6:7936405453205044137",
+          "name": "flowWaterConventrate",
+          "type": 8
+        },
+        {
+          "id": "7:3086492028957596128",
+          "name": "tanksId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:3666176766550668418",
+          "relationTarget": "Tanks"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:8412491739705492152",
+      "lastPropertyId": "5:6683520785749298080",
+      "name": "Report",
+      "properties": [
+        {
+          "id": "1:7684404739808812205",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8668650296168723279",
+          "name": "statusId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:8184140919435113473",
+          "relationTarget": "Status"
+        },
+        {
+          "id": "3:2539545804393768236",
+          "name": "note",
+          "type": 9
+        },
+        {
+          "id": "4:4584108435377659923",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "5:6683520785749298080",
+          "name": "modifiedDate",
           "type": 10
         }
       ],
       "relations": []
     },
     {
-      "id": "2:5409813635865129942",
-      "lastPropertyId": "7:5769610321370655814",
-      "name": "WaterFlow",
+      "id": "6:8690364713072224657",
+      "lastPropertyId": "6:7437941911131998803",
+      "name": "Schedule",
       "properties": [
         {
-          "id": "1:1532088061889259581",
+          "id": "1:3710859630045865034",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:4502916936746900382",
+          "id": "2:4590151508559573148",
+          "name": "time",
+          "type": 10
+        },
+        {
+          "id": "3:4000267420905102958",
+          "name": "isDeleted",
+          "type": 1
+        },
+        {
+          "id": "4:5187804353403915156",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "5:471376231355198591",
+          "name": "modifiedDate",
+          "type": 10
+        },
+        {
+          "id": "6:7437941911131998803",
+          "name": "tanksId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:7466329242053987367",
+          "relationTarget": "Tanks"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:6186102834399815133",
+      "lastPropertyId": "5:7441888363229998283",
+      "name": "SingleTank",
+      "properties": [
+        {
+          "id": "1:6226489604800903377",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4976862674937747927",
+          "name": "level",
+          "type": 8
+        },
+        {
+          "id": "3:3837077445043109078",
+          "name": "isFilling",
+          "type": 1
+        },
+        {
+          "id": "4:896861230478561895",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "5:7441888363229998283",
+          "name": "tanksId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:212184406164604022",
+          "relationTarget": "Tanks"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:931273305467641380",
+      "lastPropertyId": "2:7588902744104860698",
+      "name": "Status",
+      "properties": [
+        {
+          "id": "1:7276069924780227833",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7588902744104860698",
+          "name": "name",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:6935110620098735646",
+      "lastPropertyId": "8:5411833812437031669",
+      "name": "Tanks",
+      "properties": [
+        {
+          "id": "1:7971469998604301265",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4687932729377944390",
+          "name": "portNumber",
+          "type": 6
+        },
+        {
+          "id": "3:1773105173173924766",
+          "name": "plantName",
+          "type": 9
+        },
+        {
+          "id": "4:3519969651863867323",
+          "name": "tdsValue",
+          "type": 8
+        },
+        {
+          "id": "5:3885454275146177870",
+          "name": "irrigationVolume",
+          "type": 8
+        },
+        {
+          "id": "6:3467177616254537129",
+          "name": "isDeleted",
+          "type": 1
+        },
+        {
+          "id": "7:1201643567626866529",
+          "name": "createdDate",
+          "type": 10
+        },
+        {
+          "id": "8:5411833812437031669",
+          "name": "modifiedDate",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:3080128908209515520",
+      "lastPropertyId": "4:3639107747595664532",
+      "name": "User",
+      "properties": [
+        {
+          "id": "1:5663477019756870780",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7152842614077071521",
+          "name": "phoneNumber",
+          "type": 6
+        },
+        {
+          "id": "3:1027922757515732040",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:3639107747595664532",
+          "name": "password",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:4924419491136736900",
+      "lastPropertyId": "6:1632954346871421659",
+      "name": "WaterFlow",
+      "properties": [
+        {
+          "id": "1:1912606061171935075",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1133604917089489093",
           "name": "date",
           "type": 10
         },
         {
-          "id": "3:7711705816442072994",
+          "id": "3:1422238025693725404",
           "name": "tds",
           "type": 8
         },
@@ -54,30 +418,28 @@
           "type": 8
         },
         {
-          "id": "5:7733627546621184626",
-          "name": "tempreture",
+          "id": "5:5917653117308273437",
+          "name": "flow2",
           "type": 8
         },
         {
-          "id": "7:5769610321370655814",
-          "name": "flow2",
+          "id": "6:1632954346871421659",
+          "name": "tempreture",
           "type": 8
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:5409813635865129942",
-  "lastIndexId": "0:0",
+  "lastEntityId": "11:4924419491136736900",
+  "lastIndexId": "6:212184406164604022",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [
-    5322235315886872351
-  ],
+  "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1
 }

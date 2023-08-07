@@ -5,11 +5,10 @@ class User {
   @Id()
   int id = 0;
 
-  String? name;
+  int phoneNumber;
+  String name;
 
-  @Property(type: PropertyType.date) // Store as int in milliseconds
-  DateTime? date;
+  String password;
 
-  @Transient() // Ignore this property, not stored in the database.
-  int? computedProperty;
+  User(this.name, this.phoneNumber, this.password);
 }
