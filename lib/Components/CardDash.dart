@@ -42,7 +42,6 @@ class CardDash extends StatelessWidget {
               child: Text(
                 txt,
                 textAlign: TextAlign.left,
-                style: const TextStyle(color: Colors.white),
               ),
             ),
             Expanded(

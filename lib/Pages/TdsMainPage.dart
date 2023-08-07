@@ -32,51 +32,10 @@ class _TdsMainPageState extends State<TdsMainPage>
   late ChartSeriesController chartController;
 
   late List<CardDash> _cards;
-  int colsN = 5;
+  int colsN = 3;
   num defaultRows = 3;
-  void _initCards() {
-    if (screenSize.width > 500) return;
-    CardDash.defaultRows = 1; //0.5 is for large
-    colsN = 3;
-    _cards = [
-      CardDash(
-        txt: status,
-        child: ListView(
-          children: [
-            Slider(
-                value: tValue,
-                min: 0,
-                max: 500,
-                onChanged: (v) {
-                  setState(() {
-                    tValue = v;
-                  });
-                  updateDataSource(v);
-                }),
-            ElevatedButton(
-                onPressed: () => updateDataSource(tValue),
-                child: const Text('add Point'))
-          ],
-        ),
-      ),
-      CardDash(txt: status),
-      CardDash(txt: status),
-      CardDash(
-        txt: status,
-        rows: 3,
-        cols: 4,
-        child: ChartTds(
-            chartData: chartData,
-            xMin: 0,
-            xMax: max.toDouble(),
-            yMin: 0,
-            yMax: 1000,
-            onRendererCreated: (ChartSeriesController cc) =>
-                chartController = cc),
-      ),
-    ];
-  }
 
+  late ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   @override
   void initState() {
     super.initState();
@@ -92,9 +51,7 @@ class _TdsMainPageState extends State<TdsMainPage>
       return LiveData(temp, e.tds);
     }).toList();
 
-    _initCards();
-
-    ConnectionHandler.setInterface(this);
+    ciw.setInterface(this);
 
     //TODO this is will be used for testing
 
@@ -111,10 +68,44 @@ class _TdsMainPageState extends State<TdsMainPage>
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          ..._cards,
+          CardDash(
+            txt: status,
+            child: ListView(
+              children: [
+                Slider(
+                    value: tValue,
+                    min: 0,
+                    max: 500,
+                    onChanged: (v) {
+                      setState(() {
+                        tValue = v;
+                      });
+                      updateDataSource(v);
+                    }),
+                ElevatedButton(
+                    onPressed: () => updateDataSource(tValue),
+                    child: const Text('add Point'))
+              ],
+            ),
+          ),
+          CardDash(txt: status),
+          CardDash(txt: status),
+          CardDash(
+            txt: status,
+            rows: 3,
+            cols: 4,
+            child: ChartTds(
+                chartData: chartData,
+                xMin: 0,
+                xMax: max.toDouble(),
+                yMin: 0,
+                yMax: 1000,
+                onRendererCreated: (ChartSeriesController cc) =>
+                    chartController = cc),
+          ),
           ElevatedButton(
             onPressed: () {
-              popEdited(context);
+              Navigator.pop(context);
             },
             child: const Text('Go Back'),
           ),
@@ -126,6 +117,12 @@ class _TdsMainPageState extends State<TdsMainPage>
         ],
       ),
     ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    ciw.dispose();
   }
 
   @override

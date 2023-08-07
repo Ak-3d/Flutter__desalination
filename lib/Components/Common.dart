@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import '../ConnectionHandler.dart';
 import '../Resources.dart';
 
@@ -9,6 +12,7 @@ class AppScofflding extends StatelessWidget {
 
   final String title;
   final List<Widget> listView;
+  final String foregroundTxt = 'Toggle Service';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +33,18 @@ class AppScofflding extends StatelessWidget {
           TextButton(
             child: const Text('reconnect'),
             onPressed: () {
-              if (ConnectionHandler.isWebsocketCreated ||
-                  ConnectionHandler.isUDPCreated) {
-                ConnectionHandler.dispose();
+              FlutterBackgroundService().invoke('Connect');
+            },
+          ),
+          ElevatedButton(
+            child: Text(foregroundTxt),
+            onPressed: () async {
+              final service = FlutterBackgroundService();
+              var isRunning = await service.isRunning();
+              if (isRunning) {
+                service.invoke("stopService");
               } else {
-                ConnectionHandler.connectUDP();
+                service.startService();
               }
             },
           ),

@@ -1,8 +1,6 @@
-import 'dart:async';
-// import 'dart:html';
-import 'package:final_project/Components/Common.dart';
-import 'package:udp/udp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
@@ -24,66 +22,16 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   String status = "";
   String msgs = "";
   double value = 0;
+  String txt = '';
 
-  int colsN = 5;
-  void _initCards() {
-    if (screenSize.width > 500) return;
-    colsN = 2;
-    CardDash.defaultRows = 1;
-    _cards = [
-      CardDash(txt: 'Message', child: Text(msgs)),
-      CardDash(
-        txt: 'status',
-        child: Text(status),
-      ),
-      const CardDash(txt: 'Degree'),
-      const CardDash(txt: 'Duration'),
-      CardDash(
-        txt: 'TDS',
-        cols: 2,
-        child: ElevatedButton(
-          onPressed: () => pushEdited(
-              context: context,
-              connectionInterface: this,
-              namedRoute: '/TdsMainPage'),
-          child: const Text('TDS'),
-        ),
-      ),
-      CardDash(
-        cols: 2,
-        rows: 1,
-        child: TankCard(v1: value, v2: value),
-      ),
-      const CardDash(txt: 'flow 1'),
-      const CardDash(
-        txt: 'flow 2',
-      ),
-      CardDash(
-        child: Slider(
-            value: value,
-            min: 0,
-            max: 100,
-            onChanged: (v) {
-              setState(() {
-                value = v;
-              });
-            }),
-      ),
-      const StaggeredGridTile.extent(
-        mainAxisExtent: 500,
-        crossAxisCellCount: 3,
-        child: Text(""),
-      )
-    ];
-  }
+  int colsN = 2;
 
+  ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   @override
   void initState() {
-    ConnectionHandler.setInterface(this);
-    ConnectionHandler.connectUDP();
-
-    _initCards();
     super.initState();
+
+    ciw.setInterface(this);
   }
 
   @override
@@ -93,7 +41,51 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
         crossAxisCount: colsN,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
-        children: _cards,
+        children: [
+          CardDash(txt: 'Message', child: Text(msgs)),
+          CardDash(
+            txt: 'status',
+            child: Text(status),
+          ),
+          const CardDash(
+            txt: 'Degree',
+            child: Text('here'),
+          ),
+          const CardDash(txt: 'Duration'),
+          CardDash(
+            txt: 'TDS',
+            cols: 2,
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
+              child: const Text('TDS'),
+            ),
+          ),
+          CardDash(
+            cols: 2,
+            rows: 1,
+            child: TankCard(v1: value, v2: value),
+          ),
+          const CardDash(txt: 'flow 1'),
+          const CardDash(
+            txt: 'flow 2',
+          ),
+          CardDash(
+            child: Slider(
+                value: value,
+                min: 0,
+                max: 100,
+                onChanged: (v) {
+                  setState(() {
+                    value = v;
+                  });
+                }),
+          ),
+          const StaggeredGridTile.extent(
+            mainAxisExtent: 500,
+            crossAxisCellCount: 3,
+            child: Text(""),
+          )
+        ],
       ),
     ]);
   }
@@ -101,8 +93,8 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   @override
   void dispose() {
     super.dispose();
-    ConnectionHandler.dispose();
     admin.close();
+    ciw.dispose();
   }
 
   @override
@@ -124,7 +116,7 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
     List<String> d = data.toString().split(':');
     // value = double.parse(d[1]);
     setState(() {
-      msgs = data;
+      msgs = data.toString();
     });
   }
 }
