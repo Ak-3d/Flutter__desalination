@@ -1,8 +1,8 @@
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import '../ConnectionHandler.dart';
+// import '../ConnectionHandler.dart';
 import '../Resources.dart';
 
 class AppScofflding extends StatelessWidget {

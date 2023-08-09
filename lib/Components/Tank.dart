@@ -10,7 +10,7 @@ class Tank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double tempv = value * 2.55;
+    // double tempv = value * 2.55;
 
     double actualValue = value / 100, r = 0.4;
     Color actualColor = Color.fromARGB(
