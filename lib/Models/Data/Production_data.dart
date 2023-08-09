@@ -4,7 +4,6 @@ import '../Production.dart';
 class ProductionData {
   late Box<Production> production;
 
-
   Stream<List<Production>> getAllProduction() {
     final builder = production.query()
       ..order(Production_.id, flags: Order.descending);
@@ -25,8 +24,23 @@ class ProductionData {
   ) {
     Production newProduction = Production(
         tdsValue, flowWaterConcentrate, flowWaterPermeate, temperatureValue);
-        
-          
+
     return newProduction;
+  }
+
+  void updateProduction(
+    int id,
+    double flowWaterPermeate,
+    double flowWaterConcentrate,
+    double tdsValue,
+    double temperatureValue,
+  ) {
+    final update = production.get(id);
+    update?.flowWaterPermeate = flowWaterPermeate;
+    update?.flowWaterConcentrate = flowWaterConcentrate;
+    update?.tdsValue = tdsValue;
+    update?.temperatureValue = temperatureValue;
+
+    production.put(update!);
   }
 }

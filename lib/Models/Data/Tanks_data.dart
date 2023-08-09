@@ -54,4 +54,23 @@ class TanksData extends ScheduleData {
     singleTank.removeAsync(tankId);
     tanks.remove(tankId);
   }
+
+  void updateTank(int id, int portNumber, String plantName, double tdsValue,
+      double irrigationVolume) {
+    final update = tanks.get(id);
+    update?.modifiedDate = DateTime.now();
+    update?.irrigationVolume = irrigationVolume;
+    update?.portNumber = portNumber;
+    update?.tdsValue = tdsValue;
+    update?.tdsValue = tdsValue;
+    tanks.put(update!);
+  }
+
+  void updateSingleTank(int id, double level, bool isFilling) {
+    final update = singleTank.get(id);
+    update?.isFilling = isFilling;
+    update?.level = level;
+
+    singleTank.put(update!);
+  }
 }

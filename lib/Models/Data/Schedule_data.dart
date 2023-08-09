@@ -9,7 +9,6 @@ class ScheduleData extends ProductionData {
   late Box<Schedule> schedule;
   late Box<Days> days;
 
-
   Stream<List<Schedule>> getAllSchedule() {
     final builder = schedule.query()
       ..order(Schedule_.id, flags: Order.descending);
@@ -36,5 +35,20 @@ class ScheduleData extends ProductionData {
     selectSchedule.days.add(selectDays);
     schedule.put(selectSchedule);
     days.put(selectDays);
+  }
+
+  void updateSchedule(int id, DateTime time) {
+    final update = schedule.get(id);
+    update?.time = time;
+    update?.modifiedDate = DateTime.now();
+
+    schedule.put(update!);
+  }
+
+  void updateDays(int id, int day) {
+    final update = days.get(id);
+    update?.day = day;
+
+    days.put(update!);
   }
 }
