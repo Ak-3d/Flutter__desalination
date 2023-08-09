@@ -1,9 +1,7 @@
-import 'dart:async';
-import 'dart:math';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
-import 'package:final_project/Models/WaterFlow.dart';
-import 'package:final_project/Resources.dart';
+
+// import 'package:final_project/Resources.dart';
 import 'package:final_project/main.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -11,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:final_project/Components/ChartTds.dart';
 import '../Components/CardDash.dart';
+import '../Models/Production.dart';
 
 class TdsMainPage extends StatefulWidget {
   const TdsMainPage({Key? key}) : super(key: key);
@@ -31,7 +30,7 @@ class _TdsMainPageState extends State<TdsMainPage>
   late List<LiveData> chartData;
   late ChartSeriesController chartController;
 
-  late List<CardDash> _cards;
+  
   int colsN = 3;
   num defaultRows = 3;
 
@@ -41,14 +40,13 @@ class _TdsMainPageState extends State<TdsMainPage>
     super.initState();
 
     //database query
-    Query<WaterFlow> q =
-        objectbox.waterFlow.query().build(); //~/ gives interger
+    Query<Production> q = objectbox.production.query().build(); //~/ gives
     q.limit = (max ~/ 2);
 
     chartData = q.find().map<LiveData>((e) {
       double temp = time;
       time += step;
-      return LiveData(temp, e.tds);
+      return LiveData(temp, e.tdsValue);
     }).toList();
 
     ciw.setInterface(this);
@@ -156,9 +154,10 @@ class _TdsMainPageState extends State<TdsMainPage>
       }
     }
     if (tdsV > 1) {
-      WaterFlow w = WaterFlow(tdsV, f1, f2, tmp);
-      objectbox.waterFlow.put(w);
-      debugPrint('new tds inserted: ${w.tds}, F1:${w.flow1}');
+      Production w = Production(tdsV, f1, f2, tmp);
+      objectbox.production.put(w);
+      debugPrint(
+          'new tds inserted: ${w.tdsValue}, F1:${w.flowWaterConcentrate}');
     }
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> implements ConnectionInterface {
-  List<Widget> _cards = [];
+
 
   String status = "";
   String msgs = "";
@@ -54,10 +54,26 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
           const CardDash(txt: 'Duration'),
           CardDash(
             txt: 'TDS',
-            cols: 2,
+            
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
               child: const Text('TDS'),
+            ),
+          ),
+          CardDash(
+            txt: 'Reports',
+            
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/ReportsView'),
+              child: const Text('Reports'),
+            ),
+          ),
+           CardDash(
+            txt: 'Tanks',
+            
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/TankView'),
+              child: const Text('Tanks'),
             ),
           ),
           CardDash(
@@ -113,7 +129,7 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
 
   @override
   void listen(data) {
-    List<String> d = data.toString().split(':');
+    // List<String> d = data.toString().split(':');
     // value = double.parse(d[1]);
     setState(() {
       msgs = data.toString();
