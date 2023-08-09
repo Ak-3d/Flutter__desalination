@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:udp/udp.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -31,11 +29,11 @@ class ConnectionInterface {
 
 class ConnectionHandler {
   late WebSocketChannel _channel;
-  late StreamSubscription _stream;
+  // late StreamSubscription _stream;
   bool isWebsocketCreated = false;
 
   late UDP receiver;
-  late StreamSubscription _streamUDP;
+  // late StreamSubscription _streamUDP;
   bool isUDPCreated = false;
 
   void closeWebsocket() {
