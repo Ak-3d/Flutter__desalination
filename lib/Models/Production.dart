@@ -11,9 +11,9 @@ class Production {
   double temperatureValue;
   DateTime createdDate = DateTime.now();
   double flowWaterPermeate;
-  double flowWaterConventrate;
+  double flowWaterConcentrate;
   final tanks = ToOne<Tanks>();
 
-  Production(this.tdsValue, this.flowWaterConventrate, this.flowWaterPermeate,
+  Production(this.tdsValue, this.flowWaterConcentrate, this.flowWaterPermeate,
       this.temperatureValue);
 }
