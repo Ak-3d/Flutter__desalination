@@ -81,7 +81,7 @@
     },
     {
       "id": "3:1465380686272542004",
-      "lastPropertyId": "8:1212827881444284403",
+      "lastPropertyId": "11:1458545998541844883",
       "name": "Irrigation",
       "properties": [
         {
@@ -127,6 +127,11 @@
           "flags": 520,
           "indexId": "2:3216018811232197747",
           "relationTarget": "Schedule"
+        },
+        {
+          "id": "11:1458545998541844883",
+          "name": "tankID",
+          "type": 6
         }
       ],
       "relations": []
@@ -432,14 +437,19 @@
     }
   ],
   "lastEntityId": "11:798106028805849269",
-  "lastIndexId": "6:9089259842227766409",
+  "lastIndexId": "7:5286352375979823979",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    5286352375979823979
+  ],
+  "retiredPropertyUids": [
+    5552760817191860794,
+    8445192201471572270
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

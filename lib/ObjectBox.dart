@@ -1,3 +1,4 @@
+import 'package:final_project/Models/Irrgation.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/WaterFlow.dart';
 import 'package:path/path.dart' as p;
@@ -18,6 +19,7 @@ class ObjectBox extends TanksData {
   late final Box<Report> report;
   late final Box<Status> status;
   late final Box<WaterFlow> waterFlow;
+  late final Box<Irrigation> irregation;
 
   ObjectBox._create(this.store) {
     tanks = store.box<Tanks>();
@@ -25,6 +27,7 @@ class ObjectBox extends TanksData {
     user = store.box<User>();
     production = store.box<Production>();
     schedule = store.box<Schedule>();
+    irregation = store.box<Irrigation>();
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();

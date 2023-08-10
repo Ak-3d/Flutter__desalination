@@ -1,4 +1,5 @@
 import 'Schedule.dart';
+import 'Tanks.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -11,9 +12,12 @@ class Irrigation {
   String plantName;
   double irrigationVolume;
   int tankPort;
+
+  int tankID;
+
   DateTime createdDate = DateTime.now();
 
   final schedule = ToOne<Schedule>();
-  Irrigation(
-      this.irrigationVolume, this.plantName, this.tankPort, this.tdsValue);
+  Irrigation(this.irrigationVolume, this.plantName, this.tankPort,
+      this.tdsValue, this.tankID);
 }
