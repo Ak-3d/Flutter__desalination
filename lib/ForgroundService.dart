@@ -163,7 +163,6 @@ updateNotification(String txt) {
             disconnectID,
             'Disconnect',
             // icon: DrawableResourceAndroidBitmap('food'),
-            contextual: true,
           ),
           AndroidNotificationAction(
             stopServiceID,
