@@ -18,5 +18,5 @@ class WaterFlow {
 
   double tempreture;
 
-  WaterFlow(this.tds, this.flow1, this.flow2, this.tempreture);
+  WaterFlow(this.tds, this.flow1, this.flow2, this.tempreture, this.date);
 }

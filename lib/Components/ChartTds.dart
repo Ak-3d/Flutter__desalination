@@ -36,7 +36,10 @@ class _ChartTdsState extends State<ChartTds> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: SfCartesianChart(
-            title: ChartTitle(text: "Total Dissolved Solid Chart"),
+            title: ChartTitle(
+              text: "Total Dissolved Solid Chart",
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+            ),
             series: <LineSeries<LiveData, double>>[
               LineSeries<LiveData, double>(
                 onRendererCreated: widget.onRendererCreated,
@@ -49,20 +52,18 @@ class _ChartTdsState extends State<ChartTds> {
             enableAxisAnimation: true,
             plotAreaBorderColor: Color(22),
             primaryXAxis: NumericAxis(
-                edgeLabelPlacement: EdgeLabelPlacement.shift,
-                maximum: widget.xMin,
-                minimum: widget.xMax,
-                axisLine:
-                    const AxisLine(width: 1, color: Resources.chartAxisColor),
-                title: AxisTitle(
-                  text: 'Time (seconds)',
-                )),
+              edgeLabelPlacement: EdgeLabelPlacement.shift,
+              maximum: widget.xMin,
+              minimum: widget.xMax,
+              // axisLine:
+              //     const AxisLine(width: 1, color: Resources.chartAxisColor),
+            ),
             primaryYAxis: NumericAxis(
               maximum: widget.yMax,
               minimum: widget.yMin,
               associatedAxisName: '',
-              axisLine:
-                  const AxisLine(width: 1, color: Resources.chartAxisColor),
+              // axisLine:
+              //     const AxisLine(width: 1, color: Resources.chartAxisColor),
               // title: AxisTitle(text: 'TDS (ppm)')
             )));
   }

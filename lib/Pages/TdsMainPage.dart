@@ -1,5 +1,6 @@
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:final_project/Models/WaterFlow.dart';
 
 // import 'package:final_project/Resources.dart';
 import 'package:final_project/main.dart';
@@ -25,12 +26,11 @@ class _TdsMainPageState extends State<TdsMainPage>
 
   double time = 0;
   double step = 2;
-  int max = 1000;
+  int max = 200;
 
   late List<LiveData> chartData;
   late ChartSeriesController chartController;
 
-  
   int colsN = 3;
   num defaultRows = 3;
 
@@ -39,16 +39,24 @@ class _TdsMainPageState extends State<TdsMainPage>
   void initState() {
     super.initState();
 
+    //get last saturday, monday = 1, saturday = 6
+    final now = DateTime.now();
+    final sat = ((now.weekday + 2) % 7) - 1;
     //database query
-    Query<Production> q = objectbox.production.query().build(); //~/ gives
+    Query<WaterFlow> q = objectbox.waterFlow
+        .query(WaterFlow_.date.greaterOrEqual(
+            now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .build(); //~/ gives
     q.limit = (max ~/ 2);
 
     chartData = q.find().map<LiveData>((e) {
       double temp = time;
       time += step;
-      return LiveData(temp, e.tdsValue);
+      return LiveData(temp, e.tds);
     }).toList();
 
+    debugPrint(
+        'length of data: ${chartData.length}, days to last saturday: $sat');
     ciw.setInterface(this);
 
     //TODO this is will be used for testing
@@ -67,29 +75,7 @@ class _TdsMainPageState extends State<TdsMainPage>
         crossAxisSpacing: 20,
         children: [
           CardDash(
-            txt: status,
-            child: ListView(
-              children: [
-                Slider(
-                    value: tValue,
-                    min: 0,
-                    max: 500,
-                    onChanged: (v) {
-                      setState(() {
-                        tValue = v;
-                      });
-                      updateDataSource(v);
-                    }),
-                ElevatedButton(
-                    onPressed: () => updateDataSource(tValue),
-                    child: const Text('add Point'))
-              ],
-            ),
-          ),
-          CardDash(txt: status),
-          CardDash(txt: status),
-          CardDash(
-            txt: status,
+            title: status,
             rows: 3,
             cols: 4,
             child: ChartTds(

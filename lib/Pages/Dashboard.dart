@@ -17,14 +17,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> implements ConnectionInterface {
-
-
   String status = "";
   String msgs = "";
   double value = 0;
-  String txt = '';
+  String title = '';
 
-  int colsN = 2;
+  int colsN = 3;
 
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   @override
@@ -42,48 +40,58 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(txt: 'Message', child: Text(msgs)),
+          CardDash(title: 'Status', child: Text(msgs)),
           CardDash(
-            txt: 'status',
+            title: 'Total Power Saved',
             child: Text(status),
           ),
-          const CardDash(
-            txt: 'Degree',
-            child: Text('here'),
-          ),
-          const CardDash(txt: 'Duration'),
+          const CardDash(title: 'Total Water Production'),
           CardDash(
-            txt: 'TDS',
-            
+            title: 'Next in Schedule',
+            cols: 3,
+            rows: 2,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: Text('1 Day, 15 hours',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                ),
+              ),
+              Expanded(
+                  child: Text('Tank 1',
+                      style: Theme.of(context).textTheme.bodyMedium)),
+              Expanded(
+                child: Text('Tuesday at 3 o\'sclick',
+                    style: Theme.of(context).textTheme.bodySmall),
+              ),
+            ]),
+          ),
+          CardDash(
+            title: 'TDS',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
               child: const Text('TDS'),
             ),
           ),
           CardDash(
-            txt: 'Reports',
-            
+            title: 'Reports',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/ReportsView'),
               child: const Text('Reports'),
             ),
           ),
-           CardDash(
-            txt: 'Tanks',
-            
+          CardDash(
+            title: 'Tanks',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TankView'),
               child: const Text('Tanks'),
             ),
           ),
-          CardDash(
-            cols: 2,
-            rows: 1,
-            child: TankCard(v1: value, v2: value),
-          ),
-          const CardDash(txt: 'flow 1'),
+          const CardDash(title: 'flow 1'),
           const CardDash(
-            txt: 'flow 2',
+            title: 'flow 2',
           ),
           CardDash(
             child: Slider(

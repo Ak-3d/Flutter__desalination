@@ -1,4 +1,5 @@
 import 'package:final_project/Models/Schedule.dart';
+import 'package:final_project/Models/WaterFlow.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'Models/Production.dart';
@@ -16,16 +17,17 @@ class ObjectBox extends TanksData {
   late final Box<User> user;
   late final Box<Report> report;
   late final Box<Status> status;
+  late final Box<WaterFlow> waterFlow;
 
   ObjectBox._create(this.store) {
     tanks = store.box<Tanks>();
     singleTank = store.box<SingleTank>();
     user = store.box<User>();
     production = store.box<Production>();
-    schedule =store.box<Schedule>();
+    schedule = store.box<Schedule>();
     status = store.box<Status>();
     report = store.box<Report>();
-
+    waterFlow = store.box<WaterFlow>();
     _putDemoData();
   }
 
@@ -44,7 +46,7 @@ class ObjectBox extends TanksData {
     SingleTank stank1 = SingleTank(100, false);
     SingleTank stank2 = SingleTank(1020, true);
     SingleTank stank3 = SingleTank(2462, true);
-    tank1.singleTank.addAll([stank1, stank2,stank3]);
+    tank1.singleTank.addAll([stank1, stank2, stank3]);
     tank2.singleTank.addAll([stank1, stank2]);
     tanks.putMany([tank1, tank2]);
     Status status1 = Status("status 1");

@@ -17,12 +17,12 @@ class AppScofflding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Resources.bgcolor,
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: Resources.bgcolor,
-      ),
+      // appBar: AppBar(
+      //   title: Text(title),
+      //   backgroundColor: Resources.bgcolor,
+      // ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(25.0),
         child: ListView(
           children: listView,
         ),
