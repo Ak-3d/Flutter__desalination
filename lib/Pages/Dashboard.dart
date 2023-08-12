@@ -4,19 +4,27 @@ import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
-import '../Components/TankCard.dart';
 import '../main.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({
+class Dashboard extends StatelessWidget {
+  const Dashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AppScofflding(listView: [DashboardStfl()]);
+  }
+}
+
+class DashboardStfl extends StatefulWidget {
+  const DashboardStfl({
     super.key,
   });
 
   @override
-  State<Dashboard> createState() => _Dashboard();
+  State<DashboardStfl> createState() => _Dashboard();
 }
 
-class _Dashboard extends State<Dashboard> implements ConnectionInterface {
+class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   String status = "";
   String msgs = "";
   double value = 0;
@@ -28,14 +36,12 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
   @override
   void initState() {
     super.initState();
-
     ciw.setInterface(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppScofflding(title: 'Dashboard', listView: [
-      StaggeredGrid.count(
+    return StaggeredGrid.count(
         crossAxisCount: colsN,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
@@ -49,7 +55,7 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
           CardDash(
             title: 'Next in Schedule',
             cols: 3,
-            rows: 2,
+            rows: 1,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
@@ -85,7 +91,8 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
           CardDash(
             title: 'Tanks',
             child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/TankView'),
+              onPressed: () =>
+                  Navigator.pushNamed(context, '/TankView', arguments: 0),
               child: const Text('Tanks'),
             ),
           ),
@@ -105,13 +112,12 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
                 }),
           ),
           const StaggeredGridTile.extent(
-            mainAxisExtent: 500,
+            mainAxisExtent: 100,
             crossAxisCellCount: 3,
             child: Text(""),
           )
         ],
-      ),
-    ]);
+      );
   }
 
   @override
@@ -142,5 +148,6 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
     setState(() {
       msgs = data.toString();
     });
+    debugPrint('listnning from dashboard');
   }
 }
