@@ -17,7 +17,9 @@ Future<void> initializeService() async {
     'MY FOREGROUND SERVICE', // title
     description:
         'This channel is used for important notifications.', // description
-    importance: Importance.low, // importance must be at low or higher level
+    importance: Importance.none, // importance must be at low or higher level
+    playSound: false,
+    enableVibration: false,
   );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -54,6 +56,7 @@ Future<void> initializeService() async {
 
       // auto start service
       autoStart: true,
+      autoStartOnBoot: true,
       isForegroundMode: true,
 
       notificationChannelId: 'my_foreground',
@@ -74,6 +77,7 @@ Future<void> initializeService() async {
 
 const String disconnectID = 'disconnectID';
 const String stopServiceID = 'stopServiceID';
+
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   debugPrint(notificationResponse.toString());

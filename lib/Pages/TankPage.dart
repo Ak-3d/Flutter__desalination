@@ -14,7 +14,7 @@ class TankPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tankID = ModalRoute.of(context)!.settings.arguments as int;
-    debugPrint('this must be built only once if it is stateless');
+    // debugPrint('this must be built only once if it is stateless');
     return AppScofflding(listView: [TankPageStfl(tankID: tankID)]);
   }
 }
@@ -57,7 +57,7 @@ class _TankPageState extends State<TankPageStfl>
         .query(SingleTank_.createdDate.greaterOrEqual(lastSat));
 
     builder.link(SingleTank_.tanks, Tanks_.id.equals(widget.tankID));
-    var query = builder.build();
+    var query = builder.order(SingleTank_.createdDate).build();
     var tankData = query.find();
 
     max = (tankData.length / (sat + 1)) * 7;
@@ -68,10 +68,10 @@ class _TankPageState extends State<TankPageStfl>
       unit += step;
       return LiveData(u, tnk.level);
     }).toList();
-    debugPrint('unit at initState:$unit');
+    // debugPrint('unit at initState:$unit');
     var qi =
     objectbox.irregation.query(Irrigation_.tankID.equals(widget.tankID)).build();
-    debugPrint(qi.describe());
+    // debugPrint(qi.describe());
     var irrgs = qi.find();
     for (var element in irrgs) {
       totalIrrigation += element.irrigationVolume;
@@ -134,14 +134,14 @@ class _TankPageState extends State<TankPageStfl>
 
     isFilling = obj['isFill'] == '1';
     final level = double.parse(obj['level']);
-    if (mounted) {
+    if (mounted) { //this to double check that the page is disposed
       setState(() {
         this.level = level;
       });
     }
     updateGraph(level);
 
-    debugPrint('unit: $unit');
+    // debugPrint('unit: $unit');
     // debugPrint('listenning in tank page');
   }
 

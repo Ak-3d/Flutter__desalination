@@ -28,7 +28,7 @@ class _TdsMainPageState extends State<TdsMainPage>
 
   double time = 0;
   double step = 2;
-  int max = 200;
+  int max = 1000;
 
   late List<LiveData> chartData;
   late ChartSeriesController chartController;
@@ -43,12 +43,13 @@ class _TdsMainPageState extends State<TdsMainPage>
 
     //get last saturday, monday = 1, saturday = 6
     final now = DateTime.now();
-    final sat = ((now.weekday + 2) % 7) - 1;
+    final sat = ((now.weekday + 2) % 7) + 1;
     //database query
     Query<WaterFlow> q = objectbox.waterFlow
-        .query(WaterFlow_.date.greaterOrEqual(
-            now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .query(WaterFlow_.date.greaterOrEqual(now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .order(WaterFlow_.date)
         .build(); //~/ gives
+
     q.limit = (max ~/ 2);
 
     chartData = q.find().map<LiveData>((e) {
@@ -57,8 +58,7 @@ class _TdsMainPageState extends State<TdsMainPage>
       return LiveData(temp, e.tds);
     }).toList();
 
-    debugPrint(
-        'length of data: ${chartData.length}, days to last saturday: $sat');
+    debugPrint('describing:  ${q.describeParameters()}');
     ciw.setInterface(this);
 
     //TODO this is will be used for testing

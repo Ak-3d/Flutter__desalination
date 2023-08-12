@@ -10,6 +10,7 @@ import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
@@ -24,12 +25,13 @@ void flushData (){
   objectbox.waterFlow.removeAll();
   objectbox.singleTank.removeAll();
   objectbox.tanks.removeAll();
+  objectbox.status.removeAll();
 
-  debugPrint('5 models are flushed');
+  debugPrint('4 models are flushed');
 }
 void addDefaults(){
-  objectbox.tanks.put(Tanks(0, 'Test 1', 120, 300));
-  objectbox.tanks.put(Tanks(1, 'Test 2', 500, 0));
+  objectbox.tanks.put(Tanks(0, 'Test 1', 120, 0));
+  objectbox.tanks.put(Tanks(1, 'Test 2', 500, 300));
 
   objectbox.status.put(Status('Pending'));
   objectbox.status.put(Status('Done'));
@@ -39,7 +41,13 @@ void addDefaults(){
 }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeService();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()?.requestPermission().then((value) async =>
+      await initializeService()
+      );
+
   try {
     objectbox = await ObjectBox.create();
 
@@ -52,8 +60,8 @@ void main() async {
     debugPrint(e.toString());
   }
 
-  flushData();
-  addDefaults();
+  // flushData();
+  // addDefaults();
   // for (var i = 0; i < 1000; i++) {
   //   DateTime d = faker.date.dateTimeBetween(
   //       DateTime.now().subtract(const Duration(days: 10)), DateTime.now());
