@@ -190,6 +190,9 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
   service.on('Connect').listen((e) => connect());
+  service.on('ConnectDirectly').listen((e) {
+    connectDirectly(e?['ip'] ?? '192.168.1.102');
+  });
   service.on('Send').listen((e) {
     connectionHandler.sendWebsocket(e?['msg'].toString() ?? '.');
   });
@@ -204,6 +207,8 @@ void onStart(ServiceInstance service) async {
 
     connectionHandler.sendWebsocket('check:${timer.tick}');
   });
+
+  connectDirectly('192.168.1.102');
 }
 
 void connect() async {
@@ -217,6 +222,15 @@ void connect() async {
     return;
   }
   udpConnected(udp);
+}
+
+void connectDirectly(String ip) {
+  try {
+    var webSocket = connectionHandler.connectWebSocket(ipaddress: ip);
+    webSocketConnected(webSocket);
+  } catch (e) {
+    updateNotification('$e');
+  }
 }
 
 void disconnect() {
