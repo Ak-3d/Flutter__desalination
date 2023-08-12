@@ -3,7 +3,7 @@ import 'package:final_project/Resources.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class CardDash extends StatelessWidget {
-  static num defaultRows = 1;
+  static num defaultRows = 0.5;
 
   const CardDash(
       {Key? key,

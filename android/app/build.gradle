@@ -30,17 +30,19 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+//        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+//        multiDexEnabled true
         applicationId "com.ak.final_project"
-        // You can update the following values to match your application needs. 
+        // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 19//flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 33//flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -70,4 +72,5 @@ dependencies {
     // Warning: when ObjectBox for Dart updates check if <version>
     // needs to be updated.
     debugImplementation("io.objectbox:objectbox-android-objectbrowser:3.5.1")
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

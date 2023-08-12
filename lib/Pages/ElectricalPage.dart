@@ -4,27 +4,19 @@ import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
+import '../Components/TankCard.dart';
 import '../main.dart';
 
-class Dashboard extends StatelessWidget { //THIS IS IMPORTANT DO NOT DELETE
-  const Dashboard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const AppScofflding(listView: [DashboardStfl()]);
-  }
-}
-
-class DashboardStfl extends StatefulWidget {
-  const DashboardStfl({
+class ElectricalPage extends StatefulWidget {
+  const ElectricalPage({
     super.key,
   });
 
   @override
-  State<DashboardStfl> createState() => _Dashboard();
+  State<ElectricalPage> createState() => _ElectricalPage();
 }
 
-class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
+class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterface {
   String status = "";
   String msgs = "";
   double value = 0;
@@ -36,34 +28,80 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   @override
   void initState() {
     super.initState();
+
     ciw.setInterface(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return StaggeredGrid.count(
+    return AppScofflding(title: 'ElectricalPage', listView: [
+      StaggeredGrid.count(
         crossAxisCount: colsN,
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(title: 'Status', child: Text(msgs)),
           CardDash(
-            title: 'Total Power Saved',
-            child: Text(status),
+            title: 'Total Power Drawn From AC Source',
+             child: 
+             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: Text('126 Wh',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                ),
+              ),
+            ]),
+             ),
+          CardDash(
+            title: 'Total Power Drawn From Battery',
+             child: 
+             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: Text('50 Wh',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                ),
+              ),
+            ]),
           ),
-          const CardDash(title: 'Total Water Production'),
           CardDash(
-            title: 'Next in Schedule',
+            title: 'Total Power Drawn From the Solar Energy',
+             child: 
+             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: Text('76 Wh',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                ),
+              ),
+            ]),
+          ),
+          CardDash(
+            title: 'Real Time Calculation',
             cols: 3,
-            rows: 1,
+            rows: 2,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                 flex: 2,
-                child: Center(
-                  child: Text('1 Day, 15 hours',
-                      style: Theme.of(context).textTheme.bodyLarge),
+                child: Stack(alignment: Alignment.center,
+                children:[
+                Container(
+                  margin: const EdgeInsets.only(left: 8, right: 8),
+                  height: 300,
+                  width: double.infinity,
+                  //child: Text('Hisham'),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromRGBO(1, 1, 1, 0.1),
+                  ),
                 ),
+                Text('Hi'),
+                ]
+              ),
               ),
               Expanded(
                   child: Text('Tank 1',
@@ -89,11 +127,10 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             ),
           ),
           CardDash(
-            title: 'Tanks',
+            title: 'ElectricalPage',
             child: ElevatedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/TankView', arguments: 0),
-              child: const Text('Tanks'),
+              onPressed: () => Navigator.pushNamed(context, '/ElectricalPage'),
+              child: const Text('ElectricalPage'),
             ),
           ),
           CardDash(
@@ -104,10 +141,10 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             ),
           ),
           CardDash(
-            title: 'PasswordSetup',
+            title: 'Tanks',
             child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
-              child: const Text('PasswordSetup'),
+              onPressed: () => Navigator.pushNamed(context, '/TankView'),
+              child: const Text('Tanks'),
             ),
           ),
           const CardDash(title: 'flow 1'),
@@ -126,12 +163,13 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
                 }),
           ),
           const StaggeredGridTile.extent(
-            mainAxisExtent: 100,
+            mainAxisExtent: 500,
             crossAxisCellCount: 3,
             child: Text(""),
           )
         ],
-      );
+      ),
+    ]);
   }
 
   @override
@@ -162,6 +200,5 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     setState(() {
       msgs = data.toString();
     });
-    // debugPrint('listnning from dashboard');
   }
 }

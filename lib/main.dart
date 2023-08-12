@@ -1,9 +1,12 @@
+import 'package:faker/faker.dart';
+import 'package:final_project/Models/Status.dart';
+import 'package:final_project/Models/Tanks.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
+import 'package:final_project/Pages/TankPage.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
-import 'Core/Tanks_setup.dart';
-import 'Core/password_setup.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
@@ -13,10 +16,14 @@ late ObjectBox objectbox;
 late Admin admin;
 late Size screenSize;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeService();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()?.requestPermission().then((value) async =>
+      await initializeService()
+      );
 
   try {
     objectbox = await ObjectBox.create();
@@ -24,11 +31,14 @@ void main() async {
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
-      admin = Admin(objectbox.store, bindUri: 'http://192.168.0.117:8090');
+      admin = Admin(objectbox.store, bindUri: 'http://127.0.0.1:8090');
     }
   } catch (e) {
     debugPrint(e.toString());
   }
+
+  // flushData();
+  // addDefaults();
   // for (var i = 0; i < 1000; i++) {
   //   DateTime d = faker.date.dateTimeBetween(
   //       DateTime.now().subtract(const Duration(days: 10)), DateTime.now());
@@ -72,7 +82,8 @@ class MyApp extends StatelessWidget {
         '/ReportsView': (context) => ReportsPage(),
         '/TanksSetup': (context) => TanksSetup(),
         '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
-        // '/TankView': (context) => Tanks_view(),
+        '/ReportsView': (context) => ReportsPage(),
+        '/TankView': (context) => TankPage(),
       },
       // darkTheme: ThemeData.dark(),
     );

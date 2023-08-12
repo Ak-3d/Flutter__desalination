@@ -1,5 +1,6 @@
 // import 'dart:async';
 
+import 'package:final_project/Components/CardDash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 // import '../ConnectionHandler.dart';
@@ -15,6 +16,11 @@ class AppScofflding extends StatelessWidget {
   final String foregroundTxt = 'Toggle Service';
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // debugPrint('width of screen: $width');
+    if(MediaQuery.of(context).size.width < 450){
+      CardDash.defaultRows = 1;
+    }
     return Scaffold(
       backgroundColor: Resources.bgcolor,
       // appBar: AppBar(
@@ -29,13 +35,8 @@ class AppScofflding extends StatelessWidget {
       ),
       bottomSheet: Row(
         //TODO this is temprary
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextButton(
-            child: const Text('reconnect'),
-            onPressed: () {
-              FlutterBackgroundService().invoke('Connect');
-            },
-          ),
           ElevatedButton(
             child: Text(foregroundTxt),
             onPressed: () async {

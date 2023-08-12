@@ -12,10 +12,10 @@ class Tanks {
   @Backlink('tanks')
   final singleTank = ToMany<SingleTank>();
   @Backlink('tanks')
-  final schedule =ToMany<Schedule>();
+  final schedule = ToMany<Schedule>();
   @Backlink('tanks')
-  final production =ToMany<Production>();
-  
+  final production = ToMany<Production>();
+
   int portNumber;
   String plantName;
   double tdsValue;

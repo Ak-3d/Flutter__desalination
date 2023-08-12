@@ -17,7 +17,9 @@ Future<void> initializeService() async {
     'MY FOREGROUND SERVICE', // title
     description:
         'This channel is used for important notifications.', // description
-    importance: Importance.low, // importance must be at low or higher level
+    importance: Importance.none, // importance must be at low or higher level
+    playSound: false,
+    enableVibration: false,
   );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -54,6 +56,7 @@ Future<void> initializeService() async {
 
       // auto start service
       autoStart: true,
+      autoStartOnBoot: true,
       isForegroundMode: true,
 
       notificationChannelId: 'my_foreground',
@@ -74,6 +77,7 @@ Future<void> initializeService() async {
 
 const String disconnectID = 'disconnectID';
 const String stopServiceID = 'stopServiceID';
+
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   debugPrint(notificationResponse.toString());
@@ -190,6 +194,9 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
   service.on('Connect').listen((e) => connect());
+  service.on('ConnectDirectly').listen((e) {
+    connectDirectly(e?['ip'] ?? '192.168.1.102');
+  });
   service.on('Send').listen((e) {
     connectionHandler.sendWebsocket(e?['msg'].toString() ?? '.');
   });
@@ -204,6 +211,8 @@ void onStart(ServiceInstance service) async {
 
     connectionHandler.sendWebsocket('check:${timer.tick}');
   });
+
+  connectDirectly('192.168.1.102');
 }
 
 void connect() async {
@@ -217,6 +226,15 @@ void connect() async {
     return;
   }
   udpConnected(udp);
+}
+
+void connectDirectly(String ip) {
+  try {
+    var webSocket = connectionHandler.connectWebSocket(ipaddress: ip);
+    webSocketConnected(webSocket);
+  } catch (e) {
+    updateNotification('$e');
+  }
 }
 
 void disconnect() {
