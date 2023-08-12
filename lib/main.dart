@@ -1,20 +1,18 @@
-import 'package:faker/faker.dart';
-import 'package:final_project/Models/WaterFlow.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
-import 'package:final_project/Pages/views/Tanks_view.dart';
-import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
+import 'Core/Tanks_setup.dart';
+import 'Core/password_setup.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
-import 'Pages/views/Report_list_view.dart';
 
 late ObjectBox objectbox;
 
 late Admin admin;
 late Size screenSize;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +24,7 @@ void main() async {
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
-      admin = Admin(objectbox.store, bindUri: 'http://192.168.43.1:8090');
+      admin = Admin(objectbox.store, bindUri: 'http://192.168.0.117:8090');
     }
   } catch (e) {
     debugPrint(e.toString());
@@ -70,9 +68,11 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/TdsMainPage': (context) => TdsMainPage(),
-        // '/ReportsView': (context) => Report_list_view(),
+        '/Dashboard': (context) => Dashboard(),
         '/ReportsView': (context) => ReportsPage(),
-        '/TankView': (context) => Tanks_view(),
+        '/TanksSetup': (context) => TanksSetup(),
+        '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
+        // '/TankView': (context) => Tanks_view(),
       },
       // darkTheme: ThemeData.dark(),
     );

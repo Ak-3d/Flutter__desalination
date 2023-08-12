@@ -4,7 +4,6 @@ import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
-import '../Components/TankCard.dart';
 import '../main.dart';
 
 class Dashboard extends StatefulWidget {
@@ -87,6 +86,20 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TankView'),
               child: const Text('Tanks'),
+            ),
+          ),
+          CardDash(
+            title: 'TanksSetup',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
+              child: const Text('TanksSetup'),
+            ),
+          ),
+          CardDash(
+            title: 'PasswordSetup',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
+              child: const Text('PasswordSetup'),
             ),
           ),
           const CardDash(title: 'flow 1'),
