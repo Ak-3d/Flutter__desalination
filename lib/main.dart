@@ -16,25 +16,6 @@ late ObjectBox objectbox;
 late Admin admin;
 late Size screenSize;
 
-void flushData (){
-  objectbox.waterFlow.removeAll();
-  objectbox.singleTank.removeAll();
-  objectbox.tanks.removeAll();
-  objectbox.status.removeAll();
-  objectbox.report.removeAll();
-
-  debugPrint('5 models are flushed');
-}
-void addDefaults(){
-  objectbox.tanks.put(Tanks(0, 'Test 1', 120, 0));
-  objectbox.tanks.put(Tanks(1, 'Test 2', 500, 300));
-
-  objectbox.status.put(Status('Pending'));
-  objectbox.status.put(Status('Done'));
-  objectbox.status.put(Status('Running'));
-
-  // objectbox.user.put(User('Abdulkareem Alhamdani', '700', password))
-}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -97,6 +78,10 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/TdsMainPage': (context) => TdsMainPage(),
+        '/Dashboard': (context) => Dashboard(),
+        '/ReportsView': (context) => ReportsPage(),
+        '/TanksSetup': (context) => TanksSetup(),
+        '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
         '/ReportsView': (context) => ReportsPage(),
         '/TankView': (context) => TankPage(),
       },

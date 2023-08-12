@@ -96,6 +96,20 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
               child: const Text('Tanks'),
             ),
           ),
+          CardDash(
+            title: 'TanksSetup',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
+              child: const Text('TanksSetup'),
+            ),
+          ),
+          CardDash(
+            title: 'PasswordSetup',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
+              child: const Text('PasswordSetup'),
+            ),
+          ),
           const CardDash(title: 'flow 1'),
           const CardDash(
             title: 'flow 2',
