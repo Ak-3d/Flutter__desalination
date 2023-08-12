@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Models/WaterFlow.dart';
@@ -76,7 +78,7 @@ class _TdsMainPageState extends State<TdsMainPage>
         children: [
           CardDash(
             title: status,
-            rows: 3,
+            rows: 1.5,
             cols: 4,
             child: ChartTds(
                 chartData: chartData,
@@ -94,8 +96,8 @@ class _TdsMainPageState extends State<TdsMainPage>
             child: const Text('Go Back'),
           ),
           const StaggeredGridTile.extent(
-            mainAxisExtent: 1000,
-            crossAxisCellCount: 80,
+            mainAxisExtent: 100,
+            crossAxisCellCount: 1,
             child: Text(""),
           ),
         ],
@@ -119,38 +121,27 @@ class _TdsMainPageState extends State<TdsMainPage>
 
   @override
   void listen(data) {
-    List<String> pairs = data.toString().split(',');
-    double tdsV = 0;
+    var obj = data['flow'];
+    if (obj == null) return;
+
+    double tdsV = double.parse(obj['TDS']);
     double tmp = 23;
-    double f1 = 10;
+    double f1 = double.parse(obj['F1']);
     double f2 = 20;
-
-    for (var p in pairs) {
-      List<String> pair = p.split(":");
-      switch (pair[0]) {
-        case 'TDS':
-          tdsV = double.parse(pair[1]);
-          updateDataSource(tdsV);
-          break;
-
-        case 'F1':
-          f1 = double.parse(pair[1]);
-          break;
-        default:
-      }
-    }
+    updateDataSource(tdsV);
+    debugPrint('obj recieved ${jsonEncode(data)}');
     if (tdsV > 1) {
-      Production w = Production(tdsV, f1, f2, tmp);
-      objectbox.production.put(w);
+      WaterFlow w = WaterFlow(tdsV, f1, f2, tmp, DateTime.now());
+      objectbox.waterFlow.put(w);
       debugPrint(
-          'new tds inserted: ${w.tdsValue}, F1:${w.flowWaterConcentrate}');
+          'new tds inserted: ${w.tds}, F1:${w.flow1}, F2:${w.flow2}');
     }
   }
 
   void updateDataSource(double v) {
     time = time + step;
 
-    if (time > 1000) {
+    if (time > max) {
       time = 0;
       chartController.updateDataSource(
           removedDataIndexes:

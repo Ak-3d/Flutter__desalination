@@ -2,6 +2,7 @@ import 'package:final_project/Components/CardDash.dart';
 import 'package:final_project/Components/ChartTds.dart';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:final_project/Resources.dart';
 import 'package:final_project/main.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,12 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TankPage extends StatelessWidget {
-  final int tankID;
-  const TankPage({super.key, required this.tankID});
-
+  const TankPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return AppScofflding(listView: [
-      TankPageStfl(
-        tankID: tankID,
-      )
-    ]);
+    final tankID = ModalRoute.of(context)!.settings.arguments as int;
+    debugPrint('this must be built only once if it is stateless');
+    return AppScofflding(listView: [TankPageStfl(tankID: tankID)]);
   }
 }
 
@@ -35,18 +32,22 @@ class _TankPageState extends State<TankPageStfl>
   late ChartSeriesController chartController;
 
   double unit = 0;
+  double step = 1;
   late double max;
 
-  double totalIrregation = 0;
-  bool isRunning = false;
-
+  double level = 0;
+  double totalIrrigation = 0;
+  bool isFilling = false;
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    ciw.setInterface(this);
+
     final now = DateTime.now();
-    final sat = ((now.weekday + 2) % 7) - 1;
+    final sat = ((now.weekday + 2) % 7) + 1;
     final hours = now.hour;
 
     final lastSat =
@@ -60,58 +61,60 @@ class _TankPageState extends State<TankPageStfl>
     var tankData = query.find();
 
     max = (tankData.length / (sat + 1)) * 7;
-
+    max = max < 20 ? 20 : max;
+    unit = 0;
     levelData = tankData.map<LiveData>((tnk) {
       final u = unit;
-      unit += 1;
+      unit += step;
       return LiveData(u, tnk.level);
     }).toList();
-
-    var qi = objectbox.irregation
-        .query(Irrigation_.tankID.equals(widget.tankID))
-        .build();
+    debugPrint('unit at initState:$unit');
+    var qi =
+    objectbox.irregation.query(Irrigation_.tankID.equals(widget.tankID)).build();
+    debugPrint(qi.describe());
     var irrgs = qi.find();
     for (var element in irrgs) {
-      totalIrregation += element.irrigationVolume;
+      totalIrrigation += element.irrigationVolume;
     }
-
-    ciw.setInterface(this);
   }
-
   @override
   Widget build(BuildContext context) {
-    return StaggeredGrid.count(
-      crossAxisCount: 1,
-      mainAxisSpacing: 10,
-      children: [
-        CardDash(
-          rows: 4,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 5,
-                child: ChartTds(
-                    xMax: max,
-                    xMin: 0,
-                    yMax: 1000,
-                    yMin: 0,
-                    chartData: levelData,
-                    onRendererCreated: (controller) =>
-                        chartController = controller),
-              ),
-              Expanded(child: Text('total prodcution: $totalIrregation'))
-            ],
-          ),
+
+    final height = MediaQuery.of(context).size.height;
+    return SizedBox(
+      height: height * 0.8,
+      child: Container(
+        decoration: const BoxDecoration(color: Resources.bgcolor_100),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 8,
+              child: ChartTds(
+                  xMax: max,
+                  xMin: 0,
+                  yMax: 100,
+                  yMin: 0,
+                  chartData: levelData,
+                  onRendererCreated: (controller) =>
+                      chartController = controller),
+            ),
+            Expanded(child: Text('total prodcution: $totalIrrigation')),
+            Expanded(child: Text('level: ${level <= 0 ? '' : level}')),
+            Expanded(child: Text('being filled: $isFilling')),
+            Expanded(child: Text('tank ID: ${widget.tankID}')),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     ciw.dispose();
+    super.dispose();
   }
 
   @override
@@ -126,25 +129,33 @@ class _TankPageState extends State<TankPageStfl>
 
   @override
   void listen(data) {
-    var objs = data.toString().split('|');
-    for (var o in objs) {
-      var pair = o.split('=');
-      if (pair[0] != 'sTank') continue;
+    var obj = data['stank'];
+    if (obj == null) return;
 
-      getData(pair[1]);
-      break;
+    isFilling = obj['isFill'] == '1';
+    final level = double.parse(obj['level']);
+    if (mounted) {
+      setState(() {
+        this.level = level;
+      });
     }
+    updateGraph(level);
+
+    debugPrint('unit: $unit');
+    // debugPrint('listenning in tank page');
   }
 
-  void getData(String d) {
-    var pairs = d.split(',');
-    double value;
-    for (var pair in pairs) {
-      switch (pair[0]) {
-        case 'level':
-          value = double.tryParse(pair[1]) ?? 0;
-          break;
-      }
+  void updateGraph(double v) {
+    if (unit > max) {
+      unit = 0;
+      chartController.updateDataSource(
+          removedDataIndexes:
+              List<int>.generate(levelData.length, (index) => index));
+      levelData.clear();
     }
+
+    levelData.add(LiveData(unit, v));
+    chartController.updateDataSource(addedDataIndex: levelData.length - 1);
+    unit = unit + step;
   }
 }
