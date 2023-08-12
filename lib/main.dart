@@ -1,6 +1,10 @@
 import 'package:faker/faker.dart';
+import 'package:final_project/Models/Status.dart';
+import 'package:final_project/Models/Tanks.dart';
+import 'package:final_project/Models/User.dart';
 import 'package:final_project/Models/WaterFlow.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
+import 'package:final_project/Pages/TankPage.dart';
 import 'package:final_project/Pages/views/Tanks_view.dart';
 import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
@@ -16,21 +20,40 @@ late ObjectBox objectbox;
 late Admin admin;
 late Size screenSize;
 
+void flushData (){
+  objectbox.waterFlow.removeAll();
+  objectbox.singleTank.removeAll();
+  objectbox.tanks.removeAll();
+
+  debugPrint('5 models are flushed');
+}
+void addDefaults(){
+  objectbox.tanks.put(Tanks(0, 'Test 1', 120, 300));
+  objectbox.tanks.put(Tanks(1, 'Test 2', 500, 0));
+
+  objectbox.status.put(Status('Pending'));
+  objectbox.status.put(Status('Done'));
+  objectbox.status.put(Status('Running'));
+
+  // objectbox.user.put(User('Abdulkareem Alhamdani', '700', password))
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeService();
-
   try {
     objectbox = await ObjectBox.create();
 
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
-      admin = Admin(objectbox.store, bindUri: 'http://192.168.43.1:8090');
+      admin = Admin(objectbox.store, bindUri: 'http://127.0.0.1:8090');
     }
   } catch (e) {
     debugPrint(e.toString());
   }
+
+  flushData();
+  addDefaults();
   // for (var i = 0; i < 1000; i++) {
   //   DateTime d = faker.date.dateTimeBetween(
   //       DateTime.now().subtract(const Duration(days: 10)), DateTime.now());
@@ -72,7 +95,8 @@ class MyApp extends StatelessWidget {
         '/TdsMainPage': (context) => TdsMainPage(),
         // '/ReportsView': (context) => Report_list_view(),
         '/ReportsView': (context) => ReportsPage(),
-        '/TankView': (context) => Tanks_view(),
+        // '/TankView': (context) => Tanks_view(),
+        '/TankView': (context) => TankPage(),
       },
       // darkTheme: ThemeData.dark(),
     );
