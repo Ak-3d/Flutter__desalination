@@ -1,3 +1,4 @@
+import 'package:final_project/Components/Tank.dart';
 import 'package:final_project/Models/Irrgation.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/WaterFlow.dart';
@@ -34,7 +35,10 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
-    _putDemoData();
+
+    if(status.isEmpty()) {
+      _putDefault();
+    }
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -46,43 +50,12 @@ class ObjectBox {
     return ObjectBox._create(store);
   }
 
-  void _putDemoData() {
-    Tanks tank1 = Tanks(1, "drink", 222.2, 22);
-    Tanks tank2 = Tanks(2, "plant", 222.2, 22);
-    SingleTank stank1 = SingleTank(100, false);
-    SingleTank stank2 = SingleTank(1020, true);
-    SingleTank stank3 = SingleTank(2462, true);
-    tank1.singleTank.addAll([stank1, stank2, stank3]);
-    tank2.singleTank.addAll([stank1, stank2]);
-    tanks.putMany([tank1, tank2]);
-    Status status1 = Status("status 1");
-    Status status2 = Status("status 2");
-    Status status3 = Status("status 3");
+  void _putDefault() {
+    status.put(Status('Pending'));
+    status.put(Status('Running'));
+    status.put(Status('Done'));
 
-    Report report1 = Report("Error in status 1!!");
-    report1.status.target = status1;
-
-    Report report2 = Report("Error in status 2!!");
-    report2.status.target = status2;
-    Report report3 = Report("Error in status 1!!");
-    report3.status.target = status3;
-
-    report.putMany([report1, report2, report3]);
-  }
-
-  void addReport(String note, Status statue) {
-    Report newReport = Report(note);
-    newReport.status.target = statue;
-    report.put(newReport);
-  }
-
-  int addStatus(String name) {
-    Status newStatue = Status(name);
-    return status.put(newStatue);
-  }
-
-  Stream<List<Report>> getReports() {
-    final builder = report.query()..order(Report_.id, flags: Order.descending);
-    return builder.watch(triggerImmediately: true).map((event) => event.find());
+    tanks.put(Tanks(0, 'Drink', 120, 0));
+    tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
   }
 }

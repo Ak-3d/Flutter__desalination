@@ -1,6 +1,6 @@
 import 'package:faker/faker.dart';
-import 'package:final_project/Models/Status.dart';
-import 'package:final_project/Models/Tanks.dart';
+import 'package:final_project/Core/Tanks_setup.dart';
+import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/TankPage.dart';
 import 'package:final_project/objectbox.g.dart';
@@ -32,6 +32,8 @@ void main() async {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
       admin = Admin(objectbox.store, bindUri: 'http://127.0.0.1:8090');
+      /* TODO do this command ```adb forward tcp:8090 tcp:8090``` to
+       Expose the IP into localhost:8090 in computer */
     }
   } catch (e) {
     debugPrint(e.toString());
