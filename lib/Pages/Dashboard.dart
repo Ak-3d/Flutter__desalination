@@ -83,6 +83,20 @@ class _Dashboard extends State<Dashboard> implements ConnectionInterface {
             ),
           ),
           CardDash(
+            title: 'ElectricalPage',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/ElectricalPage'),
+              child: const Text('ElectricalPage'),
+            ),
+          ),
+          CardDash(
+            title: 'TanksSetup',
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
+              child: const Text('TanksSetup'),
+            ),
+          ),
+          CardDash(
             title: 'Tanks',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TankView'),

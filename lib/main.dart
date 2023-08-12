@@ -6,7 +6,9 @@ import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
+import 'Core/Tanks_setup.dart';
 import 'ObjectBox.dart';
+import 'Pages/ElectricalPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
 import 'Pages/views/Report_list_view.dart';
@@ -26,7 +28,7 @@ void main() async {
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
-      admin = Admin(objectbox.store, bindUri: 'http://192.168.43.1:8090');
+    //  admin = Admin(objectbox.store, bindUri: 'http://192.168.0.117:8090');
     }
   } catch (e) {
     debugPrint(e.toString());
@@ -73,6 +75,8 @@ class MyApp extends StatelessWidget {
         // '/ReportsView': (context) => Report_list_view(),
         '/ReportsView': (context) => ReportsPage(),
         '/TankView': (context) => Tanks_view(),
+        '/TanksSetup': (context) => TanksSetup(),
+        '/ElectricalPage': (context) => ElectricalPage(),
       },
       // darkTheme: ThemeData.dark(),
     );

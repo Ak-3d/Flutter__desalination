@@ -16,7 +16,8 @@ class ElectricalPage extends StatefulWidget {
   State<ElectricalPage> createState() => _ElectricalPage();
 }
 
-class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterface {
+class _ElectricalPage extends State<ElectricalPage>
+    implements ConnectionInterface {
   String status = "";
   String msgs = "";
   double value = 0;
@@ -42,8 +43,8 @@ class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterfa
         children: [
           CardDash(
             title: 'Total Power Drawn From AC Source',
-             child: 
-             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                 flex: 2,
                 child: Center(
@@ -52,11 +53,11 @@ class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterfa
                 ),
               ),
             ]),
-             ),
+          ),
           CardDash(
             title: 'Total Power Drawn From Battery',
-             child: 
-             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                 flex: 2,
                 child: Center(
@@ -68,8 +69,8 @@ class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterfa
           ),
           CardDash(
             title: 'Total Power Drawn From the Solar Energy',
-             child: 
-             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                 flex: 2,
                 child: Center(
@@ -87,21 +88,19 @@ class _ElectricalPage extends State<ElectricalPage> implements ConnectionInterfa
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                 flex: 2,
-                child: Stack(alignment: Alignment.center,
-                children:[
-                Container(
-                  margin: const EdgeInsets.only(left: 8, right: 8),
-                  height: 300,
-                  width: double.infinity,
-                  //child: Text('Hisham'),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromRGBO(1, 1, 1, 0.1),
+                child: Stack(alignment: Alignment.center, children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 8, right: 8),
+                    height: 300,
+                    width: double.infinity,
+                    //child: Text('Hisham'),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromRGBO(1, 1, 1, 0.1),
+                    ),
                   ),
-                ),
-                Text('Hi'),
-                ]
-              ),
+                  Text('Hi'),
+                ]),
               ),
               Expanded(
                   child: Text('Tank 1',
