@@ -9,10 +9,9 @@ import 'Models/SingleTank.dart';
 import 'Models/Status.dart';
 import 'Models/Tanks.dart';
 import 'Models/User.dart';
-import '../Models/Data/Tanks_data.dart';
 import 'objectbox.g.dart';
 
-class ObjectBox extends TanksData {
+class ObjectBox {
   /// The Store of this app.
   late final Store store;
   late final Box<User> user;
@@ -20,6 +19,10 @@ class ObjectBox extends TanksData {
   late final Box<Status> status;
   late final Box<WaterFlow> waterFlow;
   late final Box<Irrigation> irregation;
+  late final Box<Tanks> tanks;
+  late final Box<SingleTank> singleTank;
+  late final Box<Production> production;
+  late final Box<Schedule> schedule;
 
   ObjectBox._create(this.store) {
     tanks = store.box<Tanks>();

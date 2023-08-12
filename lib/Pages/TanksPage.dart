@@ -1,6 +1,5 @@
 import 'package:final_project/Components/TanksCards.dart';
 import 'package:final_project/Models/Tanks.dart';
-import 'package:final_project/Pages/views/PartsTanks_list_view.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,7 +19,6 @@ class _TanksPageState extends State<TanksPage> {
         child: Column(
           children: [
             TanksCards(tank: widget.tanks),
-            PartsTanks_list_view(tankId: widget.tanks.id),
           ],
         ));
   }

@@ -1,12 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:final_project/Models/Status.dart';
 import 'package:final_project/Models/Tanks.dart';
-import 'package:final_project/Models/User.dart';
-import 'package:final_project/Models/WaterFlow.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/TankPage.dart';
-import 'package:final_project/Pages/views/Tanks_view.dart';
-import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +10,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
-import 'Pages/views/Report_list_view.dart';
 
 late ObjectBox objectbox;
 
@@ -26,8 +21,9 @@ void flushData (){
   objectbox.singleTank.removeAll();
   objectbox.tanks.removeAll();
   objectbox.status.removeAll();
+  objectbox.report.removeAll();
 
-  debugPrint('4 models are flushed');
+  debugPrint('5 models are flushed');
 }
 void addDefaults(){
   objectbox.tanks.put(Tanks(0, 'Test 1', 120, 0));
@@ -101,9 +97,7 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/TdsMainPage': (context) => TdsMainPage(),
-        // '/ReportsView': (context) => Report_list_view(),
         '/ReportsView': (context) => ReportsPage(),
-        // '/TankView': (context) => Tanks_view(),
         '/TankView': (context) => TankPage(),
       },
       // darkTheme: ThemeData.dark(),

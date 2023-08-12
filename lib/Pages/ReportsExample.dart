@@ -1,6 +1,7 @@
 import 'package:final_project/Components/CardDash.dart';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/Components/ReportCardEx.dart';
+import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Models/Report.dart';
 import 'package:final_project/main.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,15 @@ class ReportsPage extends StatefulWidget {
   State<ReportsPage> createState() => _ReportsPageState();
 }
 
-class _ReportsPageState extends State<ReportsPage> {
+class _ReportsPageState extends State<ReportsPage> implements ConnectionInterface {
   late List<ReportCardEx> reports;
+
+  ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    ciw.setInterface(this);
 
     List<Report> rps = objectbox.report.getAll();
     reports = [];
@@ -39,5 +43,26 @@ class _ReportsPageState extends State<ReportsPage> {
         children: reports,
       )
     ]);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    ciw.dispose();
+    super.dispose();
+  }
+  @override
+  void connected() {
+    // TODO: implement connected
+  }
+
+  @override
+  void interrupted(data) {
+    // TODO: implement interrupted
+  }
+
+  @override
+  void listen(Map<String, dynamic> data) {
+    // TODO: implement listen
   }
 }
