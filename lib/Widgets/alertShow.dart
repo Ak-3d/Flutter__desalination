@@ -18,8 +18,10 @@ Future<bool> alertShow(
         actions: <Widget>[
           TextButton(
             child: Text('Confirm'),
-            onPressed: () {
+            onPressed: () async {
+             await alertDialog(context,'Complete Process Successfully !',"Done");
               Navigator.pop(context, true);
+              
             },
           ),
           TextButton(
@@ -32,4 +34,23 @@ Future<bool> alertShow(
       );
     },
   );
+}
+
+Future<bool> alertDialog(BuildContext context,String message ,String title)async {
+  return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:  Text(title),
+          content:  Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      });
 }

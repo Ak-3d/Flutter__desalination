@@ -6,7 +6,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
 import '../main.dart';
 
-class Dashboard extends StatelessWidget { //THIS IS IMPORTANT DO NOT DELETE
+class Dashboard extends StatelessWidget {
+  //THIS IS IMPORTANT DO NOT DELETE
   const Dashboard({super.key});
 
   @override
@@ -42,96 +43,102 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   @override
   Widget build(BuildContext context) {
     return StaggeredGrid.count(
-        crossAxisCount: colsN,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-        children: [
-          CardDash(title: 'Status', child: Text(msgs)),
-          CardDash(
-            title: 'Total Power Saved',
-            child: Text(status),
-          ),
-          const CardDash(title: 'Total Water Production'),
-          CardDash(
-            title: 'Next in Schedule',
-            cols: 3,
-            rows: 1,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text('1 Day, 15 hours',
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ),
+      crossAxisCount: colsN,
+      mainAxisSpacing: 30,
+      crossAxisSpacing: 20,
+      children: [
+        CardDash(title: 'Status', child: Text(msgs)),
+        CardDash(
+          title: 'Total Power Saved',
+          child: Text(status),
+        ),
+        const CardDash(title: 'Total Water Production'),
+        CardDash(
+          title: 'Next in Schedule',
+          cols: 3,
+          rows: 1,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Text('1 Day, 15 hours',
+                    style: Theme.of(context).textTheme.bodyLarge),
               ),
-              Expanded(
-                  child: Text('Tank 1',
-                      style: Theme.of(context).textTheme.bodyMedium)),
-              Expanded(
-                child: Text('Tuesday at 3 o\'sclick',
-                    style: Theme.of(context).textTheme.bodySmall),
-              ),
-            ]),
-          ),
-          CardDash(
-            title: 'TDS',
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
-              child: const Text('TDS'),
             ),
-          ),
-          CardDash(
-            title: 'Reports',
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/ReportsView'),
-              child: const Text('Reports'),
+            Expanded(
+                child: Text('Tank 1',
+                    style: Theme.of(context).textTheme.bodyMedium)),
+            Expanded(
+              child: Text('Tuesday at 3 o\'sclick',
+                  style: Theme.of(context).textTheme.bodySmall),
             ),
+          ]),
+        ),
+        CardDash(
+          title: 'TDS',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
+            child: const Text('TDS'),
           ),
-          CardDash(
-            title: 'Tanks',
-            child: ElevatedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/TankView', arguments: 0),
-              child: const Text('Tanks'),
-            ),
+        ),
+        CardDash(
+          title: 'Reports',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/ReportsView'),
+            child: const Text('Reports'),
           ),
-          CardDash(
-            title: 'TanksSetup',
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
-              child: const Text('TanksSetup'),
-            ),
+        ),
+        CardDash(
+          title: 'Tanks',
+          child: ElevatedButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, '/TankView', arguments: 0),
+            child: const Text('Tanks'),
           ),
-          CardDash(
-            title: 'PasswordSetup',
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
-              child: const Text('PasswordSetup'),
-            ),
+        ),
+        CardDash(
+          title: 'TanksSetup',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
+            child: const Text('TanksSetup'),
           ),
-          const CardDash(title: 'flow 1'),
-          const CardDash(
-            title: 'flow 2',
+        ),
+        CardDash(
+          title: 'PasswordSetup',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
+            child: const Text('PasswordSetup'),
           ),
-          CardDash(
-            child: Slider(
-                value: value,
-                min: 0,
-                max: 100,
-                onChanged: (v) {
-                  setState(() {
-                    value = v;
-                  });
-                }),
+        ),
+        CardDash(
+          title: 'AllTanks',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
+            child: const Text('AllTanks'),
           ),
-          const StaggeredGridTile.extent(
-            mainAxisExtent: 100,
-            crossAxisCellCount: 3,
-            child: Text(""),
-          )
-        ],
-      );
+        ),
+        const CardDash(title: 'flow 1'),
+        const CardDash(
+          title: 'flow 2',
+        ),
+        CardDash(
+          child: Slider(
+              value: value,
+              min: 0,
+              max: 100,
+              onChanged: (v) {
+                setState(() {
+                  value = v;
+                });
+              }),
+        ),
+        const StaggeredGridTile.extent(
+          mainAxisExtent: 100,
+          crossAxisCellCount: 3,
+          child: Text(""),
+        )
+      ],
+    );
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
@@ -7,7 +6,9 @@ import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'Components/TanksCards.dart';
 import 'ObjectBox.dart';
+import 'Pages/TanksPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
 
@@ -31,7 +32,7 @@ void main() async {
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
-      admin = Admin(objectbox.store, bindUri: 'http://127.0.0.1:8090');
+      admin = Admin(objectbox.store, bindUri: 'http://192.168.0.117:8090');
       /* TODO do this command ```adb forward tcp:8090 tcp:8090``` to
        Expose the IP into localhost:8090 in computer */
     }
@@ -84,8 +85,7 @@ class MyApp extends StatelessWidget {
         '/ReportsView': (context) => ReportsPage(),
         '/TanksSetup': (context) => TanksSetup(),
         '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
-        '/ReportsView': (context) => ReportsPage(),
-        '/TankView': (context) => TankPage(),
+        '/TanksPage': (context) => TanksPage(),
       },
       // darkTheme: ThemeData.dark(),
     );
