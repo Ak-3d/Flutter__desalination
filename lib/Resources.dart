@@ -14,7 +14,7 @@ class Resources {
   static const passcolor = Color(0xff00ff00);
   static const failcolor = Color(0xffff0000);
 
-  static const tankNeutralColor = Colors.grey;
+  static const tankNeutralColor = Color.fromARGB(255, 255, 255, 255);
   static const tankFullColor = Color(0xff479B33);
   static const tankEmptyColor = Color(0xffD53535);
   // static const bgcolor = Color(0x063636);

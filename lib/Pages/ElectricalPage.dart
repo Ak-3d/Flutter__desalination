@@ -4,7 +4,6 @@ import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Components/CardDash.dart';
-import '../Components/TankCard.dart';
 import '../main.dart';
 
 class ElectricalPage extends StatefulWidget {
