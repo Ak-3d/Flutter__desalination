@@ -7,6 +7,7 @@ import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Components/TanksCards.dart';
+import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
 import 'Pages/TanksPage.dart';
 import 'Pages/TdsMainPage.dart';
@@ -86,6 +87,8 @@ class MyApp extends StatelessWidget {
         '/TanksSetup': (context) => TanksSetup(),
         '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
         '/TanksPage': (context) => TanksPage(),
+        '/LoginPage': (context) => LoginPage(),
+    
       },
       // darkTheme: ThemeData.dark(),
     );

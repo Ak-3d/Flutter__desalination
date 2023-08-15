@@ -97,6 +97,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         decoration: InputDecoration(
                             labelText: "Please Enter User Name",
                             border: const OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.person),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
@@ -137,10 +138,11 @@ class _PasswordSetupState extends State<PasswordSetup> {
                       child: TextFormField(
                         focusNode: passWordFocusNode,
                         controller: passWordController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
+                        obscureText: true,
+                        decoration:  InputDecoration(
                             labelText: "Please Enter Password",
-                            border: const OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.password),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
@@ -172,6 +174,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                       child: Text(
                         "Enter Your PhoneNumber :",
                         style: Theme.of(context).textTheme.bodySmall,
+                         
                       )),
                   Container(
                       padding: const EdgeInsets.symmetric(
@@ -185,6 +188,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         decoration: InputDecoration(
                             labelText: "Please Enter  Your PhoneNumber",
                             border: const OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.phone),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
