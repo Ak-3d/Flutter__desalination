@@ -1,21 +1,41 @@
 import 'package:final_project/Components/CardDash.dart';
-import 'package:final_project/Components/ChartTds.dart';
-import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
-import 'package:final_project/Resources.dart';
 import 'package:final_project/main.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class TankPage extends StatelessWidget {
-  const TankPage({super.key});
+import '../Components/Tank.dart';
+import '../Components/TankVolume.dart';
+import '../Models/Tanks.dart';
+
+
+class SingleTank extends StatelessWidget {
+  final int tankID;
+  const SingleTank({super.key,  this.tankID =2});
   @override
   Widget build(BuildContext context) {
-    final tankID = ModalRoute.of(context)!.settings.arguments as int;
+    
+    // final tankID = 1;
+    final tank = objectbox.tanks.get(tankID);
     // debugPrint('this must be built only once if it is stateless');
-    return AppScofflding(listView: [TankPageStfl(tankID: tankID)]);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(" ${tank!.plantName} Tank"),
+      ),
+      body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            child: StaggeredGrid.count(
+              crossAxisCount: 1,
+              mainAxisSpacing: 10,
+              children: [TankPageStfl(tankID: tankID)],
+            ),
+          )),
+    );
+    // AppScofflding(listView: [TankPageStfl(tankID: tankID)]);
   }
 }
 
@@ -30,21 +50,22 @@ class _TankPageState extends State<TankPageStfl>
     implements ConnectionInterface {
   late List<LiveData> levelData;
   late ChartSeriesController chartController;
-
+  late Tanks tank;
   double unit = 0;
   double step = 1;
   late double max;
 
-  double level = 0;
-  double totalIrrigation = 0;
-  bool isFilling = false;
+  double level = 20;
+  double totalIrrigation =20;
+  bool isFilling = true;
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     ciw.setInterface(this);
+    tank = objectbox.tanks.get(widget.tankID)!;
 
     final now = DateTime.now();
     final sat = ((now.weekday + 2) % 7) + 1;
@@ -69,29 +90,33 @@ class _TankPageState extends State<TankPageStfl>
       return LiveData(u, tnk.level);
     }).toList();
     // debugPrint('unit at initState:$unit');
-    var qi =
-    objectbox.irregation.query(Irrigation_.tankID.equals(widget.tankID)).build();
+    var qi = objectbox.irregation
+        .query(Irrigation_.tankID.equals(widget.tankID))
+        .build();
     // debugPrint(qi.describe());
     var irrgs = qi.find();
     for (var element in irrgs) {
       totalIrrigation += element.irrigationVolume;
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
-    final height = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: height * 0.8,
-      child: Container(
-        decoration: const BoxDecoration(color: Resources.bgcolor_100),
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+   
+    return
+     
+      StaggeredGrid.count(
+      crossAxisCount: 5,
+      mainAxisSpacing: 22,
+      crossAxisSpacing: 12,
+      children: [
+        CardDash(
+          cols: 5,
+          rows: 3,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Expanded(
-              flex: 8,
-              child: ChartTds(
+              flex: 4,
+              child: TankVolume(
                   xMax: max,
                   xMin: 0,
                   yMax: 100,
@@ -100,13 +125,47 @@ class _TankPageState extends State<TankPageStfl>
                   onRendererCreated: (controller) =>
                       chartController = controller),
             ),
-            Expanded(child: Text('total prodcution: $totalIrrigation')),
-            Expanded(child: Text('level: ${level <= 0 ? '' : level}')),
-            Expanded(child: Text('being filled: $isFilling')),
-            Expanded(child: Text('tank ID: ${widget.tankID}')),
-          ],
+          ]),
         ),
-      ),
+        Container(
+           decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 76, 74, 76),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
+          ]),
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Container(
+             height: 150,
+                width: 300,
+              child:Tank(value: level, isFilling: isFilling),
+        
+            ),
+          ]),
+        ),        
+        CardDash(
+         cols: 2,
+          title: "Plant Name :",
+          child: Text(tank.plantName),
+        ),
+        CardDash(
+          cols: 2,
+          title: "TDS Value :",
+          child: Text(tank.tdsValue.toString() +" PPM"),
+        ),
+        CardDash(
+           color: isFilling? Color.fromARGB(205, 209, 63, 22):Color.fromARGB(205, 59, 209, 22),
+          cols: 2,
+          title: "Tank State :",
+          child: Text('${isFilling ? "Full" : "NOT Full"} '),
+        ),
+        CardDash(
+          cols: 2,
+          title: "Total Production :",
+          child: Text('$totalIrrigation  Liter'),
+        )
+
+      ],
     );
   }
 
@@ -134,7 +193,9 @@ class _TankPageState extends State<TankPageStfl>
 
     isFilling = obj['isFill'] == '1';
     final level = double.parse(obj['level']);
-    if (mounted) { //this to double check that the page is disposed
+    
+    if (mounted) {
+      //this to double check that the page is disposed
       setState(() {
         this.level = level;
       });

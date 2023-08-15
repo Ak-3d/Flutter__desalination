@@ -1,7 +1,7 @@
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
-import 'package:final_project/Pages/TankPage.dart';
+import 'package:final_project/Pages/SingleTank.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +88,7 @@ class MyApp extends StatelessWidget {
         '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
         '/TanksPage': (context) => TanksPage(),
         '/LoginPage': (context) => LoginPage(),
+        '/SingleTank': (context) => SingleTank(),
     
       },
       // darkTheme: ThemeData.dark(),
