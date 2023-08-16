@@ -7,8 +7,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import '../Resources.dart';
 
 class AppScofflding extends StatelessWidget {
-  const AppScofflding(
-      {Key? key, final this.title = 'title', required this.listView})
+  const AppScofflding({Key? key, this.title = 'title', required this.listView})
       : super(key: key);
 
   final String title;
@@ -16,9 +15,9 @@ class AppScofflding extends StatelessWidget {
   final String foregroundTxt = 'Toggle Service';
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     // debugPrint('width of screen: $width');
-    if(MediaQuery.of(context).size.width < 450){
+    if (MediaQuery.of(context).size.width < 450) {
       CardDash.defaultRows = 1;
     }
     return Scaffold(
