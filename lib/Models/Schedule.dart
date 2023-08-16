@@ -15,12 +15,16 @@ class Schedule {
   @Backlink('schedule')
   final irrigation = ToMany<Irrigation>();
 
-  DateTime time = DateTime.timestamp();
+  int hours;
+  int minutes;
+
   bool isDeleted = false;
+  @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
+  @Property(type: PropertyType.date)
   DateTime modifiedDate = DateTime.now();
 
   final tanks = ToOne<Tanks>();
 
-  Schedule(this.time, this.modifiedDate);
+  Schedule(this.hours,this.minutes, this.modifiedDate);
 }

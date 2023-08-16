@@ -26,8 +26,8 @@ class CardDash extends StatelessWidget {
       crossAxisCellCount: cols,
       mainAxisCellCount: rows ?? defaultRows,
       child: Container(
-        decoration: const BoxDecoration(
-            color: Resources.bgcolor_100,
+        decoration:  BoxDecoration(
+            color:color,
             borderRadius: BorderRadius.all(Radius.circular(20)),
             boxShadow: [
               BoxShadow(

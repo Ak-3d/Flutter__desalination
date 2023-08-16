@@ -4,6 +4,7 @@ import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/WaterFlow.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'Models/Days.dart';
 import 'Models/Production.dart';
 import 'Models/Report.dart';
 import 'Models/SingleTank.dart';
@@ -24,7 +25,7 @@ class ObjectBox {
   late final Box<SingleTank> singleTank;
   late final Box<Production> production;
   late final Box<Schedule> schedule;
-
+  late final Box<Days> days;
   ObjectBox._create(this.store) {
     tanks = store.box<Tanks>();
     singleTank = store.box<SingleTank>();
@@ -35,8 +36,9 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
+    days = store.box<Days>();
 
-    if(status.isEmpty()) {
+    if (status.isEmpty()) {
       _putDefault();
     }
   }

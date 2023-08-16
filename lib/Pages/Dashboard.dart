@@ -89,11 +89,11 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           ),
         ),
         CardDash(
-          title: 'Tanks',
+          title: 'SingleTank',
           child: ElevatedButton(
             onPressed: () =>
-                Navigator.pushNamed(context, '/TankView', arguments: 0),
-            child: const Text('Tanks'),
+                Navigator.pushNamed(context, '/SingleTank'),
+            child: const Text('SingleTank'),
           ),
         ),
         CardDash(
@@ -108,6 +108,13 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           child: ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, '/LoginPage'),
             child: const Text('LoginPage'),
+          ),
+        ),
+        CardDash(
+          title: 'SchedulePage',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/SchedulePage' ),
+            child: const Text('SchedulePage'),
           ),
         ),
         CardDash(
