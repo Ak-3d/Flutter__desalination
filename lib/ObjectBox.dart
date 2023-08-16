@@ -1,4 +1,4 @@
-import 'package:final_project/Components/Tank.dart';
+import 'package:final_project/Models/Electricity.dart';
 import 'package:final_project/Models/Irrgation.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/WaterFlow.dart';
@@ -36,7 +36,7 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
-    days = store.box<Days>();
+    _flushData();
 
     if (status.isEmpty()) {
       _putDefault();
@@ -60,4 +60,11 @@ class ObjectBox {
     tanks.put(Tanks(0, 'Drink', 120, 0));
     tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
   }
+
+  void _flushData() {
+    status.removeAll();
+    tanks.removeAll();
+  }
+
+  void _putDummy() {}
 }

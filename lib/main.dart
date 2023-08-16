@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
-import 'Pages/SchedulePage.dart';
-import 'Pages/TanksPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
 
@@ -76,8 +74,8 @@ class MyApp extends StatelessWidget {
         '/Dashboard': (context) => const Dashboard(),
         '/ReportsView': (context) => const ReportsPage(),
         '/TanksSetup': (context) => TanksSetup(),
-        '/PasswordSetup': (context) => const PasswordSetup(passwordId: 1),
-        '/TanksPage': (context) => const TanksPage(),
+        '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
+        '/TankPage': (context) => const TankPage(),
       },
       initialRoute: '/PasswordSetup',
       // darkTheme: ThemeData.dark(),

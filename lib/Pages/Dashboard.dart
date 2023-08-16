@@ -1,8 +1,23 @@
+import 'dart:async';
+
+import 'package:final_project/Components/ChartTds.dart';
+import 'package:final_project/Components/Tank.dart';
+import 'package:final_project/Components/TanksCards.dart';
+import 'package:final_project/Models/Electricity.dart';
+import 'package:final_project/Models/Production.dart';
+import 'package:final_project/Models/Schedule.dart';
+import 'package:final_project/Models/SingleTank.dart';
+import 'package:final_project/Models/Tanks.dart';
+import 'package:final_project/Pages/DashboardCards/PowerCards.dart';
+import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
+import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
+import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Components/CardDash.dart';
 import '../main.dart';
 
@@ -26,18 +41,70 @@ class DashboardStfl extends StatefulWidget {
 }
 
 class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
-  String status = "";
-  String msgs = "";
+  String status = "Disconnected";
+  double totalPower = 100;
+  double totalProduction = 70000;
+
   double value = 0;
   String title = '';
+
+  late Tanks tanks;
+  List<SingleTank> tanksRealTime = [];
+  late Schedule schedule;
+  late Production production;
+  late Electricity electricity;
 
   int colsN = 3;
 
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
+  DateTime nowTemp = DateTime.now();
+  String durationStr = '';
+
+  late List<LiveData> irregationsData;
+  late ChartSeriesController irregationController;
+
+  late List<ColoredData> dataGood;
+  late CircularSeriesController cGood;
+
+  late List<ColoredData> dataWaste;
+  late CircularSeriesController cWaste;
+
   @override
   void initState() {
     super.initState();
     ciw.setInterface(this);
+
+    tanks = Tanks(1, 'demo plant 1', 500, 2000);
+    tanks.id = 1;
+
+    tanksRealTime.add(SingleTank(100, false));
+    tanksRealTime[0].id = 1;
+    tanksRealTime.add(SingleTank(50, true));
+    tanksRealTime[1].id = 2;
+    tanksRealTime.add(SingleTank(10, true));
+    // tanksRealTime[2].id = 3;
+    // tanksRealTime.add(SingleTank(1, true));
+    // tanksRealTime[3].id = 4;
+
+    schedule = Schedule(
+        nowTemp.add(const Duration(days: 2, hours: 32)), DateTime.now());
+    schedule.tanks.target = tanks;
+
+    production = Production(120, 200, 100, 27);
+    electricity = Electricity(42, 32, 300, 3200, 40, false);
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      getPeriod();
+    });
+
+    irregationsData = List.generate(7, (index) {
+      return LiveData(index.toDouble(), index * index * 0.5);
+    });
+
+    dataGood = List<ColoredData>.generate(
+        360, (i) => ColoredData(i.toDouble(), '', Colors.white));
+    dataWaste = List<ColoredData>.generate(
+        360, (i) => ColoredData(i.toDouble(), '', Colors.white));
   }
 
   @override
@@ -47,53 +114,42 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
       mainAxisSpacing: 30,
       crossAxisSpacing: 20,
       children: [
-        CardDash(title: 'Status', child: Text(msgs)),
-        CardDash(
+        StatsBody(
+          title: 'Status',
+          data: status,
+          icon: Icons.wifi,
+        ),
+        StatsBody(
           title: 'Total Power Saved',
-          child: Text(status),
+          data: '$totalPower kW',
+          icon: Icons.electrical_services,
         ),
-        const CardDash(title: 'Total Water Production'),
-        CardDash(
-          title: 'Next in Schedule',
-          cols: 3,
-          rows: 1,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Text('1 Day, 15 hours',
-                    style: Theme.of(context).textTheme.bodyLarge),
-              ),
-            ),
-            Expanded(
-                child: Text('Tank 1',
-                    style: Theme.of(context).textTheme.bodyMedium)),
-            Expanded(
-              child: Text('Tuesday at 3 o\'sclick',
-                  style: Theme.of(context).textTheme.bodySmall),
-            ),
-          ]),
+        StatsBody(
+          title: 'Total Water Production',
+          data: '$totalProduction ml',
+          icon: Icons.water_drop_outlined,
         ),
+        ScheduleCard(
+            schedule: schedule,
+            duration: durationStr,
+            chartData: irregationsData,
+            onRendererCreated: (c) => irregationController = c),
+        PowerCard(electricity: electricity),
         CardDash(
-          title: 'TDS',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/TdsMainPage'),
-            child: const Text('TDS'),
-          ),
-        ),
+            title: 'Tanks',
+            rows: 0.8,
+            cols: tanksRealTime.length < 4 ? 1 : 3,
+            child: TanksCards(tanks: tanksRealTime)),
         CardDash(
-          title: 'Reports',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/ReportsView'),
-            child: const Text('Reports'),
-          ),
-        ),
-        CardDash(
-          title: 'SingleTank',
-          child: ElevatedButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, '/SingleTank'),
-            child: const Text('SingleTank'),
+          rows: 0.8,
+          cols: tanksRealTime.length < 4 ? 2 : 3,
+          title: 'System',
+          child: SystemCard(
+            production: production,
+            cGoodRendererCreated: (c) => cGood = c,
+            dataGood: dataGood,
+            cWasteRendererCreated: (c) => cWaste = c,
+            dataWaste: dataWaste,
           ),
         ),
         CardDash(
@@ -104,38 +160,6 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           ),
         ),
         CardDash(
-          title: 'LoginPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/LoginPage'),
-            child: const Text('LoginPage'),
-          ),
-        ),
-        CardDash(
-          title: 'SchedulePage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/SchedulePage' ),
-            child: const Text('SchedulePage'),
-          ),
-        ),
-        CardDash(
-          title: 'PasswordSetup',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/PasswordSetup'),
-            child: const Text('PasswordSetup'),
-          ),
-        ),
-        CardDash(
-          title: 'AllTanks',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
-            child: const Text('AllTanks'),
-          ),
-        ),
-        const CardDash(title: 'flow 1'),
-        const CardDash(
-          title: 'flow 2',
-        ),
-        CardDash(
           child: Slider(
               value: value,
               min: 0,
@@ -143,7 +167,11 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
               onChanged: (v) {
                 setState(() {
                   value = v;
+                  production.flowWaterPermeate = v.toInt().toDouble();
                 });
+                updateCirculeChart(cGood, dataGood, v.toInt());
+                // dischargeCtrl.changeSpeed(v);
+                electricity.batteryLevel = v.toInt().toDouble();
               }),
         ),
         const StaggeredGridTile.extent(
@@ -181,8 +209,65 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     // List<String> d = data.toString().split(':');
     // value = double.parse(d[1]);
     setState(() {
-      msgs = data.toString();
+      status = data.toString();
     });
     // debugPrint('listnning from dashboard');
+  }
+
+  void updateCirculeChart(
+      CircularSeriesController c, List<ColoredData> data, int v) {
+    List<int> degI = List<int>.generate(360, (index) => index);
+    const Color c = Resources.primaryColor;
+    v = (v * 3.6).toInt();
+    // v = v > 360 ? 359 : v;
+    for (var i = 0; i < data.length; i++) {
+      data[i] = ColoredData(100 / 3, '$i', i <= v ? c : Colors.white);
+    }
+    cGood.updateDataSource(updatedDataIndexes: degI);
+  }
+
+  void getPeriod() {
+    final diff = schedule.time.difference(DateTime.now());
+    final hrs = diff.inHours % Duration.hoursPerDay;
+    final mins = diff.inMinutes % Duration.minutesPerDay;
+    final scnds = (diff.inSeconds % Duration.secondsPerDay) % 60;
+    setState(() {
+      durationStr =
+          '${diff.inDays} days, $hrs hours, $mins mins, $scnds seconds';
+    });
+  }
+}
+
+class StatsBody extends StatelessWidget {
+  const StatsBody(
+      {super.key,
+      this.data = 'data | unit',
+      this.title = 'Title',
+      required this.icon});
+
+  final String title;
+  final String data;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width / 30;
+    return CardDash(
+        rows: 0.3,
+        title: title,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              data,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Icon(
+              icon,
+              size: width,
+              color: Resources.primaryColor,
+            )
+          ],
+        ));
   }
 }
