@@ -6,9 +6,9 @@ import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'Components/TanksCards.dart';
 import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
+import 'Pages/SchedulePage.dart';
 import 'Pages/TanksPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
@@ -89,6 +89,8 @@ class MyApp extends StatelessWidget {
         '/TanksPage': (context) => TanksPage(),
         '/LoginPage': (context) => LoginPage(),
         '/SingleTank': (context) => SingleTank(),
+        // '/ScheduleSetup': (context) => ScheduleSetup(tankId: 1,scheduleId: 1),
+        '/SchedulePage': (context) => SchedulePage(),
     
       },
       // darkTheme: ThemeData.dark(),
