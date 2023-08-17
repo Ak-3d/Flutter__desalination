@@ -25,7 +25,7 @@ class ObjectBox {
   late final Box<SingleTank> singleTank;
   late final Box<Production> production;
   late final Box<Schedule> schedule;
-  late final Box<Power> electricity;
+  late final Box<Power> power;
   late final Box<Days> days;
 
   ObjectBox._create(this.store) {
@@ -38,15 +38,15 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
-    electricity = store.box<Power>();
+    power = store.box<Power>();
     days = store.box<Days>();
 
     _flushData();
 
-    // if (status.isEmpty()) {
-    //   _putDefault();
-    // }
-    _putDummy();
+    if (status.isEmpty()) {
+      _putDefault();
+    }
+    // _putDummy();
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -70,7 +70,7 @@ class ObjectBox {
   void _flushData() {
     status.removeAll();
     tanks.removeAll();
-    electricity.removeAll();
+    power.removeAll();
     singleTank.removeAll();
     production.removeAll();
     irregation.removeAll();
@@ -101,7 +101,7 @@ class ObjectBox {
 
     for (var i = 0; i < 20; i++) {
       Power e = Power(10, 5, 2, 10, true, 1);
-      electricity.put(e);
+      power.put(e);
 
       SingleTank s = SingleTank(i * 100 / 20, false);
       s.tanks.targetId = i % 2 == 0 ? t1.id : t2.id;

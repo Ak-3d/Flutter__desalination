@@ -78,7 +78,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     final weekDay = ((nowTemp.weekday + 1) % 7) + 1;
 
     //**STATS
-    final elects = objectbox.electricity
+    final elects = objectbox.power
         .query(Power_.isBattery.equals(true))
         .order(Power_.createdDate, flags: Order.descending)
         .build()

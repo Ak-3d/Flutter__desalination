@@ -1,5 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:final_project/Models/Power.dart';
+import 'package:final_project/Models/Production.dart';
+import 'package:final_project/Models/SingleTank.dart';
+import 'package:final_project/main.dart';
+import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:udp/udp.dart';
@@ -37,7 +42,57 @@ enum PowerData {
 class ConnectionInterfaceWrapper {
   late StreamSubscription _streamSubscription;
   static int debugInterfaces = 0;
-  // static Map<String, dynamic> data = {};
+
+  static void defaultInterface() {
+    StreamSubscription st =
+        FlutterBackgroundService().on('update').listen((data) {
+      if (data == null) return;
+      var map = _convertMap(data['data']);
+
+      final prodMap = map[ObjName.production.index];
+      if (prodMap != null) {
+        Production p = Production(
+          double.parse(prodMap[ProductionData.tds.index]),
+          double.parse(prodMap[ProductionData.conFlow.index]),
+          double.parse(prodMap[ProductionData.preFlow.index]),
+          double.parse(prodMap[ProductionData.temperature.index]),
+        );
+        objectbox.production.put(p);
+      }
+
+      final powerMap = map[ObjName.power.index];
+      if (powerMap != null) {
+        Power p = Power(
+            double.parse(powerMap[PowerData.voltageIn.index]),
+            double.parse(powerMap[PowerData.currentIn.index]),
+            double.parse(powerMap[PowerData.currentOut.index]),
+            double.parse(powerMap[PowerData.batteryLevel.index]),
+            powerMap[PowerData.isBattery.index]?.toString() == '1',
+            double.parse(powerMap[PowerData.duration.index]).toInt());
+        objectbox.power.put(p);
+      }
+
+      final liveTankMap = map[ObjName.liveTank.index];
+      if (liveTankMap != null) {
+        List<SingleTank> ss = [];
+        for (var tank in liveTankMap) {
+          SingleTank s = SingleTank(
+              double.parse(tank[SingleTanksData.level.index]),
+              tank[SingleTanksData.level.index].toString() == '1');
+
+          int portNumber = int.parse(tank[SingleTanksData.port.index]);
+          int tankId = objectbox.tanks
+              .query(Tanks_.portNumber.equals(portNumber))
+              .build()
+              .findIds()[0];
+
+          s.tanks.targetId = tankId;
+          ss.add(s);
+        }
+        objectbox.singleTank.putMany(ss);
+      }
+    }, cancelOnError: true);
+  }
 
   void setInterface(ConnectionInterface ci) {
     try {
@@ -60,7 +115,7 @@ class ConnectionInterfaceWrapper {
     _streamSubscription.cancel();
   }
 
-  Map<int, dynamic> _convertMap(String data) {
+  static Map<int, dynamic> _convertMap(String data) {
     Map<int, dynamic> map = {};
     var objs = data.toString().split('|');
     List<Map<int, dynamic>> tanks = [];
@@ -83,7 +138,7 @@ class ConnectionInterfaceWrapper {
     return map;
   }
 
-  Map<int, dynamic> _getObj(String objStr) {
+  static Map<int, dynamic> _getObj(String objStr) {
     Map<int, dynamic> obj = {};
     var objs = objStr.split(',');
     for (var element in objs) {
@@ -92,7 +147,7 @@ class ConnectionInterfaceWrapper {
     return obj;
   }
 
-  Map<int, dynamic> _getPair(String pairStr) {
+  static Map<int, dynamic> _getPair(String pairStr) {
     var pair = pairStr.split(':');
     int a = int.parse(pair[0]);
     return {a: pair[1]};
