@@ -1,4 +1,4 @@
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/main.dart';
 import 'package:final_project/objectbox.g.dart';
@@ -53,7 +53,7 @@ class _TankPageState extends State<TankPageStfl>
   double step = 1;
   late double max;
 
-  double level = 20;
+  double level = 0;
   double totalIrrigation = 20;
   bool isFilling = true;
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
@@ -78,6 +78,7 @@ class _TankPageState extends State<TankPageStfl>
     var query = builder.order(SingleTank_.createdDate).build();
     var tankData = query.find();
 
+    if (tankData.isNotEmpty) level = tankData[0].level;
     max = (tankData.length / (sat + 1)) * 7;
     max = max < 20 ? 20 : max;
     unit = 0;
@@ -104,7 +105,7 @@ class _TankPageState extends State<TankPageStfl>
       mainAxisSpacing: 22,
       crossAxisSpacing: 12,
       children: [
-        CardDash(
+        CustomCard(
           cols: 5,
           rows: 3,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -139,17 +140,17 @@ class _TankPageState extends State<TankPageStfl>
                 ),
               ]),
         ),
-        CardDash(
+        CustomCard(
           cols: 2,
           title: "Plant Name :",
           child: Text(tank.plantName),
         ),
-        CardDash(
+        CustomCard(
           cols: 2,
           title: "TDS Value :",
           child: Text("${tank.tdsValue} PPM"),
         ),
-        CardDash(
+        CustomCard(
           color: isFilling
               ? const Color.fromARGB(205, 209, 63, 22)
               : const Color.fromARGB(205, 59, 209, 22),
@@ -157,7 +158,7 @@ class _TankPageState extends State<TankPageStfl>
           title: "Tank State :",
           child: Text('${isFilling ? "Full" : "NOT Full"} '),
         ),
-        CardDash(
+        CustomCard(
           cols: 2,
           title: "Total Production :",
           child: Text('$totalIrrigation  Liter'),

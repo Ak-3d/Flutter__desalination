@@ -1,4 +1,4 @@
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ class StatsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width / 30;
-    return CardDash(
+    return CustomCard(
         rows: 0.3,
         title: title,
         child: Row(

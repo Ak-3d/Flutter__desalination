@@ -1,6 +1,6 @@
 // import 'dart:async';
 
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 // import '../ConnectionHandler.dart';
@@ -18,7 +18,7 @@ class AppScofflding extends StatelessWidget {
     // final width = MediaQuery.of(context).size.width;
     // debugPrint('width of screen: $width');
     if (MediaQuery.of(context).size.width < 450) {
-      CardDash.defaultRows = 1;
+      CustomCard.defaultRows = 1;
     }
     return Scaffold(
       backgroundColor: Resources.bgcolor,

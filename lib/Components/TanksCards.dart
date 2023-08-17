@@ -1,4 +1,4 @@
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -51,17 +51,17 @@ class _TanksCardsState extends State<TanksCards> {
                 height: 150,
                 width: 300,
                 child: SmallTank(value: widget.quantity, isFilling: false)),
-            CardDash(
+            CustomCard(
               cols: 3,
               title: 'Tank Name',
               child: Text(widget.plantName),
             ),
-            CardDash(
+            CustomCard(
               cols: 1,
               title: 'Port pin',
               child: Text(widget.portNumber.toString()),
             ),
-            CardDash(
+            CustomCard(
               cols: 3,
               title: 'TDS value',
               child: Text(widget.tdsValue.toString()),

@@ -1,4 +1,4 @@
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Components/ChartTds.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
 
   @override
   Widget build(BuildContext context) {
-    return CardDash(
+    return CustomCard(
         title: '',
         cols: 2,
         rows: 1,

@@ -2,6 +2,7 @@ import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
+import 'package:final_project/Pages/TanksPage.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
+import '';
 
 late ObjectBox objectbox;
 
@@ -76,8 +78,9 @@ class MyApp extends StatelessWidget {
         '/PasswordSetup': (context) => const PasswordSetup(passwordId: 1),
         '/login': (context) => LoginPage(),
         '/SchedulePage': (context) => const SchedulePage(),
+        '/TanksPage': (context) => const TanksPage(),
       },
-      // initialRoute: init,
+      // initialRoute: '/TanksPage',
       // darkTheme: ThemeData.dark(),
     );
   }

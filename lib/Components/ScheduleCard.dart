@@ -1,5 +1,5 @@
 import 'package:day_picker/day_picker.dart';
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Core/ScheduleSetup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -58,7 +58,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
           mainAxisSpacing: 5,
           crossAxisSpacing: 10,
           children: [
-            CardDash(
+            CustomCard(
               cols: 5,
               rows: 1,
               title: 'Selected Days',
@@ -81,12 +81,12 @@ class _ScheduleCardState extends State<ScheduleCard> {
                         ),
                       ))),
             ),
-            CardDash(
+            CustomCard(
               cols: 2,
               title: 'Tank Name',
               child: Text(widget.plantName),
             ),
-            CardDash(
+            CustomCard(
               cols: 2,
               title: 'Time',
               child: Text(widget.time),

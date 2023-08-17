@@ -39,7 +39,7 @@ class _TanksCardDashState extends State<TanksCardDash> {
                       context,
                       MaterialPageRoute(
                           builder: ((context) => SingleTankPage(
-                              tankID: widget.tanks[i].tanks.targetId))));
+                              tankID: widget.tanks[i].tanks.target!.id))));
                   //   Navigator.pushNamed(context, '/TankPage',
                   //       arguments: widget.tanks[i].tanks.target?.portNumber ?? 1);
                   // },

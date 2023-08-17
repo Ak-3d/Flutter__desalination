@@ -1,4 +1,4 @@
-import 'package:final_project/Components/CardDash.dart';
+import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Pages/PowerPage.dart';
 import 'package:final_project/Resources.dart';
@@ -11,7 +11,7 @@ class PowerCard extends StatelessWidget {
   final double w = 20;
   @override
   Widget build(BuildContext context) {
-    return CardDash(
+    return CustomCard(
       title: 'Power',
       rows: 1,
       child: TextButton(

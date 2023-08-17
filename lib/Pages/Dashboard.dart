@@ -19,7 +19,7 @@ import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../Components/CardDash.dart';
+import '../Components/CustomCard.dart';
 import '../main.dart';
 
 class Dashboard extends StatelessWidget {
@@ -71,7 +71,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   late CircularSeriesController cWaste;
 
   late List<Tanks> tanks;
-  List<SingleTank> liveTanks = [];
+  late List<SingleTank> liveTanks;
 
   void quryDatabase() {
     DateTime nowTemp = DateTime.now();
@@ -96,6 +96,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     //**TANKS
     tanks =
         objectbox.tanks.query(Tanks_.isDeleted.equals(false)).build().find();
+    liveTanks = [];
     for (var t in tanks) {
       SingleTank s = SingleTank(0, false);
       s.tanks.target = t;
@@ -146,7 +147,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   void initState() {
     super.initState();
     ciw.setInterface(this);
-
+    print("init Dashbaord");
     quryDatabase();
 
     production = Production(0, 0, 0, 0);
@@ -189,12 +190,12 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             date: scheduleDate,
             onRendererCreated: (c) => irregationController = c),
         PowerCard(electricity: electricity),
-        CardDash(
+        CustomCard(
             title: 'Tanks',
             rows: 0.8,
             cols: liveTanks.length < 4 ? 1 : 3,
             child: TanksCardDash(tanks: liveTanks)),
-        CardDash(
+        CustomCard(
           rows: 0.8,
           cols: liveTanks.length < 4 ? 2 : 3,
           title: 'System',
@@ -206,14 +207,14 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             dataWaste: dataWaste,
           ),
         ),
-        CardDash(
+        CustomCard(
           title: 'TanksSetup',
           child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
+            onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
             child: const Text('TanksSetup'),
           ),
         ),
-        CardDash(
+        CustomCard(
           child: Slider(
               value: value,
               min: 0,
@@ -242,6 +243,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     super.dispose();
     admin.close();
     ciw.dispose();
+    print("closed Dashbord");
   }
 
   @override

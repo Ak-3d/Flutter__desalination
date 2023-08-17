@@ -1,6 +1,8 @@
+import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/Tanks.dart';
+import '../Pages/Dashboard.dart';
 import '../Widgets/alertShow.dart';
 import '../main.dart';
 
@@ -57,6 +59,17 @@ class _TanksSetupState extends State<TanksSetup> {
 
   // delete the database for only delete task
   void deleteTank() {
+    var qurySchedule = objectbox.schedule.query();
+    qurySchedule.link(Schedule_.tanks, Tanks_.id.equals(widget.tankId));
+    var scheduleBuild = qurySchedule.build();
+    var scheduleIds = scheduleBuild.findIds();
+
+    for (var s in scheduleIds) {
+      var removeDays = objectbox.days.query();
+      removeDays.link(Days_.schedule, Schedule_.id.equals(s));
+      removeDays.build().remove();
+    }
+    scheduleBuild.remove();
     objectbox.tanks.remove(widget.tankId);
     print("Complete delete  Tank !!");
   }
@@ -78,10 +91,15 @@ class _TanksSetupState extends State<TanksSetup> {
   }
 
   void nextPage() {
-    Navigator.pop(context
-        // ,MaterialPageRoute<void>(
-        //     builder: (BuildContext context) => const Dashboard()),
-        );
+    // Navigator.pop(context
+    //     // ,MaterialPageRoute<void>(
+    //     //     builder: (BuildContext context) => const Dashboard()),
+    //     );
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => const Dashboard()),
+        (e) => false);
   }
 
   void checkDialog(BuildContext context) async {

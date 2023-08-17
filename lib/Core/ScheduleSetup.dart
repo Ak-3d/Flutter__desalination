@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, file_names
 
+import 'package:final_project/Pages/Dashboard.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -116,7 +117,12 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
   }
 
   void nextPage() {
-    Navigator.pop(context);
+    // Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => const Dashboard()),
+        (e) => false);
   }
 
   void checkDialog(BuildContext context) async {
@@ -239,10 +245,7 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                       borderRadius: BorderRadius.circular(30.0),
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
-                        colors: [
-                          Color(0xFFE55CE4),
-                          Color(0xFFBB75FB)
-                        ],
+                        colors: [Color(0xFFE55CE4), Color(0xFFBB75FB)],
                         tileMode: TileMode
                             .repeated, // repeats the gradient over the canvas
                       ),

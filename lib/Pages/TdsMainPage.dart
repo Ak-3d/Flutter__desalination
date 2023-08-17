@@ -11,7 +11,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:final_project/Components/ChartTds.dart';
-import '../Components/CardDash.dart';
+import '../Components/CustomCard.dart';
 
 class TdsMainPage extends StatefulWidget {
   const TdsMainPage({Key? key}) : super(key: key);
@@ -45,7 +45,8 @@ class _TdsMainPageState extends State<TdsMainPage>
     final sat = ((now.weekday + 2) % 7) + 1;
     //database query
     Query<WaterFlow> q = objectbox.waterFlow
-        .query(WaterFlow_.date.greaterOrEqual(now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .query(WaterFlow_.date.greaterOrEqual(
+            now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
         .order(WaterFlow_.date)
         .build(); //~/ gives
 
@@ -75,7 +76,7 @@ class _TdsMainPageState extends State<TdsMainPage>
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(
+          CustomCard(
             title: status,
             rows: 1.5,
             cols: 4,
@@ -132,8 +133,7 @@ class _TdsMainPageState extends State<TdsMainPage>
     if (tdsV > 1) {
       WaterFlow w = WaterFlow(tdsV, f1, f2, tmp, DateTime.now());
       objectbox.waterFlow.put(w);
-      debugPrint(
-          'new tds inserted: ${w.tds}, F1:${w.flow1}, F2:${w.flow2}');
+      debugPrint('new tds inserted: ${w.tds}, F1:${w.flow1}, F2:${w.flow2}');
     }
   }
 

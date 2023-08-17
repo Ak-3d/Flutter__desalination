@@ -7,10 +7,15 @@ import '../Models/Tanks.dart';
 import 'alertShow.dart';
 
 late int id;
+// int id = 0;
 Future<bool> selectTank(BuildContext context, String title) async {
   List<Tanks> tank = objectbox.tanks.getAll();
   var tanksName = tank.map<String>((e) => e.plantName).toList();
-
+  id = objectbox.tanks
+      .query(Tanks_.plantName.equals(tanksName[0]))
+      .build()
+      .findFirst()!
+      .id;
   return await showDialog(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -36,8 +41,8 @@ Future<bool> selectTank(BuildContext context, String title) async {
           TextButton(
             child: const Text('Confirm'),
             onPressed: () async {
-              await alertDialog(
-                  context, 'Complete Process Successfully !', "Done");
+              // await alertDialog(
+              //     context, 'Complete Process Successfully !', "Done");
               nextPage(context);
             },
           ),

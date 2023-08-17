@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:final_project/Resources.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class CardDash extends StatelessWidget {
+class CustomCard extends StatelessWidget {
   static num defaultRows = 0.5;
 
-  const CardDash(
+  const CustomCard(
       {Key? key,
       this.color = Resources.bgcolor_100,
       this.cols = 1,

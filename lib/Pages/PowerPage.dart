@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../Components/CardDash.dart';
+import '../Components/CustomCard.dart';
 import '../main.dart';
 
 class ElectricalPage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ElectricalPage extends State<ElectricalPage>
         mainAxisSpacing: 20,
         crossAxisSpacing: 20,
         children: [
-          CardDash(
+          CustomCard(
             title: 'Total Power Drawn From AC Source',
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -53,7 +53,7 @@ class _ElectricalPage extends State<ElectricalPage>
               ),
             ]),
           ),
-          CardDash(
+          CustomCard(
             title: 'Total Power Drawn From Battery',
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -66,7 +66,7 @@ class _ElectricalPage extends State<ElectricalPage>
               ),
             ]),
           ),
-          CardDash(
+          CustomCard(
             title: 'Total Power Drawn From the Solar Energy',
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -79,7 +79,7 @@ class _ElectricalPage extends State<ElectricalPage>
               ),
             ]),
           ),
-          CardDash(
+          CustomCard(
             title: 'Real Time Calculation',
             cols: 3,
             rows: 2,
@@ -110,25 +110,25 @@ class _ElectricalPage extends State<ElectricalPage>
               ),
             ]),
           ),
-          CardDash(
+          CustomCard(
             title: 'TanksSetup',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TanksSetup'),
               child: const Text('TanksSetup'),
             ),
           ),
-          CardDash(
+          CustomCard(
             title: 'Tanks',
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/TankView'),
               child: const Text('Tanks'),
             ),
           ),
-          const CardDash(title: 'flow 1'),
-          const CardDash(
+          const CustomCard(title: 'flow 1'),
+          const CustomCard(
             title: 'flow 2',
           ),
-          CardDash(
+          CustomCard(
             child: Slider(
                 value: value,
                 min: 0,
