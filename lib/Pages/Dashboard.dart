@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:final_project/Components/ChartTds.dart';
-import 'package:final_project/Components/Tank.dart';
 import 'package:final_project/Components/TanksCards.dart';
 import 'package:final_project/Models/Electricity.dart';
 import 'package:final_project/Models/Production.dart';
@@ -10,12 +9,15 @@ import 'package:final_project/Models/SingleTank.dart';
 import 'package:final_project/Models/Tanks.dart';
 import 'package:final_project/Pages/DashboardCards/PowerCards.dart';
 import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
+import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
 import 'package:final_project/Resources.dart';
+import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Components/CardDash.dart';
@@ -48,19 +50,19 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   double value = 0;
   String title = '';
 
-  late Tanks tanks;
-  List<SingleTank> tanksRealTime = [];
   late Schedule schedule;
+  late DateTime? scheduleDate;
+
   late Production production;
   late Electricity electricity;
 
   int colsN = 3;
 
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
-  DateTime nowTemp = DateTime.now();
+
   String durationStr = '';
 
-  late List<LiveData> irregationsData;
+  late List<NamedData> irregationsData;
   late ChartSeriesController irregationController;
 
   late List<ColoredData> dataGood;
@@ -69,42 +71,90 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   late List<ColoredData> dataWaste;
   late CircularSeriesController cWaste;
 
+  late List<Tanks> tanks;
+  List<SingleTank> liveTanks = [];
+
+  void quryDatabase() {
+    DateTime nowTemp = DateTime.now();
+
+    //**STATS
+    final elects = objectbox.electricity
+        .query(Electricity_.isBattery.equals(true))
+        .order(Electricity_.createdDate, flags: Order.descending)
+        .build()
+        .find();
+    electricity =
+        elects.isEmpty ? Electricity(0, 0, 0, 0, false, 0) : elects[0];
+
+    totalPower = elects.fold<double>(
+        0,
+        (previousValue, element) =>
+            ((element.currentOut * 36) + previousValue)); //TODO 10***
+
+    totalProduction = objectbox.production.getAll().fold<double>(0,
+        (previousValue, element) => previousValue + element.flowWaterPermeate);
+
+    //**TANKS
+    tanks =
+        objectbox.tanks.query(Tanks_.isDeleted.equals(false)).build().find();
+    for (var t in tanks) {
+      SingleTank s = SingleTank(0, false);
+      s.tanks.target = t;
+      var b = objectbox.singleTank
+          .query()
+          .order(SingleTank_.createdDate, flags: Order.descending);
+      b.link(SingleTank_.tanks, Tanks_.id.equals(t.id));
+      var built = b.build();
+      SingleTank temp = built.findFirst() ?? s;
+      liveTanks.add(temp);
+    }
+
+    //**Schedule
+    var schBuild = objectbox.schedule
+        .query(Schedule_.hours.greaterOrEqual(nowTemp.hour + 354))
+        .order(Schedule_.hours); //sort by hours
+    List<Schedule> scs = schBuild.build().find();
+
+    scs.sort((a, b) => a.mins.compareTo(b.mins)); //sort by mins
+    schedule = scs.isEmpty
+        ? Schedule(0, 0, DateTime.now())
+        : scs[0]; //check if none is found
+    scheduleDate = scs.isEmpty
+        ? null
+        : DateTime(nowTemp.year, nowTemp.month, nowTemp.day, schedule.hours,
+            schedule.mins);
+
+    //**Irrigation
+    irregationsData = [];
+    for (var i = 0; i < tanks.length; i++) {
+      final volume = objectbox.irregation
+          .query(Irrigation_.tankID
+              .equals(tanks[i].id)
+              .and(Irrigation_.isDeleted.equals(false)))
+          .build()
+          .find()
+          .fold<double>(
+              0,
+              (previousValue, element) =>
+                  previousValue + element.irrigationVolume);
+      irregationsData.add(NamedData(
+          'Tank ${tanks[i].portNumber}', volume, Resources.primaryColor));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     ciw.setInterface(this);
 
-    tanks = Tanks(1, 'demo plant 1', 500, 2000);
-    tanks.id = 1;
-
-    tanksRealTime.add(SingleTank(100, false));
-    tanksRealTime[0].id = 1;
-    tanksRealTime.add(SingleTank(50, true));
-    tanksRealTime[1].id = 2;
-    tanksRealTime.add(SingleTank(10, true));
-    // tanksRealTime[2].id = 3;
-    // tanksRealTime.add(SingleTank(1, true));
-    // tanksRealTime[3].id = 4;
-
-    schedule = Schedule(
-        nowTemp.add(const Duration(days: 2, hours: 32)), DateTime.now());
-    schedule.tanks.target = tanks;
-
-    production = Production(120, 200, 100, 27);
-    electricity = Electricity(42, 32, 300, 3200, 40, false);
-
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      getPeriod();
-    });
-
-    irregationsData = List.generate(7, (index) {
-      return LiveData(index.toDouble(), index * index * 0.5);
-    });
-
     dataGood = List<ColoredData>.generate(
         360, (i) => ColoredData(i.toDouble(), '', Colors.white));
     dataWaste = List<ColoredData>.generate(
         360, (i) => ColoredData(i.toDouble(), '', Colors.white));
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      updateDuration(); //update the Duration for irregation
+    });
   }
 
   @override
@@ -133,16 +183,17 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             schedule: schedule,
             duration: durationStr,
             chartData: irregationsData,
+            date: scheduleDate,
             onRendererCreated: (c) => irregationController = c),
         PowerCard(electricity: electricity),
         CardDash(
             title: 'Tanks',
             rows: 0.8,
-            cols: tanksRealTime.length < 4 ? 1 : 3,
-            child: TanksCards(tanks: tanksRealTime)),
+            cols: liveTanks.length < 4 ? 1 : 3,
+            child: TanksCards(tanks: liveTanks)),
         CardDash(
           rows: 0.8,
-          cols: tanksRealTime.length < 4 ? 2 : 3,
+          cols: liveTanks.length < 4 ? 2 : 3,
           title: 'System',
           child: SystemCard(
             production: production,
@@ -206,68 +257,37 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   @override
   void listen(data) {
-    // List<String> d = data.toString().split(':');
-    // value = double.parse(d[1]);
     setState(() {
       status = data.toString();
     });
-    // debugPrint('listnning from dashboard');
   }
 
-  void updateCirculeChart(
-      CircularSeriesController c, List<ColoredData> data, int v) {
-    List<int> degI = List<int>.generate(360, (index) => index);
+  List<int> degI = List<int>.generate(360, (index) => index);
+  void updateCirculeChart(controller, coloredData, int discharage) {
     const Color c = Resources.primaryColor;
-    v = (v * 3.6).toInt();
-    // v = v > 360 ? 359 : v;
-    for (var i = 0; i < data.length; i++) {
-      data[i] = ColoredData(100 / 3, '$i', i <= v ? c : Colors.white);
+    discharage = (discharage * 3.6).toInt();
+    for (var i = 0; i < coloredData.length; i++) {
+      coloredData[i] =
+          ColoredData(100 / 3, '$i', i <= discharage ? c : Colors.white);
     }
     cGood.updateDataSource(updatedDataIndexes: degI);
   }
 
-  void getPeriod() {
-    final diff = schedule.time.difference(DateTime.now());
+  void updateDuration() {
+    if (scheduleDate == null) {
+      setState(() {
+        durationStr = 'No irregations for the rest of the day';
+      });
+      return;
+    }
+
+    final nowD = DateTime.now();
+    final diff = scheduleDate!.difference(nowD);
     final hrs = diff.inHours % Duration.hoursPerDay;
-    final mins = diff.inMinutes % Duration.minutesPerDay;
+    final mins = diff.inMinutes % 60;
     final scnds = (diff.inSeconds % Duration.secondsPerDay) % 60;
     setState(() {
-      durationStr =
-          '${diff.inDays} days, $hrs hours, $mins mins, $scnds seconds';
+      durationStr = '$hrs hours, $mins mins, $scnds seconds';
     });
-  }
-}
-
-class StatsBody extends StatelessWidget {
-  const StatsBody(
-      {super.key,
-      this.data = 'data | unit',
-      this.title = 'Title',
-      required this.icon});
-
-  final String title;
-  final String data;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width / 30;
-    return CardDash(
-        rows: 0.3,
-        title: title,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              data,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Icon(
-              icon,
-              size: width,
-              color: Resources.primaryColor,
-            )
-          ],
-        ));
   }
 }

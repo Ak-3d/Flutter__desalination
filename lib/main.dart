@@ -25,7 +25,6 @@ void main() async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.requestPermission()
       .then((value) async => await initializeService());
-
   try {
     objectbox = await ObjectBox.create();
 

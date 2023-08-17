@@ -70,7 +70,7 @@ class PowerCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
-                          '${electricity.currentOut * electricity.voltageOut / 1000} WH',
+                          '${electricity.currentOut * 36 / 1000} WH',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],

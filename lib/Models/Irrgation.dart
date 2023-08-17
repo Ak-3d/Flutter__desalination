@@ -15,9 +15,10 @@ class Irrigation {
 
   int tankID;
 
+  @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
 
   final schedule = ToOne<Schedule>();
   Irrigation(this.irrigationVolume, this.plantName, this.tankPort,
-      this.tdsValue, this.tankID);
+      this.tdsValue, this.tankID, this.createdDate);
 }

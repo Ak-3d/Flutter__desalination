@@ -9,10 +9,13 @@ class Production {
 
   double tdsValue;
   double temperatureValue;
-  DateTime createdDate = DateTime.now();
   double flowWaterPermeate;
   double flowWaterConcentrate;
+
   final tanks = ToOne<Tanks>();
+
+  @Property(type: PropertyType.date)
+  DateTime createdDate = DateTime.now();
 
   Production(this.tdsValue, this.flowWaterConcentrate, this.flowWaterPermeate,
       this.temperatureValue);

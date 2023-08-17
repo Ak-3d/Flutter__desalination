@@ -1,4 +1,5 @@
 import 'package:final_project/Models/Irrgation.dart';
+import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'Days.dart';
@@ -15,16 +16,18 @@ class Schedule {
   @Backlink('schedule')
   final irrigation = ToMany<Irrigation>();
 
-  int hours;
-  int minutes;
-
   bool isDeleted = false;
+
   @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
+
   @Property(type: PropertyType.date)
   DateTime modifiedDate = DateTime.now();
 
+  int hours;
+  int mins;
+
   final tanks = ToOne<Tanks>();
 
-  Schedule(this.hours,this.minutes, this.modifiedDate);
+  Schedule(this.hours, this.mins, this.modifiedDate);
 }

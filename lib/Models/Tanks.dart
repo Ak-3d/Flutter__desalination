@@ -21,7 +21,11 @@ class Tanks {
   double tdsValue;
   double irrigationVolume;
   bool isDeleted = false;
+
+  @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
+
+  @Property(type: PropertyType.date)
   DateTime modifiedDate = DateTime.now();
 
   Tanks(this.portNumber, this.plantName, this.tdsValue, this.irrigationVolume);

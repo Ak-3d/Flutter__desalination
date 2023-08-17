@@ -10,12 +10,13 @@ class ScheduleCard extends StatefulWidget {
       required this.schedule,
       required this.duration,
       required this.chartData,
+      required this.date,
       required this.onRendererCreated});
 
   final Schedule schedule;
   final String duration;
-
-  final List<LiveData> chartData;
+  final DateTime? date;
+  final List<NamedData> chartData;
   final void Function(ChartSeriesController controller) onRendererCreated;
   @override
   State<ScheduleCard> createState() => _ScheduleCardState();
@@ -41,6 +42,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Expanded(
+              flex: 2,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -56,21 +58,27 @@ class _ScheduleCardState extends State<ScheduleCard> {
                               style: Theme.of(context).textTheme.bodyLarge),
                           const Text(''),
                           Text(
-                              'From Tank ${widget.schedule.tanks.target?.id ?? 0}',
+                              widget.date == null
+                                  ? '...'
+                                  : 'From Tank ${widget.schedule.tanks.target?.portNumber ?? 0}',
                               style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
                     ),
-                    Text(widget.schedule.time.toIso8601String(),
+                    Text(widget.date == null ? '' : widget.date.toString(),
                         style: Theme.of(context).textTheme.bodySmall),
                   ]),
             ),
+            const Spacer(),
             Expanded(
+                flex: 2,
                 child: Center(
                     child: ChartBar(
-              chartData: widget.chartData,
-              onRendererCreated: widget.onRendererCreated,
-            )))
+                  xMin: 0,
+                  xMax: widget.chartData.length.toDouble() * 10,
+                  chartData: widget.chartData,
+                  onRendererCreated: widget.onRendererCreated,
+                )))
           ],
         ));
   }

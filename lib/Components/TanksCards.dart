@@ -39,10 +39,11 @@ class _TanksCardsState extends State<TanksCards> {
               child: TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/TankPage',
-                      arguments: widget.tanks[i].id);
+                      arguments: widget.tanks[i].tanks.target?.portNumber ?? 1);
                 },
                 child: Tank(
-                  tankTitle: 'Tank ${widget.tanks[i].id}',
+                  tankTitle:
+                      'Tank ${widget.tanks[i].tanks.target?.portNumber ?? 1}',
                   isFilling: false,
                   value: widget.tanks[i].level,
                 ),

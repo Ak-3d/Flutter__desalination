@@ -6,11 +6,14 @@ import 'Tanks.dart';
 class SingleTank {
   @Id()
   int id = 0;
+
   double level;
   bool isFilling;
+
+  @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
 
   final tanks = ToOne<Tanks>();
 
-  SingleTank(this.level, this.isFilling );
+  SingleTank(this.level, this.isFilling);
 }

@@ -70,7 +70,7 @@ class _ChartTdsState extends State<ChartTds> {
 }
 
 class ChartBar extends StatefulWidget {
-  final List<LiveData> chartData;
+  final List<NamedData> chartData;
   final void Function(ChartSeriesController controller) onRendererCreated;
 
   final double? xMin;
@@ -103,34 +103,38 @@ class _ChartBarState extends State<ChartBar> {
         text: widget.title,
         textStyle: Theme.of(context).textTheme.bodyLarge,
       ),
-      series: <ChartSeries<LiveData, double>>[
-        ColumnSeries<LiveData, double>(
+      series: <CartesianSeries<NamedData, String>>[
+        ColumnSeries<NamedData, String>(
           onRendererCreated: widget.onRendererCreated,
           dataSource: widget.chartData,
           color: Resources.chartColor,
-          xValueMapper: (LiveData sales, _) => sales.time,
-          yValueMapper: (LiveData sales, _) => sales.speed,
+          xValueMapper: (NamedData data, _) => data.name,
+          yValueMapper: (NamedData data, _) => data.value,
+          pointColorMapper: (NamedData data, _) => data.c,
         )
       ],
       enableAxisAnimation: true,
-      primaryXAxis: NumericAxis(
-          // edgeLabelPlacement: EdgeLabelPlacement.shift,
-          maximum: widget.xMin,
-          minimum: widget.xMax,
-          majorTickLines: const MajorTickLines(width: 0),
-          majorGridLines: const MajorGridLines(width: 0),
-          minorGridLines: const MinorGridLines(width: 2)
-          // axisLine:
-          //     const AxisLine(width: 1, color: Resources.chartAxisColor),
-          ),
+      primaryXAxis: CategoryAxis(
+        majorGridLines: const MajorGridLines(width: 0),
+      ),
+      // primaryXAxis: NumericAxis(
+      //     // edgeLabelPlacement: EdgeLabelPlacement.shift,
+      //     maximum: widget.xMin,
+      //     minimum: widget.xMax,
+      //     majorTickLines: const MajorTickLines(width: 0),
+      //     majorGridLines: const MajorGridLines(width: 0),
+      //     minorGridLines: const MinorGridLines(width: 2)
+      //     // axisLine:
+      //     //     const AxisLine(width: 1, color: Resources.chartAxisColor),
+      //     ),
       primaryYAxis: NumericAxis(
           maximum: widget.yMax,
           minimum: widget.yMin,
-          associatedAxisName: '',
-          maximumLabelWidth: 0,
+          associatedAxisName: 'Irrigation Volume',
+          // maximumLabelWidth: 0,
           axisLine: const AxisLine(width: 0),
           majorTickLines: const MajorTickLines(width: 0),
-          majorGridLines: const MajorGridLines(width: 0),
+          // majorGridLines: const MajorGridLines(width: 0),
           minorGridLines: const MinorGridLines(width: 2)
           // axisLine:
           //     const AxisLine(width: 1, color: Resources.chartAxisColor),
@@ -194,6 +198,13 @@ class _CircleChartState extends State<CircleChart> {
           innerRadius: '80%')
     ]));
   }
+}
+
+class NamedData {
+  final double value;
+  final String name;
+  Color c;
+  NamedData(this.name, this.value, this.c);
 }
 
 class ColoredData {
