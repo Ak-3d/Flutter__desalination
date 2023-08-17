@@ -1,13 +1,12 @@
 import 'Schedule.dart';
-import 'Tanks.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
 class Irrigation {
   @Id()
   int id = 0;
-
   bool isDeleted = false;
+
   double tdsValue;
   String plantName;
   double irrigationVolume;

@@ -1,4 +1,3 @@
-import 'package:final_project/Components/CardDash.dart';
 import 'package:final_project/Components/ChartTds.dart';
 import 'package:final_project/Models/Production.dart';
 import 'package:flutter/material.dart';

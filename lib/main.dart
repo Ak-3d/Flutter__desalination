@@ -1,7 +1,7 @@
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
-import 'package:final_project/Resources.dart';
+import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,6 @@ void main() async {
       .then((value) async => await initializeService());
   try {
     objectbox = await ObjectBox.create();
-
     if (Admin.isAvailable()) {
       //for development, the phone broadcast database into the network
       //eneter it using the uri followed by index.html
@@ -49,6 +48,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const title = 'Water Desalination Project';
     screenSize = MediaQuery.of(context).size;
+    bool isFirst = objectbox.user.isEmpty();
 
     return MaterialApp(
       theme: ThemeData(
@@ -66,17 +66,18 @@ class MyApp extends StatelessWidget {
               titleSmall: TextStyle(
                   color: Color.fromARGB(255, 71, 71, 71), fontSize: 12))),
       title: title,
-      home: const Dashboard(),
+      home: isFirst ? const PasswordSetup(passwordId: 1) : const Dashboard(),
 
       routes: {
         '/TdsMainPage': (context) => const TdsMainPage(),
         '/Dashboard': (context) => const Dashboard(),
         '/ReportsView': (context) => const ReportsPage(),
-        '/TanksSetup': (context) => TanksSetup(),
-        '/PasswordSetup': (context) => PasswordSetup(passwordId: 1),
-        '/TankPage': (context) => const TankPage(),
+        '/TanksSetup': (context) => const TanksSetup(),
+        '/PasswordSetup': (context) => const PasswordSetup(passwordId: 1),
+        '/login': (context) => LoginPage(),
+        '/SchedulePage': (context) => const SchedulePage(),
       },
-      initialRoute: '/PasswordSetup',
+      // initialRoute: init,
       // darkTheme: ThemeData.dark(),
     );
   }

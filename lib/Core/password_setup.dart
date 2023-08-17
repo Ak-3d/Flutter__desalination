@@ -49,7 +49,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
       saveData();
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Dashboard()),
+          MaterialPageRoute(builder: (context) => const Dashboard()),
           ModalRoute.withName("/Dashboard"));
     } else {
       print('Complete not Save !');
@@ -97,7 +97,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         decoration: InputDecoration(
                             labelText: "Please Enter User Name",
                             border: const OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.person),
+                            prefixIcon: const Icon(Icons.person),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
@@ -141,8 +141,8 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         obscureText: true,
                         decoration:  InputDecoration(
                             labelText: "Please Enter Password",
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.password),
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.password),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
@@ -188,7 +188,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         decoration: InputDecoration(
                             labelText: "Please Enter  Your PhoneNumber",
                             border: const OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.phone),
+                            prefixIcon: const Icon(Icons.phone),
                             suffixIcon: !validated
                                 ? const Icon(Icons.error_outline_rounded,
                                     color: Colors.red)
@@ -213,11 +213,11 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         },
                       )),
                   
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Row(
                       children: [
-                        const Spacer(),
+                        Spacer(),
                       ],
                     ),
                   ),

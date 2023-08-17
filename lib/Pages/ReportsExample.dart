@@ -1,4 +1,3 @@
-import 'package:final_project/Components/CardDash.dart';
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/Components/ReportCardEx.dart';
 import 'package:final_project/ConnectionHandler.dart';

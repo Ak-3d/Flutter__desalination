@@ -1,15 +1,23 @@
 import 'package:final_project/Components/CardDash.dart';
-import 'package:final_project/Components/Tank.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
-import 'package:final_project/Models/SingleTank.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Widgets/SmallTank.dart';
 
 class TanksCards extends StatefulWidget {
-  final List<SingleTank> tanks;
-
-  const TanksCards({Key? key, required this.tanks}) : super(key: key);
+  final int tankId;
+  final int portNumber;
+  final String plantName;
+  final double tdsValue;
+  final double quantity;
+  const TanksCards(
+      {Key? key,
+      this.tankId = 0,
+      this.portNumber = 0,
+      this.plantName = "tankName",
+      this.tdsValue = 0.0,
+      this.quantity = 0.0})
+      : super(key: key);
 
   @override
   _TanksCardsState createState() => _TanksCardsState();
@@ -19,37 +27,66 @@ class _TanksCardsState extends State<TanksCards> {
   @override
   void initState() {
     super.initState();
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (con, box) {
-      const mx = 2;
-      final w =
-          box.maxWidth / widget.tanks.length - widget.tanks.length * mx / 2;
-      // debugPrint('$mx');
-      return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.tanks.length,
-          itemBuilder: (c, int i) {
-            return Container(
-              margin: EdgeInsets.symmetric(horizontal: mx * 0.5),
-              width: w,
-              // decoration: BoxDecoration(border: Border.all()),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/TankPage',
-                      arguments: widget.tanks[i].tanks.target?.portNumber ?? 1);
-                },
-                child: Tank(
-                  tankTitle:
-                      'Tank ${widget.tanks[i].tanks.target?.portNumber ?? 1}',
-                  isFilling: false,
-                  value: widget.tanks[i].level,
+    return Container(
+      padding: const EdgeInsets.all(15.0),
+      decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 76, 74, 76),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
+          ]),
+      child: Column(children: [
+        StaggeredGrid.count(
+          crossAxisCount: 5,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 10,
+          children: [
+            SizedBox(
+                height: 150,
+                width: 300,
+                child: SmallTank(value: widget.quantity, isFilling: false)),
+            CardDash(
+              cols: 3,
+              title: 'Tank Name',
+              child: Text(widget.plantName),
+            ),
+            CardDash(
+              cols: 1,
+              title: 'Port pin',
+              child: Text(widget.portNumber.toString()),
+            ),
+            CardDash(
+              cols: 3,
+              title: 'TDS value',
+              child: Text(widget.tdsValue.toString()),
+            ),
+            SizedBox(
+              width: 100, // <-- Your width
+              height: 75,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  minimumSize: const Size(100, 40), //////// HERE
                 ),
+                onPressed: () async {
+                  await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TanksSetup(tankId: widget.tankId)));
+                  setState(() {});
+                },
+                child: const Text('Edit'),
               ),
-            );
-          });
-    });
+            ),
+          ],
+        ),
+      ]),
+    );
   }
 }

@@ -12,7 +12,7 @@ class ReportCardEx extends StatelessWidget {
       decoration: const BoxDecoration(
           color: Resources.bgcolor_100,
           borderRadius: BorderRadius.all(Radius.circular(20))),
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -34,7 +34,7 @@ class ReportCardEx extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                     onPressed: () => {debugPrint('$title is pressed')},
-                    child: Text('Action')),
+                    child: const Text('Action')),
               )
             ],
           )

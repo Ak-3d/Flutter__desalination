@@ -50,7 +50,7 @@ class _ChartTdsState extends State<TankVolume> {
               )
             ],
             enableAxisAnimation: true,
-            plotAreaBorderColor: Color.fromARGB(0, 206, 206, 215),
+            plotAreaBorderColor: const Color.fromARGB(0, 206, 206, 215),
             primaryXAxis: NumericAxis(
               edgeLabelPlacement: EdgeLabelPlacement.shift,
               maximum: widget.xMin,

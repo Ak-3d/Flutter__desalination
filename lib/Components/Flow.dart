@@ -11,9 +11,9 @@ class FlowAnimation extends StatefulWidget {
 class _FlowAnimationState extends State<FlowAnimation> {
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
+    return const CustomPaint(
       // painter: FluidPaint(),
-      child: const SizedBox(
+      child: SizedBox(
         width: 100,
         height: 100,
       ),

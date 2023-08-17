@@ -17,7 +17,7 @@ Future<bool> alertShow(
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Confirm'),
+            child: const Text('Confirm'),
             onPressed: () async {
              await alertDialog(context,'Complete Process Successfully !',"Done");
               Navigator.pop(context, true);
@@ -25,7 +25,7 @@ Future<bool> alertShow(
             },
           ),
           TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: () {
               Navigator.pop(context, false);
             },

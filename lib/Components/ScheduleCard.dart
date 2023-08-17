@@ -99,14 +99,16 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   elevation: 3,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
-                  minimumSize: Size(100, 40), //////// HERE
+                  minimumSize: const Size(100, 40), //////// HERE
                 ),
                 onPressed: () async {
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ScheduleSetup(
-                          tankId: widget.tankId,
-                          scheduleId: widget.scheduleId)));
-                  setState(() {});
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ScheduleSetup(
+                              tankId: widget.tankId,
+                              scheduleId: widget.scheduleId)));
+                  Navigator.pop(context);
                 },
                 child: const Text('Edit'),
               ),

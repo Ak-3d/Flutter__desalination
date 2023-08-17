@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages, file_names
 
-import 'package:final_project/Pages/Dashboard.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -70,7 +69,7 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
 
     if (widget.scheduleId != 0) {
       schedule.hours = hours;
-      schedule.minutes = minutes;
+      schedule.mins = minutes;
       var dTemp = schedule.days.cast<Days>().map<int>((e) => e.id);
       objectbox.days.removeMany(dTemp.toList());
       print("Complete Update Data !!");
@@ -99,8 +98,8 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
     if (widget.tankId != 0 && widget.scheduleId != 0) {
       schedule = objectbox.schedule.get(widget.scheduleId)!;
       hours = schedule.hours;
-      minutes = schedule.minutes;
-      timeInput.text = "${schedule.hours}:${schedule.minutes}";
+      minutes = schedule.mins;
+      timeInput.text = "${schedule.hours}:${schedule.mins}";
       var dTemp = schedule.days.cast<Days>().map<int>((e) => e.day);
       _days = List<DayInWeek>.generate(dayName.length, (index) {
         return DayInWeek(dayName[index],
@@ -117,11 +116,7 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
   }
 
   void nextPage() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute<void>(
-            builder: (BuildContext context) => const Dashboard()),
-        (e) => false);
+    Navigator.pop(context);
   }
 
   void checkDialog(BuildContext context) async {
@@ -174,7 +169,7 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                   focusNode: timeInputFocusNode,
                   controller: timeInput, //editing controller of this TextField
                   decoration: InputDecoration(
-                      icon: Icon(Icons.timer), //icon of text field
+                      icon: const Icon(Icons.timer), //icon of text field
                       labelText: "Enter Time",
                       border: const OutlineInputBorder(),
                       suffixIcon: !validated
@@ -242,11 +237,11 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                     border: false,
                     boxDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30.0),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         colors: [
-                          const Color(0xFFE55CE4),
-                          const Color(0xFFBB75FB)
+                          Color(0xFFE55CE4),
+                          Color(0xFFBB75FB)
                         ],
                         tileMode: TileMode
                             .repeated, // repeats the gradient over the canvas
@@ -282,11 +277,12 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                           if (formKey.currentState!.validate()) {
                             setState(() {
                               validated = formKey.currentState!.validate();
-                              if (selectDays.isEmpty)
+                              if (selectDays.isEmpty) {
                                 alertDialog(context, "Please Select Days",
                                     "Error Days !!");
-                              else
+                              } else {
                                 checkDialog(context);
+                              }
                             });
                           } else {
                             setState(() {

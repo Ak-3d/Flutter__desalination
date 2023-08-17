@@ -50,7 +50,7 @@ class _ChartTdsState extends State<ChartTds> {
               )
             ],
             enableAxisAnimation: true,
-            plotAreaBorderColor: Color(22),
+            plotAreaBorderColor: const Color(0x00000016),
             primaryXAxis: NumericAxis(
               edgeLabelPlacement: EdgeLabelPlacement.shift,
               maximum: widget.xMin,

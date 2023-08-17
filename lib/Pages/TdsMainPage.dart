@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:final_project/Components/ChartTds.dart';
 import '../Components/CardDash.dart';
-import '../Models/Production.dart';
 
 class TdsMainPage extends StatefulWidget {
   const TdsMainPage({Key? key}) : super(key: key);

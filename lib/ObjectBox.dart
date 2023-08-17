@@ -1,12 +1,10 @@
 import 'package:final_project/Models/Days.dart';
-import 'package:final_project/Models/Electricity.dart';
-import 'package:final_project/Models/Irrgation.dart';
+import 'package:final_project/Models/Power.dart';
+import 'package:final_project/Models/Irrigation.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/WaterFlow.dart';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:faker/faker.dart';
 import 'Models/Production.dart';
 import 'Models/Report.dart';
 import 'Models/SingleTank.dart';
@@ -27,7 +25,7 @@ class ObjectBox {
   late final Box<SingleTank> singleTank;
   late final Box<Production> production;
   late final Box<Schedule> schedule;
-  late final Box<Electricity> electricity;
+  late final Box<Power> electricity;
   late final Box<Days> days;
 
   ObjectBox._create(this.store) {
@@ -40,15 +38,15 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
-    electricity = store.box<Electricity>();
+    electricity = store.box<Power>();
     days = store.box<Days>();
 
     _flushData();
 
-    if (status.isEmpty()) {
-      _putDefault();
-    }
-    // _putDummy();
+    // if (status.isEmpty()) {
+    //   _putDefault();
+    // }
+    _putDummy();
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -84,25 +82,25 @@ class ObjectBox {
   void _putDummy() {
     DateTime nowTemp = DateTime.now();
     Tanks t1 = Tanks(0, 'Drink', 120, 0);
-    Tanks t2 = Tanks(1, 'Demo Plant', 500, 2000);
+    Tanks t2 = Tanks(1, 'Demo Plant', 120, 2000);
     tanks.put(t1);
     tanks.put(t2);
 
-    List<Days> d1 = [Days(1), Days(2)];
+    List<Days> d1 = [Days(6), Days(2)];
 
-    Schedule sch1 = Schedule(4, 40, nowTemp);
+    Schedule sch1 = Schedule(10, 40, nowTemp);
     sch1.tanks.target = t1;
     sch1.days.addAll(d1);
 
-    List<Days> d2 = [Days(3), Days(4)];
-    Schedule sch2 = Schedule(4, 20, nowTemp);
+    List<Days> d2 = [Days(3), Days(5)];
+    Schedule sch2 = Schedule(17, 20, nowTemp);
     sch2.tanks.target = t2;
     sch2.days.addAll(d2);
 
     schedule.putMany([sch1, sch2]);
 
     for (var i = 0; i < 20; i++) {
-      Electricity e = Electricity(10, 5, 2, 10, true, 1);
+      Power e = Power(10, 5, 2, 10, true, 1);
       electricity.put(e);
 
       SingleTank s = SingleTank(i * 100 / 20, false);

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:final_project/Components/ChartTds.dart';
-import 'package:final_project/Components/TanksCards.dart';
-import 'package:final_project/Models/Electricity.dart';
+import 'package:final_project/Pages/DashboardCards/TanksCardDash.dart';
+import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Models/Production.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Models/SingleTank.dart';
 import 'package:final_project/Models/Tanks.dart';
-import 'package:final_project/Pages/DashboardCards/PowerCards.dart';
+import 'package:final_project/Pages/DashboardCards/PowerCard.dart';
 import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
 import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Components/CardDash.dart';
@@ -54,7 +53,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   late DateTime? scheduleDate;
 
   late Production production;
-  late Electricity electricity;
+  late Power electricity;
 
   int colsN = 3;
 
@@ -76,15 +75,15 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   void quryDatabase() {
     DateTime nowTemp = DateTime.now();
+    final weekDay = ((nowTemp.weekday + 1) % 7) + 1;
 
     //**STATS
     final elects = objectbox.electricity
-        .query(Electricity_.isBattery.equals(true))
-        .order(Electricity_.createdDate, flags: Order.descending)
+        .query(Power_.isBattery.equals(true))
+        .order(Power_.createdDate, flags: Order.descending)
         .build()
         .find();
-    electricity =
-        elects.isEmpty ? Electricity(0, 0, 0, 0, false, 0) : elects[0];
+    electricity = elects.isEmpty ? Power(0, 0, 0, 0, false, 0) : elects[0];
 
     totalPower = elects.fold<double>(
         0,
@@ -111,8 +110,9 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
     //**Schedule
     var schBuild = objectbox.schedule
-        .query(Schedule_.hours.greaterOrEqual(nowTemp.hour + 354))
+        .query(Schedule_.hours.greaterOrEqual(nowTemp.hour))
         .order(Schedule_.hours); //sort by hours
+    schBuild.backlink(Days_.schedule, Days_.day.equals(weekDay));
     List<Schedule> scs = schBuild.build().find();
 
     scs.sort((a, b) => a.mins.compareTo(b.mins)); //sort by mins
@@ -147,6 +147,9 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     super.initState();
     ciw.setInterface(this);
 
+    quryDatabase();
+
+    production = Production(0, 0, 0, 0);
     dataGood = List<ColoredData>.generate(
         360, (i) => ColoredData(i.toDouble(), '', Colors.white));
     dataWaste = List<ColoredData>.generate(
@@ -190,7 +193,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             title: 'Tanks',
             rows: 0.8,
             cols: liveTanks.length < 4 ? 1 : 3,
-            child: TanksCards(tanks: liveTanks)),
+            child: TanksCardDash(tanks: liveTanks)),
         CardDash(
           rows: 0.8,
           cols: liveTanks.length < 4 ? 2 : 3,
@@ -275,9 +278,11 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   void updateDuration() {
     if (scheduleDate == null) {
-      setState(() {
-        durationStr = 'No irregations for the rest of the day';
-      });
+      if (mounted) {
+        setState(() {
+          durationStr = 'No irregations for the rest of the day';
+        });
+      }
       return;
     }
 

@@ -10,13 +10,11 @@ import '../Components/Tank.dart';
 import '../Components/TankVolume.dart';
 import '../Models/Tanks.dart';
 
-
-class SingleTank extends StatelessWidget {
+class SingleTankPage extends StatelessWidget {
   final int tankID;
-  const SingleTank({super.key,  this.tankID =2});
+  const SingleTankPage({super.key, this.tankID = 2});
   @override
   Widget build(BuildContext context) {
-    
     // final tankID = 1;
     final tank = objectbox.tanks.get(tankID);
     // debugPrint('this must be built only once if it is stateless');
@@ -56,13 +54,12 @@ class _TankPageState extends State<TankPageStfl>
   late double max;
 
   double level = 20;
-  double totalIrrigation =20;
+  double totalIrrigation = 20;
   bool isFilling = true;
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
 
   @override
   void initState() {
-
     super.initState();
     ciw.setInterface(this);
     tank = objectbox.tanks.get(widget.tankID)!;
@@ -102,10 +99,7 @@ class _TankPageState extends State<TankPageStfl>
 
   @override
   Widget build(BuildContext context) {
-   
-    return
-     
-      StaggeredGrid.count(
+    return StaggeredGrid.count(
       crossAxisCount: 5,
       mainAxisSpacing: 22,
       crossAxisSpacing: 12,
@@ -128,33 +122,37 @@ class _TankPageState extends State<TankPageStfl>
           ]),
         ),
         Container(
-           decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 76, 74, 76),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
-          ]),
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Container(
-             height: 150,
-                width: 300,
-              child:Tank(value: level, isFilling: isFilling),
-        
-            ),
-          ]),
-        ),        
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 76, 74, 76),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
+              ]),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 150,
+                  width: 300,
+                  child: Tank(value: level, isFilling: isFilling),
+                ),
+              ]),
+        ),
         CardDash(
-         cols: 2,
+          cols: 2,
           title: "Plant Name :",
           child: Text(tank.plantName),
         ),
         CardDash(
           cols: 2,
           title: "TDS Value :",
-          child: Text(tank.tdsValue.toString() +" PPM"),
+          child: Text("${tank.tdsValue} PPM"),
         ),
         CardDash(
-           color: isFilling? Color.fromARGB(205, 209, 63, 22):Color.fromARGB(205, 59, 209, 22),
+          color: isFilling
+              ? const Color.fromARGB(205, 209, 63, 22)
+              : const Color.fromARGB(205, 59, 209, 22),
           cols: 2,
           title: "Tank State :",
           child: Text('${isFilling ? "Full" : "NOT Full"} '),
@@ -164,7 +162,6 @@ class _TankPageState extends State<TankPageStfl>
           title: "Total Production :",
           child: Text('$totalIrrigation  Liter'),
         )
-
       ],
     );
   }
@@ -193,7 +190,7 @@ class _TankPageState extends State<TankPageStfl>
 
     isFilling = obj['isFill'] == '1';
     final level = double.parse(obj['level']);
-    
+
     if (mounted) {
       //this to double check that the page is disposed
       setState(() {

@@ -1,7 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class Electricity {
+class Power {
   @Id()
   int id = 0;
 
@@ -15,6 +15,6 @@ class Electricity {
   @Property(type: PropertyType.date)
   DateTime createdDate = DateTime.now();
 
-  Electricity(this.voltageIn, this.currentIn, this.currentOut,
-      this.batteryLevel, this.isBattery, this.duration);
+  Power(this.voltageIn, this.currentIn, this.currentOut, this.batteryLevel,
+      this.isBattery, this.duration);
 }

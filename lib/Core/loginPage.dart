@@ -39,7 +39,10 @@ class LoginPage extends StatelessWidget {
             Container(
                 constraints:
                     const BoxConstraints(maxWidth: 200, maxHeight: 200),
-                child: Image.asset("assets/images/logo.png")),
+                child: const Icon(
+                  Icons.person,
+                  size: 200,
+                )),
             Column(
               children: [
                 // TextField(

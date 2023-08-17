@@ -40,7 +40,7 @@ class ShowDays extends StatefulWidget {
   final double? width;
 
   /// `ShowDays` takes a list of days of type `DayInWeek`.
-  ShowDays({
+  const ShowDays({
     this.backgroundColor,
     this.fontWeight,
     this.fontSize,
@@ -71,11 +71,11 @@ class ShowDaysState extends State<ShowDays> {
 
   @override
   void initState() {
-    _daysInWeek.forEach((element) {
+    for (var element in _daysInWeek) {
       if (element.isSelected) {
         selectedDays.add(element.dayKey);
       }
-    });
+    }
     super.initState();
   }
 
@@ -155,12 +155,10 @@ class ShowDaysState extends State<ShowDays> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width ?? MediaQuery.of(context).size.width,
-      decoration: widget.boxDecoration == null
-          ? BoxDecoration(
+      decoration: widget.boxDecoration ?? BoxDecoration(
               color: _handleBackgroundColor,
               borderRadius: BorderRadius.circular(0),
-            )
-          : widget.boxDecoration,
+            ),
       child: Padding(
         padding: EdgeInsets.all(widget.padding),
         child: Row(

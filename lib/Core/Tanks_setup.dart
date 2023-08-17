@@ -1,4 +1,3 @@
-import 'package:final_project/Pages/Dashboard.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/Tanks.dart';
@@ -7,7 +6,7 @@ import '../main.dart';
 
 class TanksSetup extends StatefulWidget {
   final int tankId;
-  TanksSetup({Key? key, this.tankId = 0}) : super(key: key);
+  const TanksSetup({Key? key, this.tankId = 0}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -38,7 +37,7 @@ class _TanksSetupState extends State<TanksSetup> {
 
 // Add the database for only add new task
   void addTank() {
-    if (widget.tankId !=0) {
+    if (widget.tankId != 0) {
       tank.plantName = plantNameController.text;
       tank.portNumber = int.parse(portPinController.text);
       tank.irrigationVolume = double.parse(irrigationValueController.text);
@@ -70,19 +69,19 @@ class _TanksSetupState extends State<TanksSetup> {
       portPinController.text = tank.portNumber.toString();
       tdsValueController.text = tank.tdsValue.toString();
       irrigationValueController.text = tank.irrigationVolume.toString();
-      if(tankId>=3) {
+      if (tankId >= 3) {
         // we can not delete the default tanks
-      deleteVisibleBtn = true;
+        deleteVisibleBtn = true;
       }
       print("Tank $tankId : you can Edit it !!");
     }
   }
 
   void nextPage() {
-    Navigator.pushAndRemoveUntil(
-        context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => const Dashboard()),
-        (e)=>false);
+    Navigator.pop(context
+        // ,MaterialPageRoute<void>(
+        //     builder: (BuildContext context) => const Dashboard()),
+        );
   }
 
   void checkDialog(BuildContext context) async {

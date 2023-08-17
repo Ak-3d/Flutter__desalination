@@ -71,7 +71,7 @@ class SmallTank extends StatelessWidget {
       child: Center(
           child: Text(
         '${value.toInt()}%',
-         style: TextStyle(fontSize: 10),
+         style: const TextStyle(fontSize: 10),
         textScaleFactor: 2,
       )),
     );

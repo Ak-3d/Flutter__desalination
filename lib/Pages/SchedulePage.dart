@@ -1,5 +1,3 @@
-import 'package:final_project/Core/ScheduleSetup.dart';
-import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Models/Schedule.dart';
 import 'package:final_project/Widgets/SelectTank.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +29,7 @@ class _SchedulePageState extends State<SchedulePage> {
         scheduleId: one.id,
         plantName: objectbox.tanks.get(one.tanks.targetId)!.plantName,
         selectDays: one.days.cast<Days>().map<int>((e) => e.day).toList(),
-        time: "${one.hours}:${one.minutes}",
+        time: "${one.hours}:${one.mins}",
       ));
     }
   }

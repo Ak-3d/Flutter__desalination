@@ -38,48 +38,51 @@ class _ScheduleCardState extends State<ScheduleCard> {
         title: '',
         cols: 2,
         rows: 1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Upcoming Schedule',
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const Spacer(),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-                          Text(widget.duration,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyLarge),
-                          const Text(''),
-                          Text(
-                              widget.date == null
-                                  ? '...'
-                                  : 'From Tank ${widget.schedule.tanks.target?.portNumber ?? 0}',
-                              style: Theme.of(context).textTheme.bodyMedium),
-                        ],
-                      ),
-                    ),
-                    Text(widget.date == null ? '' : widget.date.toString(),
-                        style: Theme.of(context).textTheme.bodySmall),
-                  ]),
-            ),
-            const Spacer(),
-            Expanded(
+        child: TextButton(
+          onPressed: () => Navigator.pushNamed(context, '/SchedulePage'),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
                 flex: 2,
-                child: Center(
-                    child: ChartBar(
-                  xMin: 0,
-                  xMax: widget.chartData.length.toDouble() * 10,
-                  chartData: widget.chartData,
-                  onRendererCreated: widget.onRendererCreated,
-                )))
-          ],
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Upcoming Schedule',
+                          style: Theme.of(context).textTheme.titleMedium),
+                      const Spacer(),
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          children: [
+                            Text(widget.duration,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyLarge),
+                            const Text(''),
+                            Text(
+                                widget.date == null
+                                    ? '...'
+                                    : 'From Tank ${widget.schedule.tanks.target?.portNumber ?? 0}',
+                                style: Theme.of(context).textTheme.bodyMedium),
+                          ],
+                        ),
+                      ),
+                      Text(widget.date == null ? '' : widget.date.toString(),
+                          style: Theme.of(context).textTheme.bodySmall),
+                    ]),
+              ),
+              const Spacer(),
+              Expanded(
+                  flex: 2,
+                  child: Center(
+                      child: ChartBar(
+                    xMin: 0,
+                    xMax: widget.chartData.length.toDouble() * 10,
+                    chartData: widget.chartData,
+                    onRendererCreated: widget.onRendererCreated,
+                  )))
+            ],
+          ),
         ));
   }
 }
