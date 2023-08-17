@@ -12,6 +12,8 @@ import 'Pages/ElectricalPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
 import 'Pages/views/Report_list_view.dart';
+import 'Pages/SettingAndInfo.dart';
+import 'Pages/TechInfo.dart';
 
 late ObjectBox objectbox;
 
@@ -77,6 +79,8 @@ class MyApp extends StatelessWidget {
         '/TankView': (context) => Tanks_view(),
         '/TanksSetup': (context) => TanksSetup(),
         '/ElectricalPage': (context) => ElectricalPage(),
+        '/SettingAndInfo': (context) => SettingAndInfo(),
+        '/TechInfo': (context) => TechInfo(),
       },
       // darkTheme: ThemeData.dark(),
     );
