@@ -5,6 +5,7 @@ import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/Pages/SettingAndInfo.dart';
 import 'package:final_project/Pages/TanksPage.dart';
+import 'package:final_project/Pages/systemPage.dart';
 import 'package:final_project/Pages/TechInfo.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
               titleSmall: TextStyle(
                   color: Color.fromARGB(255, 71, 71, 71), fontSize: 12))),
       title: title,
-      home: isFirst ? const PasswordSetup(passwordId: 1) : const Dashboard(),
+      home: systemPage(),
 
       routes: {
         '/TdsMainPage': (context) => const TdsMainPage(),
