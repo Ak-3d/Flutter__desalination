@@ -1,3 +1,5 @@
+import 'package:final_project/Models/SingleTank.dart';
+import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
@@ -52,6 +54,8 @@ class _TanksSetupState extends State<TanksSetup> {
           plantNameController.text,
           double.parse(tdsValueController.text),
           double.parse(irrigationValueController.text));
+      var singletank = SingleTank(0, false);
+      singletank.tanks.target = tank;
       print("Complete Add new  Tank !!");
     }
     objectbox.tanks.put(tank);
@@ -319,40 +323,68 @@ class _TanksSetupState extends State<TanksSetup> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                            child: const Text(
-                              "Save",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                setState(() {
-                                  validated = formKey.currentState!.validate();
-
-                                  checkDialog(context);
-                                });
-                              } else {
-                                setState(() {
-                                  validated = formKey.currentState!.validate();
-                                });
-                              }
-                            }),
-                        const Spacer(flex: 3),
-                        Visibility(
-                            visible: deleteVisibleBtn,
+                  SizedBox(
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            flex: 2,
                             child: ElevatedButton(
                                 child: const Text(
-                                  "Delete",
+                                  "Save",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0))),
                                 onPressed: () async {
-                                  checkDialogDelete(context);
-                                })),
-                      ],
+                                  if (formKey.currentState!.validate()) {
+                                    setState(() {
+                                      validated =
+                                          formKey.currentState!.validate();
+
+                                      checkDialog(context);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      validated =
+                                          formKey.currentState!.validate();
+                                    });
+                                  }
+                                }),
+                          ),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Visibility(
+                                visible: deleteVisibleBtn,
+                                child: ElevatedButton(
+                                    child: const Text(
+                                      "Delete",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Resources.failcolor,
+                                        elevation: 3,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0))),
+                                    onPressed: () async {
+                                      checkDialogDelete(context);
+                                    })),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ]))));

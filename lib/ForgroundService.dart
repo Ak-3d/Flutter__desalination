@@ -212,7 +212,7 @@ void onStart(ServiceInstance service) async {
     connectionHandler.sendWebsocket('check:${timer.tick}');
   });
 
-  connectDirectly('192.168.1.102');
+  connectDirectly('192.168.0.114');
 }
 
 void connect() async {

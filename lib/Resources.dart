@@ -11,7 +11,7 @@ class Resources {
   static const chartAxisColor = Color.fromARGB(255, 255, 255, 255);
 
   static const passcolor = Color(0xff00ff00);
-  static const failcolor = Color(0xffff0000);
+  static const failcolor = Color.fromARGB(255, 170, 11, 11);
 
   static const tankNeutralColor = Color.fromARGB(255, 255, 255, 255);
   static const tankFullColor = Color(0xffEEEAF5);

@@ -13,7 +13,8 @@ class ReportsPage extends StatefulWidget {
   State<ReportsPage> createState() => _ReportsPageState();
 }
 
-class _ReportsPageState extends State<ReportsPage> implements ConnectionInterface {
+class _ReportsPageState extends State<ReportsPage>
+    implements ConnectionInterface {
   late List<ReportCardEx> reports;
 
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
@@ -50,6 +51,7 @@ class _ReportsPageState extends State<ReportsPage> implements ConnectionInterfac
     ciw.dispose();
     super.dispose();
   }
+
   @override
   void connected() {
     // TODO: implement connected
@@ -61,7 +63,7 @@ class _ReportsPageState extends State<ReportsPage> implements ConnectionInterfac
   }
 
   @override
-  void listen(Map<String, dynamic> data) {
+  void listen(Map<int, dynamic> data) {
     // TODO: implement listen
   }
 }
