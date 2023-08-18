@@ -1,5 +1,6 @@
 import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/main.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
@@ -77,8 +78,8 @@ class _TankPageState extends State<TankPageStfl>
     builder.link(SingleTank_.tanks, Tanks_.id.equals(widget.tankID));
     var query = builder.order(SingleTank_.createdDate).build();
     var tankData = query.find();
-
-    if (tankData.isNotEmpty) level = tankData[0].level;
+    isFilling = tankData[tankData.length - 1].isFilling;
+    if (tankData.isNotEmpty) level = tankData[tankData.length - 1].level;
     max = (tankData.length / (sat + 1)) * 7;
     max = max < 20 ? 20 : max;
     unit = 0;
@@ -101,68 +102,47 @@ class _TankPageState extends State<TankPageStfl>
   @override
   Widget build(BuildContext context) {
     return StaggeredGrid.count(
-      crossAxisCount: 5,
-      mainAxisSpacing: 22,
-      crossAxisSpacing: 12,
+      crossAxisCount: 4,
+      mainAxisSpacing: 30,
+      crossAxisSpacing: 20,
       children: [
         CustomCard(
-          cols: 5,
-          rows: 3,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Expanded(
-              flex: 4,
-              child: TankVolume(
-                  xMax: max,
-                  xMin: 0,
-                  yMax: 100,
-                  yMin: 0,
-                  chartData: levelData,
-                  onRendererCreated: (controller) =>
-                      chartController = controller),
-            ),
-          ]),
+          cols: 4,
+          rows: 1.3,
+          child: Expanded(
+            flex: 4,
+            child: TankVolume(
+                xMax: max,
+                xMin: 0,
+                yMax: 100,
+                yMin: 0,
+                chartData: levelData,
+                onRendererCreated: (controller) =>
+                    chartController = controller),
+          ),
         ),
-        Container(
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 76, 74, 76),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
-              ]),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: 150,
-                  width: 300,
-                  child: Tank(value: level, isFilling: isFilling),
-                ),
-              ]),
-        ),
+        StatsBody(
+            icon: Icons.takeout_dining_rounded,
+            title: "Tank Name:",
+            data: tank.plantName),
         CustomCard(
           cols: 2,
-          title: "Plant Name :",
-          child: Text(tank.plantName),
+          rows: 0.7,
+          child:
+              Tank(tankTitle: "tank Level", value: level, isFilling: isFilling),
         ),
-        CustomCard(
-          cols: 2,
-          title: "TDS Value :",
-          child: Text("${tank.tdsValue} PPM"),
-        ),
-        CustomCard(
-          color: isFilling
-              ? const Color.fromARGB(205, 209, 63, 22)
-              : const Color.fromARGB(205, 59, 209, 22),
-          cols: 2,
-          title: "Tank State :",
-          child: Text('${isFilling ? "Full" : "NOT Full"} '),
-        ),
-        CustomCard(
-          cols: 2,
-          title: "Total Production :",
-          child: Text('$totalIrrigation  Liter'),
-        )
+        StatsBody(
+            icon: isFilling ? Icons.battery_full : Icons.battery_0_bar,
+            title: "Tank State :",
+            data: '${isFilling ? "Full" : "NOT Full"} '),
+        StatsBody(
+            icon: Icons.spa_outlined,
+            title: "TDS Value :",
+            data: "${tank.tdsValue} PPM"),
+        StatsBody(
+            icon: Icons.water,
+            title: "Total Production :",
+            data: '$totalIrrigation  Liter'),
       ],
     );
   }
