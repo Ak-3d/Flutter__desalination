@@ -41,11 +41,8 @@ class ObjectBox {
     power = store.box<Power>();
     days = store.box<Days>();
 
-    // _flushData();
-
-    if (status.isEmpty()) {
-      _putDefault();
-    }
+    _flushData(); //TODO delete in production
+    _putDefault();
     // _putDummy();
   }
 
@@ -59,18 +56,24 @@ class ObjectBox {
   }
 
   void _putDefault() {
-    status.put(Status('Pending'));
-    status.put(Status('Running'));
-    status.put(Status('Done'));
+    if (status.isEmpty()) {
+      status.put(Status('Pending'));
+      status.put(Status('Running'));
+      status.put(Status('Done'));
+    }
 
-    tanks.put(Tanks(0, 'Drink', 120, 0));
-    tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
+    if (tanks.isEmpty()) {
+      tanks.put(Tanks(0, 'Drink', 120, 0));
+      tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
+    }
   }
 
   void _flushData() {
-    status.removeAll();
-    tanks.query(Tanks_.id.notEquals(1).or(Tanks_.id.notEquals(2))).build().remove();
-    electricity.removeAll();
+    tanks
+        .query(Tanks_.id.notEquals(1).and(Tanks_.id.notEquals(2)))
+        .build()
+        .remove();
+    power.removeAll();
     singleTank.removeAll();
     production.removeAll();
     irregation.removeAll();
