@@ -3,17 +3,17 @@ import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
+import 'package:final_project/Pages/SettingAndInfo.dart';
 import 'package:final_project/Pages/TanksPage.dart';
+import 'package:final_project/Pages/TechInfo.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
-import 'Pages/ElectricalPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
-import 'Pages/views/Report_list_view.dart';
 
 late ObjectBox objectbox;
 
@@ -82,8 +82,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/SchedulePage': (context) => const SchedulePage(),
         '/TanksPage': (context) => const TanksPage(),
+        '/Settings': (context) => const SettingAndInfo(),
+        '/TechInfo': (context) => const TechInfo(),
       },
-      // initialRoute: '/TanksPage',
+      initialRoute: '/Settings',
       // darkTheme: ThemeData.dark(),
     );
   }
