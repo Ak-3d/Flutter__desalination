@@ -34,53 +34,62 @@ class _TechInfoState extends State<TechInfo> {
 
               children: [
                 TableRow(
-                  decoration: BoxDecoration(
-          // backgroundBlendMode: BlendMode.colorDodge,
-          color: Colors.blueGrey.shade400,
-        ),
-                  children: [
-                    TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Text('Item',    
-          selectionColor: Colors.amber,
-          style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-    TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Text('Pin no',    
-          selectionColor: Colors.amber,
-          style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-    TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Text('GPIO Mode',    
-          selectionColor: Colors.amber,
-          style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-    TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: Text('Label',    
-          selectionColor: Colors.amber,
-          style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold,),
-        ),
-      ),
-    ),
-                  ]
-                  ),
+                    decoration: BoxDecoration(
+                      // backgroundBlendMode: BlendMode.colorDodge,
+                      color: Colors.blueGrey.shade400,
+                    ),
+                    children: [
+                      TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Item',
+                            selectionColor: Colors.amber,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Pin no',
+                            selectionColor: Colors.amber,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'GPIO Mode',
+                            selectionColor: Colors.amber,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text(
+                            'Label',
+                            selectionColor: Colors.amber,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
                 // FullRow('Item', 'Pin no', 'GPIO Mode', 'Label'),
                 FullRow('In Pump', '21', 'O/P', '0'),
                 FullRow('Plant valve', '16', 'O/P', '2'),
@@ -119,16 +128,15 @@ class _TechInfoState extends State<TechInfo> {
     );
   }
 
-  TableRow FullRow(String a, String b, String c, String d) {  // this function creat n cells
+  TableRow FullRow(String a, String b, String c, String d) {
+    // this function creat n cells
     return TableRow(
         decoration: BoxDecoration(
           // backgroundBlendMode: BlendMode.colorDodge,
           color: Colors.amber.shade100,
         ),
         children: [
-        
           RowCell(
-          
             content: a,
           ),
           RowCell(
@@ -144,7 +152,8 @@ class _TechInfoState extends State<TechInfo> {
   }
 }
 
-class RowCell extends StatelessWidget { //// this class creat one cell
+class RowCell extends StatelessWidget {
+  //// this class creat one cell
   final String content;
   const RowCell({
     super.key,
