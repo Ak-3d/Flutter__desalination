@@ -28,7 +28,13 @@ class _TechInfoState extends State<TechInfo> {
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Table(
-              border: TableBorder.all(color: Colors.white30),
+              border: TableBorder.all(color: Colors.black),
+              columnWidths: {
+                0: FlexColumnWidth(5),
+                1: FlexColumnWidth(2),
+                2: FlexColumnWidth(3),
+                3: FlexColumnWidth(2),
+              },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               // columnWidths:Map(),
 
@@ -36,7 +42,7 @@ class _TechInfoState extends State<TechInfo> {
                 TableRow(
                     decoration: BoxDecoration(
                       // backgroundBlendMode: BlendMode.colorDodge,
-                      color: Colors.blueGrey.shade400,
+                      color: const Color.fromARGB(255, 147, 180, 196),
                     ),
                     children: [
                       TableCell(
@@ -45,7 +51,7 @@ class _TechInfoState extends State<TechInfo> {
                           padding: EdgeInsets.all(12.0),
                           child: Text(
                             'Item',
-                            selectionColor: Colors.amber,
+                            selectionColor: Colors.blueAccent,
                             style: TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.bold),
                           ),
@@ -133,7 +139,7 @@ class _TechInfoState extends State<TechInfo> {
     return TableRow(
         decoration: BoxDecoration(
           // backgroundBlendMode: BlendMode.colorDodge,
-          color: Colors.amber.shade100,
+          color: const Color.fromARGB(255, 127, 203, 238),
         ),
         children: [
           RowCell(
@@ -169,7 +175,7 @@ class RowCell extends StatelessWidget {
         padding: EdgeInsets.all(12.0),
         child: Text(
           content,
-          selectionColor: Colors.amber,
+          selectionColor: Colors.blueGrey,
           style: TextStyle(fontSize: 12),
         ),
       ),
