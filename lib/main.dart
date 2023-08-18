@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
+import 'Pages/ElectricalPage.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
+import 'Pages/views/Report_list_view.dart';
 
 late ObjectBox objectbox;
 
