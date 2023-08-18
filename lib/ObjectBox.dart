@@ -41,12 +41,12 @@ class ObjectBox {
     electricity = store.box<Power>();
     days = store.box<Days>();
 
-    _flushData();
+    // _flushData();
 
-    // if (status.isEmpty()) {
-    //   _putDefault();
-    // }
-    _putDummy();
+    if (status.isEmpty()) {
+      _putDefault();
+    }
+    // _putDummy();
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -69,7 +69,7 @@ class ObjectBox {
 
   void _flushData() {
     status.removeAll();
-    tanks.removeAll();
+    tanks.query(Tanks_.id.notEquals(1).or(Tanks_.id.notEquals(2))).build().remove();
     electricity.removeAll();
     singleTank.removeAll();
     production.removeAll();
