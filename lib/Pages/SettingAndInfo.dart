@@ -1,4 +1,4 @@
-import 'package:final_project/Models/Schedule.dart';
+import 'package:final_project/Resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -16,26 +16,27 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Resources.bgcolor_100,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple.shade400,
-        title: Text('Setting & Support'),
+        
+        title: const Text('Setting & Support'),
         elevation: 1,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.settings,
@@ -50,21 +51,28 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
                 )
               ],
             ),
-            Divider(
+            const Divider(
               height: 15,
               thickness: 2,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            buildSettingOptionRow(context, "Account Setting", '/TdsMainPage'),
-            buildSettingOptionRow(context, "Tanks Setting", '/TanksSetup'),
-            buildSettingOptionRow(context, "Scheduling Setting", '/TanksSetup'),
-            buildSettingOptionRow(context, "TDS Setting", '/TdsMainPage'),
-            SizedBox(
+            buildSettingOptionRow(context, "Edit Password", '/PasswordSetup',
+                "You can edit the User info !!"),
+            buildSettingOptionRow(context, "Tanks Setting", '/TanksPage',
+                "View All Setup Tanks and You can edit or delete Tanks !!"),
+            buildSettingOptionRow(
+                context,
+                "Scheduling Setting",
+                '/SchedulePage',
+                "View All Recorded scheduled for each Tank and You can edit or delete schedule for each tank !!"),
+            // buildSettingOptionRow(context, "Reports", '/ReportsView',
+            // "View All Reports and issues Recorded"),
+            const SizedBox(
               height: 25,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.info,
@@ -79,15 +87,17 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
                 )
               ],
             ),
-            Divider(
+            const Divider(
               height: 15,
               thickness: 2,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            buildSettingOptionRow(context, "About the Project", '/TechInfo'),
-            buildSettingOptionRow(context, "About the App", '/TanksSetup'),
+            buildSettingOptionRow(context, "Structure Project Hardware", '/TechInfo',
+                "Show All ports and DataSheet diagram for Hardware Components  "),
+            buildSettingOptionRow(context, "About Us", '/About',
+                "about Our Version and Licenses @"),
           ],
         ),
       ),
@@ -95,11 +105,11 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
   }
 
   GestureDetector buildSettingOptionRow(
-      BuildContext context, String title, String rote) {
+      BuildContext context, String title, String rote, String tip) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, rote),
       onLongPress: () {
-        longPressedSetting(context, title, hamod);
+        longPressedSetting(context, title, tip);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -136,7 +146,7 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text("Close")),
+                  child: const Text("Close")),
             ],
           );
         });
