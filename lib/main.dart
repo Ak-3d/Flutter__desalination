@@ -1,3 +1,4 @@
+import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
@@ -11,7 +12,6 @@ import 'Core/loginPage.dart';
 import 'ObjectBox.dart';
 import 'Pages/TdsMainPage.dart';
 import 'Pages/Dashboard.dart';
-import '';
 
 late ObjectBox objectbox;
 
@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
     const title = 'Water Desalination Project';
     screenSize = MediaQuery.of(context).size;
     bool isFirst = objectbox.user.isEmpty();
+    ConnectionInterfaceWrapper.defaultInterface();
 
     return MaterialApp(
       theme: ThemeData(
