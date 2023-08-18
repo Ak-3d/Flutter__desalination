@@ -78,8 +78,11 @@ class _TankPageState extends State<TankPageStfl>
     builder.link(SingleTank_.tanks, Tanks_.id.equals(widget.tankID));
     var query = builder.order(SingleTank_.createdDate).build();
     var tankData = query.find();
-    isFilling = tankData[tankData.length - 1].isFilling;
-    if (tankData.isNotEmpty) level = tankData[tankData.length - 1].level;
+
+    if (tankData.isNotEmpty) {
+      level = tankData[tankData.length - 1].level;
+      isFilling = tankData[tankData.length - 1].isFilling;
+    }
     max = (tankData.length / (sat + 1)) * 7;
     max = max < 20 ? 20 : max;
     unit = 0;
