@@ -13,7 +13,7 @@ class _TechInfoState extends State<TechInfo> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple.shade400,
-        title: Text('Pin Configurations'),
+        title: Text('Pins Configurations'),
         elevation: 1,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -163,6 +163,7 @@ class RowCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableCell(
+      
       verticalAlignment: TableCellVerticalAlignment.middle,
       child: Padding(
         padding: EdgeInsets.all(12.0),
