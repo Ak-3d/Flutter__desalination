@@ -41,7 +41,7 @@ class ObjectBox {
     power = store.box<Power>();
     days = store.box<Days>();
 
-    _flushData();
+    // _flushData();
 
     if (status.isEmpty()) {
       _putDefault();
@@ -69,8 +69,8 @@ class ObjectBox {
 
   void _flushData() {
     status.removeAll();
-    tanks.removeAll();
-    power.removeAll();
+    tanks.query(Tanks_.id.notEquals(1).or(Tanks_.id.notEquals(2))).build().remove();
+    electricity.removeAll();
     singleTank.removeAll();
     production.removeAll();
     irregation.removeAll();

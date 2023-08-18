@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, file_names
 
 import 'package:final_project/Pages/Dashboard.dart';
+import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -160,6 +161,7 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
             child: Form(
           key: formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 alignment: Alignment.bottomLeft,
@@ -167,96 +169,116 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                 margin: const EdgeInsets.only(top: 20, right: 5, left: 10),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 15.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 1.0),
                 margin: const EdgeInsets.only(
-                    top: 1, bottom: 2, right: 1, left: 10),
-                child: TextFormField(
-                  focusNode: timeInputFocusNode,
-                  controller: timeInput, //editing controller of this TextField
-                  decoration: InputDecoration(
-                      icon: const Icon(Icons.timer), //icon of text field
-                      labelText: "Enter Time",
-                      border: const OutlineInputBorder(),
-                      suffixIcon: !validated
-                          ? const Icon(Icons.error_outline_rounded,
-                              color: Colors.red)
-                          : const SizedBox()),
-                  validator: (phoneNo) {
-                    if (phoneNo!.isEmpty) {
-                      timeInputFocusNode.requestFocus();
-                      timeInputHasFocus = true;
-                      return "You must enter Time";
-                    } else {
-                      timeInputHasFocus = false;
-                      return null;
-                    }
-                  },
-                  onChanged: (value) {
-                    if (value.isNotEmpty) {
-                      setState(() {
-                        validated = true;
-                        // formKey.currentState!.validate();
-                      });
-                    }
-                  }, //label text of field
+                    top: 20, bottom: 2, right: 1, left: 10),
+                child: Row(
+                  children: [
+                    Icon(Icons.timer),
+                    Text("  "),
+                    Expanded(
+                      child: TextFormField(
+                        focusNode: timeInputFocusNode,
+                        controller:
+                            timeInput, //editing controller of this TextField
+                        decoration: InputDecoration(
+                            labelText: "Enter Time",
+                            border: const OutlineInputBorder(),
+                            suffixIcon: !validated
+                                ? const Icon(Icons.error_outline_rounded,
+                                    color: Colors.red)
+                                : const SizedBox()),
+                        validator: (phoneNo) {
+                          if (phoneNo!.isEmpty) {
+                            timeInputFocusNode.requestFocus();
+                            timeInputHasFocus = true;
+                            return "You must enter Time";
+                          } else {
+                            timeInputHasFocus = false;
+                            return null;
+                          }
+                        },
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            setState(() {
+                              validated = true;
+                              // formKey.currentState!.validate();
+                            });
+                          }
+                        }, //label text of field
 
-                  readOnly:
-                      true, //set it true, so that user will not able to edit text
-                  onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      initialTime: TimeOfDay.now(),
-                      context: context,
-                      initialEntryMode: TimePickerEntryMode.inputOnly,
-                    );
+                        readOnly:
+                            true, //set it true, so that user will not able to edit text
+                        onTap: () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                            initialTime: TimeOfDay.now(),
+                            context: context,
+                            initialEntryMode: TimePickerEntryMode.inputOnly,
+                          );
 
-                    if (pickedTime != null) {
-                      print(pickedTime.format(context)); //output 10:51 PM
-                      DateTime parsedTime = DateFormat.jm()
-                          .parse(pickedTime.format(context).toString());
-                      //converting to DateTime so that we can further format on different pattern.
-                      print(parsedTime); //output 1970-01-01 22:53:00.000
-                      String formattedTime =
-                          DateFormat('HH:mm').format(parsedTime);
-                      hours = parsedTime.hour;
-                      minutes = parsedTime.minute;
-                      print("$hours : $minutes"); //output 14:59:00
-                      //DateFormat() is from intl package, you can format the time on any pattern you need.
+                          if (pickedTime != null) {
+                            print(pickedTime.format(context)); //output 10:51 PM
+                            DateTime parsedTime = DateFormat.jm()
+                                .parse(pickedTime.format(context).toString());
+                            //converting to DateTime so that we can further format on different pattern.
+                            print(parsedTime); //output 1970-01-01 22:53:00.000
+                            String formattedTime =
+                                DateFormat('HH:mm').format(parsedTime);
+                            hours = parsedTime.hour;
+                            minutes = parsedTime.minute;
+                            print("$hours : $minutes"); //output 14:59:00
+                            //DateFormat() is from intl package, you can format the time on any pattern you need.
 
-                      setState(() {
-                        timeInput.text =
-                            formattedTime; //set the value of text field.
-                      });
-                    } else {
-                      print("Time is not selected");
-                    }
-                  },
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SelectWeekDays(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    days: _days,
-                    border: false,
-                    boxDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        colors: [Color(0xFFE55CE4), Color(0xFFBB75FB)],
-                        tileMode: TileMode
-                            .repeated, // repeats the gradient over the canvas
+                            setState(() {
+                              timeInput.text =
+                                  formattedTime; //set the value of text field.
+                            });
+                          } else {
+                            print("Time is not selected");
+                          }
+                        },
                       ),
                     ),
-                    onSelect: (values) {
-                      // <== Callback to handle the selected days
-                      print(values);
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 1.0),
+                margin: const EdgeInsets.only(
+                    top: 10, bottom: 2, right: 1, left: 10),
+                child: Row(
+                  children: [
+                    Icon(Icons.calendar_today_rounded),
+                    Text("  "),
+                    Expanded(
+                      flex: 10,
+                      child: SelectWeekDays(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        days: _days,
+                        border: false,
+                        padding: 10,
+                        daysFillColor: Color.fromARGB(255, 92, 11, 255),
+                        selectedDayTextColor:
+                            Color.fromARGB(255, 255, 255, 255),
+                        unSelectedDayTextColor: Colors.grey,
+                        backgroundColor: Resources.bgcolor,
+                        boxDecoration: BoxDecoration(
+                          border:
+                              Border.all(width: 1, color: Resources.chartColor),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        onSelect: (values) {
+                          // <== Callback to handle the selected days
+                          print(values);
 
-                      selectDays = values;
-                    },
-                  ),
+                          selectDays = values;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Padding(
@@ -267,44 +289,67 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                        child: const Text(
-                          "Save",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            setState(() {
-                              validated = formKey.currentState!.validate();
-                              if (selectDays.isEmpty) {
-                                alertDialog(context, "Please Select Days",
-                                    "Error Days !!");
-                              } else {
-                                checkDialog(context);
-                              }
-                            });
-                          } else {
-                            setState(() {
-                              validated = formKey.currentState!.validate();
-                            });
-                          }
-                        }),
-                    const Spacer(flex: 3),
-                    Visibility(
-                        visible: deleteVisibleBtn,
+              SizedBox(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 2,
                         child: ElevatedButton(
                             child: const Text(
-                              "Delete",
+                              "Save",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0))),
                             onPressed: () async {
-                              checkDialogDelete(context);
-                            })),
-                  ],
+                              if (formKey.currentState!.validate()) {
+                                setState(() {
+                                  validated = formKey.currentState!.validate();
+                                  if (selectDays.isEmpty) {
+                                    alertDialog(context, "Please Select Days",
+                                        "Error Days !!");
+                                  } else {
+                                    checkDialog(context);
+                                  }
+                                });
+                              } else {
+                                setState(() {
+                                  validated = formKey.currentState!.validate();
+                                });
+                              }
+                            }),
+                      ),
+                      Spacer(
+                        flex: 1,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Visibility(
+                            visible: deleteVisibleBtn,
+                            child: ElevatedButton(
+                                child: const Text(
+                                  "Delete",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Resources.failcolor,
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0))),
+                                onPressed: () async {
+                                  checkDialogDelete(context);
+                                })),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

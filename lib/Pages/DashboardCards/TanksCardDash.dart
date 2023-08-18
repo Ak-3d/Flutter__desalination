@@ -35,11 +35,9 @@ class _TanksCardDashState extends State<TanksCardDash> {
               // decoration: BoxDecoration(border: Border.all()),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => SingleTankPage(
-                              tankID: widget.tanks[i].tanks.target!.id))));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                   return SingleTankPage(tankID: widget.tanks[i].tanks.target!.id);
+                  }));
                   //   Navigator.pushNamed(context, '/TankPage',
                   //       arguments: widget.tanks[i].tanks.target?.portNumber ?? 1);
                   // },
