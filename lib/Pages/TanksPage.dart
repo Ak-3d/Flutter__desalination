@@ -1,6 +1,7 @@
 import 'package:final_project/Components/TanksCards.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Models/Tanks.dart';
+import 'package:final_project/Resources.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -39,6 +40,7 @@ class _TanksPageState extends State<TanksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Resources.bgcolor,
       appBar: AppBar(
         title: const Text("Tanks"),
       ),

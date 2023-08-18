@@ -78,7 +78,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     final weekDay = ((nowTemp.weekday + 1) % 7) + 1;
 
     //**STATS
-    final elects = objectbox.electricity
+    final elects = objectbox.power
         .query(Power_.isBattery.equals(true))
         .order(Power_.createdDate, flags: Order.descending)
         .build()
@@ -243,7 +243,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     super.dispose();
     admin.close();
     ciw.dispose();
-    print("closed Dashbord");
+    // print("closed Dashbord");
   }
 
   @override
@@ -262,9 +262,42 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   @override
   void listen(data) {
-    setState(() {
-      status = data.toString();
-    });
+    final prodMap = data[ObjName.production.index];
+
+    if (prodMap != null) {
+      production.flowWaterPermeate =
+          double.parse(prodMap[ProductionData.preFlow.index]);
+      production.flowWaterConcentrate =
+          double.parse(prodMap[ProductionData.conFlow.index]);
+
+      setState(() {
+        production.temperatureValue =
+            double.parse(prodMap[ProductionData.temperature.index]);
+        production.tdsValue = double.parse(prodMap[ProductionData.tds.index]);
+      });
+
+      var toDeg = (production.flowWaterPermeate / 2000 * 360).toInt();
+      updateCirculeChart(cGood, dataGood, toDeg);
+      updateCirculeChart(
+          cWaste, dataWaste, production.flowWaterConcentrate.toInt());
+    }
+
+    final powerMap = data[ObjName.power.index];
+    if (powerMap != null) {
+      setState(() {
+        electricity.batteryLevel =
+            double.parse(powerMap[PowerData.batteryLevel.index]);
+        electricity.currentOut =
+            double.parse(powerMap[PowerData.currentOut.index]);
+        electricity.currentIn =
+            double.parse(powerMap[PowerData.currentIn.index]);
+        electricity.voltageIn =
+            double.parse(powerMap[PowerData.voltageIn.index]);
+        electricity.duration = int.parse(powerMap[PowerData.duration.index]);
+        electricity.isBattery =
+            powerMap[PowerData.isBattery.index]?.toString() == '1' ?? false;
+      });
+    }
   }
 
   List<int> degI = List<int>.generate(360, (index) => index);
