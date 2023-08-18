@@ -1,6 +1,7 @@
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
+import 'package:final_project/Pages/About.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/Pages/SettingAndInfo.dart';
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
               titleSmall: TextStyle(
                   color: Color.fromARGB(255, 71, 71, 71), fontSize: 12))),
       title: title,
-      home: systemPage(),
+      home: const Dashboard(),
 
       routes: {
         '/TdsMainPage': (context) => const TdsMainPage(),
@@ -85,8 +86,9 @@ class MyApp extends StatelessWidget {
         '/TanksPage': (context) => const TanksPage(),
         '/Settings': (context) => const SettingAndInfo(),
         '/TechInfo': (context) => const TechInfo(),
+        '/About': (context) => const About(),
       },
-      initialRoute: '/Settings',
+      // initialRoute: '/Settings',
       // darkTheme: ThemeData.dark(),
     );
   }
