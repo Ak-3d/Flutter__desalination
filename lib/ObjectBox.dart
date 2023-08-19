@@ -25,7 +25,7 @@ class ObjectBox {
   late final Box<SingleTank> singleTank;
   late final Box<Production> production;
   late final Box<Schedule> schedule;
-  late final Box<Power> electricity;
+  late final Box<Power> power;
   late final Box<Days> days;
 
   ObjectBox._create(this.store) {
@@ -38,15 +38,12 @@ class ObjectBox {
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
-    electricity = store.box<Power>();
+    power = store.box<Power>();
     days = store.box<Days>();
 
-    _flushData();
-
-    // if (status.isEmpty()) {
-    //   _putDefault();
-    // }
-    _putDummy();
+    _flushData(); //TODO delete in production
+    _putDefault();
+    // _putDummy();
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -59,18 +56,24 @@ class ObjectBox {
   }
 
   void _putDefault() {
-    status.put(Status('Pending'));
-    status.put(Status('Running'));
-    status.put(Status('Done'));
+    if (status.isEmpty()) {
+      status.put(Status('Pending'));
+      status.put(Status('Running'));
+      status.put(Status('Done'));
+    }
 
-    tanks.put(Tanks(0, 'Drink', 120, 0));
-    tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
+    if (tanks.isEmpty()) {
+      tanks.put(Tanks(0, 'Drink', 120, 0));
+      tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
+    }
   }
 
   void _flushData() {
-    status.removeAll();
-    tanks.removeAll();
-    electricity.removeAll();
+    tanks
+        .query(Tanks_.id.notEquals(1).and(Tanks_.id.notEquals(2)))
+        .build()
+        .remove();
+    power.removeAll();
     singleTank.removeAll();
     production.removeAll();
     irregation.removeAll();
@@ -101,7 +104,7 @@ class ObjectBox {
 
     for (var i = 0; i < 20; i++) {
       Power e = Power(10, 5, 2, 10, true, 1);
-      electricity.put(e);
+      power.put(e);
 
       SingleTank s = SingleTank(i * 100 / 20, false);
       s.tanks.targetId = i % 2 == 0 ? t1.id : t2.id;
