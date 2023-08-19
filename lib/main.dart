@@ -6,7 +6,7 @@ import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/Pages/SettingAndInfo.dart';
 import 'package:final_project/Pages/TanksPage.dart';
-import 'package:final_project/Pages/systemPage.dart';
+import 'package:final_project/Pages/SystemPage.dart';
 import 'package:final_project/Pages/TechInfo.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:final_project/ForgroundService.dart';
@@ -84,6 +84,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/SchedulePage': (context) => const SchedulePage(),
         '/TanksPage': (context) => const TanksPage(),
+        '/SystemPage': (context) => const SystemPage(),
         '/Settings': (context) => const SettingAndInfo(),
         '/TechInfo': (context) => const TechInfo(),
         '/About': (context) => const About(),
