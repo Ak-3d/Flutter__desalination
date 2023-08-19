@@ -39,19 +39,20 @@ Future<bool> selectTank(BuildContext context, String title) async {
         ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Confirm'),
-            onPressed: () async {
-              // await alertDialog(
-              //     context, 'Complete Process Successfully !', "Done");
-              nextPage(context);
-            },
-          ),
-          TextButton(
             child: const Text('Cancel'),
             onPressed: () {
               Navigator.pop(context, false);
             },
           ),
+          TextButton(
+            child: const Text('Confirm'),
+            onPressed: () async {
+              await alertDialog(
+                  context, 'Complete Choose Tank !', "Add new Schedule Please !");
+              nextPage(context);
+            },
+          ),
+          
         ],
       );
     },

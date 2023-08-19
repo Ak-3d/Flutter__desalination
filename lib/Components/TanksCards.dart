@@ -1,7 +1,11 @@
 import 'package:final_project/Components/CustomCard.dart';
+import 'package:final_project/Components/Tank.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
+import 'package:final_project/Resources.dart';
+import 'package:final_project/Widgets/EditButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../Pages/DashboardCards/StatsCard.dart';
 import '../Widgets/SmallTank.dart';
 
 class TanksCards extends StatefulWidget {
@@ -34,56 +38,44 @@ class _TanksCardsState extends State<TanksCards> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15.0),
-      decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 76, 74, 76),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 1)
-          ]),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+            color: Resources.bgcolor_100,
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withAlpha((255 * 0.25).toInt()),
+                  offset: const Offset(0, 7),
+                  blurRadius: 4)
+            ]),
       child: Column(children: [
         StaggeredGrid.count(
-          crossAxisCount: 5,
+          crossAxisCount: 3,
           mainAxisSpacing: 5,
           crossAxisSpacing: 10,
           children: [
-            SizedBox(
-                height: 150,
-                width: 300,
-                child: SmallTank(value: widget.quantity, isFilling: false)),
             CustomCard(
-              cols: 3,
-              title: 'Tank Name',
-              child: Text(widget.plantName),
-            ),
-            CustomCard(
+              color: const Color.fromARGB(165, 105, 30, 225),
               cols: 1,
-              title: 'Port pin',
-              child: Text(widget.portNumber.toString()),
+              rows: 0.6,
+              child: Tank(
+                  tankTitle: "tank Level",
+                  value: widget.quantity,
+                  isFilling: false),
             ),
-            CustomCard(
-              cols: 3,
-              title: 'TDS value',
-              child: Text(widget.tdsValue.toString()),
-            ),
-            SizedBox(
-              width: 100, // <-- Your width
-              height: 75,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  minimumSize: const Size(100, 40), //////// HERE
-                ),
-                onPressed: () async {
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => TanksSetup(tankId: widget.tankId)));
-                  setState(() {});
-                },
-                child: const Text('Edit'),
-              ),
-            ),
+            StatsBody(
+                icon: Icons.takeout_dining_rounded,
+                title: "Tank Name:",
+                data: widget.plantName),
+            StatsBody(
+                icon: Icons.pin_end_sharp,
+                title: 'Port pin:',
+                data: widget.portNumber.toString()),
+            StatsBody(
+                icon: Icons.spa_outlined,
+                title: 'TDS value',
+                data: widget.tdsValue.toString()),
+            EditButton(editPage: TanksSetup(tankId: widget.tankId)),
           ],
         ),
       ]),

@@ -1,4 +1,5 @@
 import 'package:final_project/Models/Schedule.dart';
+import 'package:final_project/Resources.dart';
 import 'package:final_project/Widgets/SelectTank.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -37,6 +38,7 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Resources.bgcolor,
       appBar: AppBar(
         title: const Text("All Schedules"),
       ),

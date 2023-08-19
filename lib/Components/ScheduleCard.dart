@@ -1,9 +1,12 @@
 import 'package:day_picker/day_picker.dart';
 import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/Core/ScheduleSetup.dart';
+import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
+import 'package:final_project/Widgets/EditButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../Resources.dart';
 import '../Widgets/ShowDays.dart';
 
 class ScheduleCard extends StatefulWidget {
@@ -42,76 +45,59 @@ class _ScheduleCardState extends State<ScheduleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15.0),
-      decoration: const BoxDecoration(
-          color: Color.fromARGB(14, 154, 152, 154),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-                color: Color.fromARGB(30, 0, 0, 0),
-                offset: Offset(0, 1),
-                blurRadius: 1)
-          ]),
+       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+            color: Resources.bgcolor_100,
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withAlpha((255 * 0.25).toInt()),
+                  offset: const Offset(0, 7),
+                  blurRadius: 4)
+            ]),
       child: Column(children: [
         StaggeredGrid.count(
-          crossAxisCount: 5,
-          mainAxisSpacing: 5,
+          crossAxisCount:3,
+          mainAxisSpacing: 15,
           crossAxisSpacing: 10,
           children: [
-            CustomCard(
-              cols: 5,
-              rows: 1,
+            
+        
+             StatsBody(
+                icon: Icons.takeout_dining_rounded,
+                title: "Tank Name:",
+                data: widget.plantName),
+             StatsBody(
+                icon: Icons.timer,
+                title: "Required Time:",
+                data: widget.time.toString()),
+         
+            EditButton(editPage: ScheduleSetup(
+                              tankId: widget.tankId,
+                              scheduleId: widget.scheduleId)),
+           CustomCard(
+              cols: 3,
+              rows: 0.4,
               title: 'Selected Days',
               child: Center(
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ShowDays(
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                         days: _days,
-                        border: true,
+                        border: false,
+                       
+                        daysFillColor: Resources.primaryColor,
+                        selectedDayTextColor: Colors.white,
+                        unSelectedDayTextColor: Colors.grey,
+                        daysBorderColor: Colors.grey,
                         boxDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            colors: [Color(0xFFE55CE4), Color(0xFFBB75FB)],
-                            tileMode: TileMode
-                                .repeated, // repeats the gradient over the canvas
-                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                      
+                          border: Border.all(width: 1,color: Resources.chartColor)
                         ),
                       ))),
-            ),
-            CustomCard(
-              cols: 2,
-              title: 'Tank Name',
-              child: Text(widget.plantName),
-            ),
-            CustomCard(
-              cols: 2,
-              title: 'Time',
-              child: Text(widget.time),
-            ),
-            SizedBox(
-              width: 100, // <-- Your width
-              height: 75,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  minimumSize: const Size(100, 40), //////// HERE
-                ),
-                onPressed: () async {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ScheduleSetup(
-                              tankId: widget.tankId,
-                              scheduleId: widget.scheduleId)));
-                  Navigator.pop(context);
-                },
-                child: const Text('Edit'),
-              ),
             ),
           ],
         ),
