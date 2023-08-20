@@ -222,6 +222,13 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           ),
         ),
         CustomCard(
+          title: 'IrrigationPage',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
+            child: const Text('IrrigationPage'),
+          ),
+        ),
+        CustomCard(
           child: Slider(
               value: value,
               min: 0,
