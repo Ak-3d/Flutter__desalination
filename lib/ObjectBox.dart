@@ -41,7 +41,7 @@ class ObjectBox {
     power = store.box<Power>();
     days = store.box<Days>();
 
-    _flushData(); //TODO delete in production
+    // _flushData(); //TODO delete in production
     _putDefault();
     // _putDummy();
   }
@@ -63,8 +63,8 @@ class ObjectBox {
     }
 
     if (tanks.isEmpty()) {
-      tanks.put(Tanks(0, 'Drink', 120, 0));
-      tanks.put(Tanks(1, 'Demo Plant', 500, 2000));
+      tanks.put(Tanks(1, 'Drink', 120, 0));
+      tanks.put(Tanks(2, 'Demo Plant', 500, 2000));
     }
   }
 
@@ -84,8 +84,8 @@ class ObjectBox {
 
   void _putDummy() {
     DateTime nowTemp = DateTime.now();
-    Tanks t1 = Tanks(0, 'Drink', 120, 0);
-    Tanks t2 = Tanks(1, 'Demo Plant', 120, 2000);
+    Tanks t1 = Tanks(1, 'Drink', 120, 0);
+    Tanks t2 = Tanks(2, 'Demo Plant', 120, 2000);
     tanks.put(t1);
     tanks.put(t2);
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:final_project/Components/ChartTds.dart';
+import 'package:final_project/Models/Irrigation.dart';
 import 'package:final_project/Pages/DashboardCards/TanksCardDash.dart';
 import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Models/Production.dart';
@@ -12,11 +13,13 @@ import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
 import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
 import 'package:final_project/Resources.dart';
+import 'package:final_project/Widgets/alertShow.dart';
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/Components/Common.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Components/CustomCard.dart';
@@ -49,8 +52,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   double value = 0;
   String title = '';
 
-  late Schedule schedule;
-  late DateTime? scheduleDate;
+  late IrrigationDashboardData scheduling;
 
   late Production production;
   late Power electricity;
@@ -58,7 +60,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   int colsN = 3;
 
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
-
+  String infos = '';
   String durationStr = '';
 
   late List<NamedData> irregationsData;
@@ -72,6 +74,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   late List<Tanks> tanks;
   late List<SingleTank> liveTanks;
+  late Map<int, SingleTank> mapLiveTanks;
 
   void quryDatabase() {
     DateTime nowTemp = DateTime.now();
@@ -97,6 +100,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     tanks =
         objectbox.tanks.query(Tanks_.isDeleted.equals(false)).build().find();
     liveTanks = [];
+    mapLiveTanks = {};
     for (var t in tanks) {
       SingleTank s = SingleTank(0, false);
       s.tanks.target = t;
@@ -107,23 +111,11 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
       var built = b.build();
       SingleTank temp = built.findFirst() ?? s;
       liveTanks.add(temp);
+      mapLiveTanks.addAll({t.portNumber: temp});
     }
 
     //**Schedule
-    var schBuild = objectbox.schedule
-        .query(Schedule_.hours.greaterOrEqual(nowTemp.hour))
-        .order(Schedule_.hours); //sort by hours
-    schBuild.backlink(Days_.schedule, Days_.day.equals(weekDay));
-    List<Schedule> scs = schBuild.build().find();
-
-    scs.sort((a, b) => a.mins.compareTo(b.mins)); //sort by mins
-    schedule = scs.isEmpty
-        ? Schedule(0, 0, DateTime.now())
-        : scs[0]; //check if none is found
-    scheduleDate = scs.isEmpty
-        ? null
-        : DateTime(nowTemp.year, nowTemp.month, nowTemp.day, schedule.hours,
-            schedule.mins);
+    scheduling = IrrigationDashboardData(mapLiveTanks);
 
     //**Irrigation
     irregationsData = [];
@@ -147,8 +139,11 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   void initState() {
     super.initState();
     ciw.setInterface(this);
-    print("init Dashbaord");
     quryDatabase();
+
+    //Safety
+    FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
+    FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:0'});
 
     production = Production(0, 0, 0, 0);
     dataGood = List<ColoredData>.generate(
@@ -157,6 +152,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
         360, (i) => ColoredData(i.toDouble(), '', Colors.white));
 
     Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
       updateDuration(); //update the Duration for irregation
     });
   }
@@ -184,10 +180,10 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           icon: Icons.water_drop_outlined,
         ),
         ScheduleCard(
-            schedule: schedule,
+            scheduling: scheduling,
+            infos: infos,
             duration: durationStr,
             chartData: irregationsData,
-            date: scheduleDate,
             onRendererCreated: (c) => irregationController = c),
         PowerCard(electricity: electricity),
         CustomCard(
@@ -262,15 +258,17 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   @override
   void interrupted(data) {
+    if (!mounted) return;
     setState(() {
-      status = 'Disconnect: $data';
+      status = 'Disconnect';
     });
   }
 
   @override
   void listen(data) {
-    final prodMap = data[ObjName.production.index];
+    if (!mounted) return;
 
+    final prodMap = data[ObjName.production.index];
     if (prodMap != null) {
       production.flowWaterPermeate =
           double.parse(prodMap[ProductionData.preFlow.index]);
@@ -305,6 +303,18 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             powerMap[PowerData.isBattery.index]?.toString() == '1' ?? false;
       });
     }
+
+    final tanksMap = data[ObjName.liveTank.index];
+    if (tanksMap != null) {
+      for (var i = 0; i < tanksMap.length; i++) {
+        setState(() {
+          liveTanks[i].level =
+              double.parse(tanksMap[i][SingleTanksData.level.index]);
+          liveTanks[i].isFilling =
+              tanksMap[i][SingleTanksData.isFilling.index] == '1';
+        });
+      }
+    }
   }
 
   List<int> degI = List<int>.generate(360, (index) => index);
@@ -319,22 +329,65 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   }
 
   void updateDuration() {
-    if (scheduleDate == null) {
-      if (mounted) {
-        setState(() {
-          durationStr = 'No irregations for the rest of the day';
-        });
-      }
+    if (!mounted) return;
+
+    if (scheduling.dates.isEmpty || scheduling.isFinished()) {
+      setState(() {
+        durationStr = 'No irregations for the rest of the day';
+        infos = '...';
+      });
       return;
     }
+    String tanksStrInfos = '';
+    for (var i = 0; i < scheduling.length; i++) {
+      if (scheduling.status[i] == Status.pending) {
+        final nowD = DateTime.now();
+        final diff = scheduling.dates[i].difference(nowD);
+        final hrs = diff.inHours % Duration.hoursPerDay;
+        final mins = diff.inMinutes % 60;
+        final scnds = (diff.inSeconds % Duration.secondsPerDay) % 60;
 
-    final nowD = DateTime.now();
-    final diff = scheduleDate!.difference(nowD);
-    final hrs = diff.inHours % Duration.hoursPerDay;
-    final mins = diff.inMinutes % 60;
-    final scnds = (diff.inSeconds % Duration.secondsPerDay) % 60;
-    setState(() {
-      durationStr = '$hrs hours, $mins mins, $scnds seconds';
-    });
+        if (i == scheduling.index) {
+          tanksStrInfos +=
+              '(${mapLiveTanks[scheduling.ports[i]]!.tanks.target!.plantName}: Pending) ';
+          setState(() {
+            durationStr = '$hrs hours, $mins mins, $scnds seconds';
+          });
+        }
+
+        if (scnds == 0 && mins == 0 && hrs == 0) {
+          scheduling.status[i] = Status.running;
+
+          scheduling.levels[i] =
+              mapLiveTanks[scheduling.ports[i]]!.level; //index is port for now
+          if (scheduling.ports[i] == 1) {
+            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:1'});
+          } else if (scheduling.ports[i] == 2) {
+            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:1'});
+          }
+        }
+      } else if (scheduling.status[i] == Status.running) {
+        final diffLevel =
+            scheduling.levels[i] - mapLiveTanks[scheduling.ports[i]]!.level;
+        tanksStrInfos +=
+            '(${mapLiveTanks[scheduling.ports[i]]!.tanks.target!.plantName}: $diffLevel running) ';
+
+        if (mapLiveTanks[scheduling.ports[i]]!.tanks.target!.irrigationVolume <
+            diffLevel) {
+          // alertShow(context, 'level reached', 'WOW');
+          scheduling.status[i] = Status.finished;
+          scheduling.index++;
+          if (scheduling.ports[i] == 1) {
+            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:0'});
+          } else if (scheduling.ports[i] == 2) {
+            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
+          }
+          objectbox.irregation.put(scheduling.irrigations[i]);
+        }
+      }
+      setState(() {
+        infos = tanksStrInfos;
+      });
+    }
   }
 }

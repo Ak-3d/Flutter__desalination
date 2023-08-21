@@ -103,11 +103,14 @@ class _ScheduleSetupState extends State<ScheduleSetup> {
       minutes = schedule.mins;
       timeInput.text = "${schedule.hours}:${schedule.mins}";
       var dTemp = schedule.days.cast<Days>().map<int>((e) => e.day);
+      selectDays = [];
       _days = List<DayInWeek>.generate(dayName.length, (index) {
+        if (dTemp.contains(index + 1)) {
+          selectDays.add('${index + 1}');
+        }
         return DayInWeek(dayName[index],
             dayKey: '${index + 1}', isSelected: dTemp.contains(index + 1));
       });
-
 // we can not delete the default
       if (widget.scheduleId != 0) {
         deleteVisibleBtn = true;
