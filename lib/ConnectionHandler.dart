@@ -21,7 +21,7 @@ enum SingleTanksData { port, level, isFilling }
 
 enum ProductionData { tds, temperature, preFlow, conFlow }
 
-enum PumpsAndValvesData {
+enum ActutureStatusData {
   drinkValve,
   plantValve,
   nullSpace,

@@ -210,8 +210,8 @@ void onStart(ServiceInstance service) async {
     connectionHandler.sendWebsocket('check:${timer.tick}');
   });
 
-  // connectDirectly('192.168.43.133');
-  connect();
+  connectDirectly('192.168.43.133');
+  // connect();
 }
 
 void connect() async {

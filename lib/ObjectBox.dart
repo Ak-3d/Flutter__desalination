@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:final_project/Models/Days.dart';
 import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Models/Irrigation.dart';
@@ -20,7 +22,7 @@ class ObjectBox {
   late final Box<Report> report;
   late final Box<Status> status;
   late final Box<WaterFlow> waterFlow;
-  late final Box<Irrigation> irregation;
+  late final Box<Irrigation> irrigation;
   late final Box<Tanks> tanks;
   late final Box<SingleTank> singleTank;
   late final Box<Production> production;
@@ -34,7 +36,7 @@ class ObjectBox {
     user = store.box<User>();
     production = store.box<Production>();
     schedule = store.box<Schedule>();
-    irregation = store.box<Irrigation>();
+    irrigation = store.box<Irrigation>();
     status = store.box<Status>();
     report = store.box<Report>();
     waterFlow = store.box<WaterFlow>();
@@ -42,6 +44,7 @@ class ObjectBox {
     days = store.box<Days>();
 
     // _flushData(); //TODO delete in production
+    // _putDummyProduction();
     _putDefault();
     // _putDummy();
   }
@@ -61,12 +64,6 @@ class ObjectBox {
       status.put(Status('Running'));
       status.put(Status('Done'));
     }
-    if (irregation.isEmpty()) {
-      irregation.put(Irrigation(22.22, "plantName", 2, 114.2, 0, DateTime.now()));
-      irregation.put(Irrigation(6, "plant", 12, 14.2, 2, DateTime.now()));
-      
-    }
-
     if (tanks.isEmpty()) {
       tanks.put(Tanks(1, 'Drink', 120, 0));
       tanks.put(Tanks(2, 'Demo Plant', 500, 2000));
@@ -81,10 +78,21 @@ class ObjectBox {
     power.removeAll();
     singleTank.removeAll();
     production.removeAll();
-    irregation.removeAll();
+    irrigation.removeAll();
     schedule.removeAll();
     days.removeAll();
-    irregation.removeAll();
+    irrigation.removeAll();
+  }
+
+  void _putDummyProduction() {
+    production.removeAll();
+    // final List<Production> ps = [];
+    for (var i = 0; i < 500; i++) {
+      Production p = Production(500 + 500 * sin(i * 3.14 / 100), 10, 10, 10);
+      production.put(p);
+      // ps.add(p);
+    }
+    // production.putMany(ps);
   }
 
   void _putDummy() {
@@ -127,7 +135,7 @@ class ObjectBox {
           t2.tdsValue, t2.id, nowTemp.subtract(Duration(days: i)));
       irr2.tankID = t2.id;
 
-      irregation.putMany([irr1, irr2]);
+      irrigation.putMany([irr1, irr2]);
     }
   }
 }

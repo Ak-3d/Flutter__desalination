@@ -120,7 +120,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     //**Irrigation
     irregationsData = [];
     for (var i = 0; i < tanks.length; i++) {
-      final volume = objectbox.irregation
+      final volume = objectbox.irrigation
           .query(Irrigation_.tankID
               .equals(tanks[i].id)
               .and(Irrigation_.isDeleted.equals(false)))
@@ -195,12 +195,15 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           rows: 0.8,
           cols: liveTanks.length < 4 ? 2 : 3,
           title: 'System',
-          child: SystemCard(
-            production: production,
-            cGoodRendererCreated: (c) => cGood = c,
-            dataGood: dataGood,
-            cWasteRendererCreated: (c) => cWaste = c,
-            dataWaste: dataWaste,
+          child: TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/SystemPage'),
+            child: SystemCard(
+              production: production,
+              cGoodRendererCreated: (c) => cGood = c,
+              dataGood: dataGood,
+              cWasteRendererCreated: (c) => cWaste = c,
+              dataWaste: dataWaste,
+            ),
           ),
         ),
         CustomCard(
@@ -389,7 +392,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           } else if (scheduling.ports[i] == 2) {
             FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
           }
-          objectbox.irregation.put(scheduling.irrigations[i]);
+          objectbox.irrigation.put(scheduling.irrigations[i]);
         }
       }
       setState(() {
