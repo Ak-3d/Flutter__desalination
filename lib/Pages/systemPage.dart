@@ -137,10 +137,11 @@ class SystemPageStfl extends StatefulWidget {
   State<SystemPageStfl> createState() => _SystemPageStflState();
 }
 
-class _SystemPageStflState extends State<SystemPageStfl>implements ConnectionInterface {
+class _SystemPageStflState extends State<SystemPageStfl>
+    implements ConnectionInterface {
   late ChartSeriesController chartController;
   late List<LiveData> levelData;
-   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
+  ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   late Tanks tank;
   String tankName = '';
   double tdsValue = 0;
@@ -326,19 +327,19 @@ class _SystemPageStflState extends State<SystemPageStfl>implements ConnectionInt
       ],
     );
   }
-  
+
   @override
   void connected() {
     // TODO: implement connected
   }
-  
+
   @override
   void interrupted(data) {
     // TODO: implement interrupted
   }
-  
+
   @override
-  void listen(Map<String, dynamic> data) {
+  void listen(Map<int, dynamic> data) {
     // TODO: implement listen
   }
 }

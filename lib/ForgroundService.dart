@@ -204,15 +204,14 @@ void onStart(ServiceInstance service) async {
     connectionHandler.dispose();
   });
 
-  debugPrint('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}'); //TODO Delete
-
   Timer.periodic(const Duration(seconds: 10), (timer) {
     if (!connectionHandler.isWebsocketCreated) return;
 
     connectionHandler.sendWebsocket('check:${timer.tick}');
   });
 
-  connectDirectly('192.168.0.114');
+  // connectDirectly('192.168.43.133');
+  connect();
 }
 
 void connect() async {
