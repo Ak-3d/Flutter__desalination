@@ -61,6 +61,11 @@ class ObjectBox {
       status.put(Status('Running'));
       status.put(Status('Done'));
     }
+    if (irregation.isEmpty()) {
+      irregation.put(Irrigation(22.22, "plantName", 2, 114.2, 0, DateTime.now()));
+      irregation.put(Irrigation(6, "plant", 12, 14.2, 2, DateTime.now()));
+      
+    }
 
     if (tanks.isEmpty()) {
       tanks.put(Tanks(1, 'Drink', 120, 0));
