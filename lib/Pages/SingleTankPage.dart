@@ -92,7 +92,7 @@ class _TankPageState extends State<TankPageStfl>
       return LiveData(u, tnk.level);
     }).toList();
     // debugPrint('unit at initState:$unit');
-    var qi = objectbox.irregation
+    var qi = objectbox.irrigation
         .query(Irrigation_.tankID.equals(widget.tankID))
         .build();
     // debugPrint(qi.describe());
