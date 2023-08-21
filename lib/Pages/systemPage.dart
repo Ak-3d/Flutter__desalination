@@ -338,7 +338,7 @@ class _SystemPageStflState extends State<SystemPageStfl>implements ConnectionInt
   }
   
   @override
-  void listen(Map<String, dynamic> data) {
+  void listen(Map<int, dynamic> data) {
     // TODO: implement listen
   }
 }

@@ -2,6 +2,7 @@ import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/About.dart';
+import 'package:final_project/Pages/IrrigationPage.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/Pages/SettingAndInfo.dart';
@@ -88,6 +89,7 @@ class MyApp extends StatelessWidget {
         '/Settings': (context) => const SettingAndInfo(),
         '/TechInfo': (context) => const TechInfo(),
         '/About': (context) => const About(),
+        '/IrrigationPage': (context) => const IrrigationPage(),
       },
       // initialRoute: '/Settings',
       // darkTheme: ThemeData.dark(),
