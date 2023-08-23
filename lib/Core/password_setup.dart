@@ -1,3 +1,4 @@
+import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:flutter/material.dart';
 import '../Models/User.dart';
 import '../Pages/Dashboard.dart';
@@ -12,29 +13,31 @@ class PasswordSetup extends StatefulWidget {
 }
 
 class _PasswordSetupState extends State<PasswordSetup> {
-
-   final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   bool validated = true;
 
-    TextEditingController userNameController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
   FocusNode userNameFocusNode = FocusNode();
   bool userNameHasFocus = false;
-  
-   TextEditingController passWordController = TextEditingController();
+
+  TextEditingController passWordController = TextEditingController();
   FocusNode passWordFocusNode = FocusNode();
   bool passWordHasFocus = false;
-  
+
   TextEditingController phoneNumController = TextEditingController();
   FocusNode phoneNumFocusNode = FocusNode();
   bool phoneNumHasFocus = false;
 
   late User getUser;
   late bool statue;
+  late bool first = false;
 
   void saveData() {
     if (objectbox.user.isEmpty()) {
-      getUser = User(userNameController.text, (int.parse(phoneNumController.text)), passWordController.text);
-      Navigator.pushNamed(context, '/TanksSetup');
+      getUser = User(userNameController.text,
+          (int.parse(phoneNumController.text)), passWordController.text);
+      objectbox.user.put(getUser);
+      first = true;
     } else {
       getUser.name = userNameController.text;
       getUser.phoneNumber = (int.parse(phoneNumController.text));
@@ -47,10 +50,21 @@ class _PasswordSetupState extends State<PasswordSetup> {
     statue = await alertShow(context, 'Do You want to save ?', 'Verify');
     if (statue) {
       saveData();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Dashboard()),
-          ModalRoute.withName("/Dashboard"));
+      if (first) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const TanksSetup()),
+            ModalRoute.withName("/TanksSetup"));
+      }
+      
+      else {
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Dashboard()),
+            ModalRoute.withName("/Dashboard"));
+      }
     } else {
       print('Complete not Save !');
     }
@@ -71,6 +85,8 @@ class _PasswordSetupState extends State<PasswordSetup> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
           title: const Text("Account"),
         ),
         body: SingleChildScrollView(
@@ -139,7 +155,7 @@ class _PasswordSetupState extends State<PasswordSetup> {
                         focusNode: passWordFocusNode,
                         controller: passWordController,
                         obscureText: true,
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                             labelText: "Please Enter Password",
                             border: const OutlineInputBorder(),
                             prefixIcon: const Icon(Icons.password),
@@ -174,7 +190,6 @@ class _PasswordSetupState extends State<PasswordSetup> {
                       child: Text(
                         "Enter Your PhoneNumber :",
                         style: Theme.of(context).textTheme.bodySmall,
-                         
                       )),
                   Container(
                       padding: const EdgeInsets.symmetric(
@@ -212,7 +227,6 @@ class _PasswordSetupState extends State<PasswordSetup> {
                           }
                         },
                       )),
-                  
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Row(
@@ -243,7 +257,6 @@ class _PasswordSetupState extends State<PasswordSetup> {
                                 });
                               }
                             }),
-                     
                       ],
                     ),
                   ),
