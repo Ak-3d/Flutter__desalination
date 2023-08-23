@@ -1,4 +1,3 @@
-import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:flutter/material.dart';
 import '../Models/User.dart';
 import '../Pages/Dashboard.dart';
@@ -50,21 +49,21 @@ class _PasswordSetupState extends State<PasswordSetup> {
     statue = await alertShow(context, 'Do You want to save ?', 'Verify');
     if (statue) {
       saveData();
-      if (first) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const TanksSetup()),
-            ModalRoute.withName("/TanksSetup"));
-      }
+      // if (first) {
+      //   // ignore: use_build_context_synchronously
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const TanksSetup()),
+      //       ModalRoute.withName("/TanksSetup"));
+      // }
       
-      else {
+      // else {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const Dashboard()),
             ModalRoute.withName("/Dashboard"));
-      }
+      // }
     } else {
       print('Complete not Save !');
     }
