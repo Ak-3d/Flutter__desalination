@@ -57,9 +57,11 @@ class MyApp extends StatelessWidget {
     const title = 'Water Desalination Project';
     screenSize = MediaQuery.of(context).size;
     bool isFirst = objectbox.user.isEmpty();
+    print(isFirst);
     ConnectionInterfaceWrapper.defaultInterface();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.deepPurple,
           brightness: Brightness.light,
@@ -75,8 +77,8 @@ class MyApp extends StatelessWidget {
               titleSmall: TextStyle(
                   color: Color.fromARGB(255, 71, 71, 71), fontSize: 12))),
       title: title,
-      home: const Dashboard(),
-
+      home:  objectbox.user.isEmpty() ? new  PasswordSetup(passwordId: 1) : new LoginPage(),
+    
       routes: {
         '/TdsMainPage': (context) => const TdsMainPage(),
         '/Dashboard': (context) => const Dashboard(),
@@ -92,8 +94,9 @@ class MyApp extends StatelessWidget {
         '/About': (context) => const About(),
         '/IrrigationPage': (context) => const IrrigationPage(),
         '/ManualControlPage': (context) => const ManualControlPage(),
+
       },
-      // initialRoute: '/Settings',
+      // initialRoute:  objectbox.user.isEmpty() ? '/PasswordSetup' : '/login',
       // darkTheme: ThemeData.dark(),
     );
   }
