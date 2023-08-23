@@ -3,6 +3,7 @@ import 'package:final_project/Core/Tanks_setup.dart';
 import 'package:final_project/Core/password_setup.dart';
 import 'package:final_project/Pages/About.dart';
 import 'package:final_project/Pages/IrrigationPage.dart';
+import 'package:final_project/Pages/ManualControlPage.dart';
 import 'package:final_project/Pages/ReportsExample.dart';
 import 'package:final_project/Pages/SchedulePage.dart';
 import 'package:final_project/Pages/SettingAndInfo.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         '/TechInfo': (context) => const TechInfo(),
         '/About': (context) => const About(),
         '/IrrigationPage': (context) => const IrrigationPage(),
+        '/ManualControlPage': (context) => const ManualControlPage(),
       },
       // initialRoute: '/Settings',
       // darkTheme: ThemeData.dark(),
