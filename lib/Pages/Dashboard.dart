@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:final_project/Components/ChartTds.dart';
-import 'package:final_project/Models/Irrigation.dart';
+
 import 'package:final_project/Pages/DashboardCards/TanksCardDash.dart';
 import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Models/Production.dart';
-import 'package:final_project/Models/Schedule.dart';
+
 import 'package:final_project/Models/SingleTank.dart';
 import 'package:final_project/Models/Tanks.dart';
 import 'package:final_project/Pages/DashboardCards/PowerCard.dart';
@@ -13,7 +13,7 @@ import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
 import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
 import 'package:final_project/Resources.dart';
-import 'package:final_project/Widgets/alertShow.dart';
+
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,23 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScofflding(listView: [DashboardStfl()]);
+    return Scaffold(
+      
+        appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
+              onPressed: () {
+                Navigator.pushNamed(context, '/Settings');
+              },
+            ),
+          ],
+          title: const Text("Dashboard"),
+        ),
+        body: const AppScofflding(listView: [DashboardStfl()]));
   }
 }
 
@@ -203,49 +219,57 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             dataWaste: dataWaste,
           ),
         ),
-        CustomCard(
-          title: 'TanksSetup',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
-            child: const Text('TanksSetup'),
-          ),
-        ),
-        CustomCard(
-          title: 'SystemPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/SystemPage'),
-            child: const Text('SystemPage'),
-          ),
-        ),
-        CustomCard(
-          title: 'IrrigationPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
-            child: const Text('IrrigationPage'),
-          ),
-        ),
-        CustomCard(
-          title: 'ManualControlPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/ManualControlPage'),
-            child: const Text('ManualControlPage'),
-          ),
-        ),
-        CustomCard(
-          child: Slider(
-              value: value,
-              min: 0,
-              max: 100,
-              onChanged: (v) {
-                setState(() {
-                  value = v;
-                  production.flowWaterPermeate = v.toInt().toDouble();
-                });
-                updateCirculeChart(cGood, dataGood, v.toInt());
-                // dischargeCtrl.changeSpeed(v);
-                electricity.batteryLevel = v.toInt().toDouble();
-              }),
-        ),
+        // CustomCard(
+        //   rows: 0.3,
+        //   title: 'Settings',
+        //   child: TextButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/Settings'),
+        //     child: Icon(Icons.settings),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'SystemPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/SystemPage'),
+        //     child: const Text('SystemPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'IrrigationPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
+        //     child: const Text('IrrigationPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'ManualControlPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/ManualControlPage'),
+        //     child: const Text('ManualControlPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'SettingAndInfo',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/Settings'),
+        //     child: const Text('SettingAndInfo'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   child: Slider(
+        //       value: value,
+        //       min: 0,
+        //       max: 100,
+        //       onChanged: (v) {
+        //         setState(() {
+        //           value = v;
+        //           production.flowWaterPermeate = v.toInt().toDouble();
+        //         });
+        //         updateCirculeChart(cGood, dataGood, v.toInt());
+        //         // dischargeCtrl.changeSpeed(v);
+        //         electricity.batteryLevel = v.toInt().toDouble();
+        //       }),
+        // ),
         const StaggeredGridTile.extent(
           mainAxisExtent: 100,
           crossAxisCellCount: 3,
