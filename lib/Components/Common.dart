@@ -21,6 +21,30 @@ class AppScofflding extends StatelessWidget {
       CustomCard.defaultRows = 1;
     }
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple[900],
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/Settings');
+            },
+          ),
+        ],
+      ),
       backgroundColor: Resources.bgcolor,
       // appBar: AppBar(
       //   title: Text(title),
@@ -33,7 +57,6 @@ class AppScofflding extends StatelessWidget {
         ),
       ),
       bottomSheet: Row(
-        //TODO this is temprary
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
@@ -47,6 +70,62 @@ class AppScofflding extends StatelessWidget {
                 service.startService();
               }
             },
+          ),
+          ElevatedButton(
+            child: const Text('connect direct'),
+            onPressed: () async {
+              final service = FlutterBackgroundService();
+              var isRunning = await service.isRunning();
+              if (isRunning) {
+                service.invoke("ConnectDirectly", {"ip": "192.168.43.133"});
+              } else {
+                service.startService();
+              }
+            },
+          ),
+          Row(
+            children: [
+              ElevatedButton(
+                child: const Text('plant 0'),
+                onPressed: () async {
+                  final service = FlutterBackgroundService();
+                  var isRunning = await service.isRunning();
+                  if (isRunning) {
+                    service.invoke("Send", {"msg": "plant:0"});
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: const Text('plant 1'),
+                onPressed: () async {
+                  final service = FlutterBackgroundService();
+                  var isRunning = await service.isRunning();
+                  if (isRunning) {
+                    service.invoke("Send", {"msg": "plant:1"});
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: const Text('mainpump 1'),
+                onPressed: () async {
+                  final service = FlutterBackgroundService();
+                  var isRunning = await service.isRunning();
+                  if (isRunning) {
+                    service.invoke("Send", {"msg": "mainpump:1"});
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: const Text('mainpump 0'),
+                onPressed: () async {
+                  final service = FlutterBackgroundService();
+                  var isRunning = await service.isRunning();
+                  if (isRunning) {
+                    service.invoke("Send", {"msg": "mainpump:0"});
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),

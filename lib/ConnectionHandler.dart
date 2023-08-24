@@ -21,7 +21,7 @@ enum SingleTanksData { port, level, isFilling }
 
 enum ProductionData { tds, temperature, preFlow, conFlow }
 
-enum PumpsAndValvesData {
+enum ActutureStatusData {
   drinkValve,
   plantValve,
   nullSpace,
@@ -39,57 +39,70 @@ enum PowerData {
   isBattery
 }
 
+enum ConnectionStatus {
+  connected,
+  listen,
+  disconnected,
+}
+
 class ConnectionInterfaceWrapper {
   late StreamSubscription _streamSubscription;
   static int debugInterfaces = 0;
 
   static void defaultInterface() {
-    StreamSubscription st =
-        FlutterBackgroundService().on('update').listen((data) {
+    FlutterBackgroundService().on('update').listen((data) {
       if (data == null) return;
-      var map = _convertMap(data['data']);
+      try {
+        var event = data['event'];
+        if (event != null) {
+        } else {
+          var map = _convertMap(data['data']);
 
-      final prodMap = map[ObjName.production.index];
-      if (prodMap != null) {
-        Production p = Production(
-          double.parse(prodMap[ProductionData.tds.index]),
-          double.parse(prodMap[ProductionData.conFlow.index]),
-          double.parse(prodMap[ProductionData.preFlow.index]),
-          double.parse(prodMap[ProductionData.temperature.index]),
-        );
-        objectbox.production.put(p);
-      }
+          final prodMap = map[ObjName.production.index];
+          if (prodMap != null) {
+            Production p = Production(
+              double.parse(prodMap[ProductionData.tds.index]),
+              double.parse(prodMap[ProductionData.conFlow.index]),
+              double.parse(prodMap[ProductionData.preFlow.index]),
+              double.parse(prodMap[ProductionData.temperature.index]),
+            );
+            objectbox.production.put(p);
+          }
 
-      final powerMap = map[ObjName.power.index];
-      if (powerMap != null) {
-        Power p = Power(
-            double.parse(powerMap[PowerData.voltageIn.index]),
-            double.parse(powerMap[PowerData.currentIn.index]),
-            double.parse(powerMap[PowerData.currentOut.index]),
-            double.parse(powerMap[PowerData.batteryLevel.index]),
-            powerMap[PowerData.isBattery.index]?.toString() == '1',
-            double.parse(powerMap[PowerData.duration.index]).toInt());
-        objectbox.power.put(p);
-      }
+          final powerMap = map[ObjName.power.index];
+          if (powerMap != null) {
+            Power p = Power(
+                double.parse(powerMap[PowerData.voltageIn.index]),
+                double.parse(powerMap[PowerData.currentIn.index]),
+                double.parse(powerMap[PowerData.currentOut.index]),
+                double.parse(powerMap[PowerData.batteryLevel.index]),
+                powerMap[PowerData.isBattery.index]?.toString() == '1',
+                double.parse(powerMap[PowerData.duration.index]).toInt());
+            objectbox.power.put(p);
+          }
 
-      final liveTankMap = map[ObjName.liveTank.index];
-      if (liveTankMap != null) {
-        List<SingleTank> ss = [];
-        for (var tank in liveTankMap) {
-          SingleTank s = SingleTank(
-              double.parse(tank[SingleTanksData.level.index]),
-              tank[SingleTanksData.level.index].toString() == '1');
+          final liveTankMap = map[ObjName.liveTank.index];
+          if (liveTankMap != null) {
+            List<SingleTank> ss = [];
+            for (var tank in liveTankMap) {
+              SingleTank s = SingleTank(
+                  double.parse(tank[SingleTanksData.level.index]),
+                  tank[SingleTanksData.level.index].toString() == '1');
 
-          int portNumber = int.parse(tank[SingleTanksData.port.index]);
-          int tankId = objectbox.tanks
-              .query(Tanks_.portNumber.equals(portNumber))
-              .build()
-              .findIds()[0];
+              int portNumber = int.parse(tank[SingleTanksData.port.index]);
+              int tankId = objectbox.tanks
+                  .query(Tanks_.portNumber.equals(portNumber))
+                  .build()
+                  .findIds()[0];
 
-          s.tanks.targetId = tankId;
-          ss.add(s);
+              s.tanks.targetId = tankId;
+              ss.add(s);
+            }
+            objectbox.singleTank.putMany(ss);
+          }
         }
-        objectbox.singleTank.putMany(ss);
+      } catch (e) {
+        debugPrint('Model Interface: ${e.toString()}');
       }
     }, cancelOnError: true);
   }
@@ -99,8 +112,23 @@ class ConnectionInterfaceWrapper {
       _streamSubscription =
           FlutterBackgroundService().on('update').listen((data) {
         if (data == null) return;
-        var map = _convertMap(data['data']);
-        ci.listen(map);
+        try {
+          var event = data['event'];
+          if (event != null) {
+            var stat = event['event'];
+
+            if (stat == '${ConnectionStatus.connected.index}') {
+              ci.connected();
+            } else if (stat == '${ConnectionStatus.disconnected.index}') {
+              ci.interrupted('done');
+            }
+          } else {
+            var map = _convertMap(data['data']);
+            ci.listen(map);
+          }
+        } catch (e) {
+          debugPrint('expInterface: ${e.toString()}');
+        }
       }, cancelOnError: true);
       debugInterfaces += 1; //not perfect but will do to debug
       debugPrint('added, interfaces:$debugInterfaces');
