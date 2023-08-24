@@ -60,6 +60,8 @@ class _SettingAndInfoState extends State<SettingAndInfo> {
             ),
             buildSettingOptionRow(context, "Edit Password", '/PasswordSetup',
                 "You can edit the User info !!"),
+                buildSettingOptionRow(context, "Manual Control", '/ManualControlPage',
+                "Control Pumps and Valves Manually  !!"),
             buildSettingOptionRow(context, "Tanks Setting", '/TanksPage',
                 "View All Setup Tanks and You can edit or delete Tanks !!"),
             buildSettingOptionRow(

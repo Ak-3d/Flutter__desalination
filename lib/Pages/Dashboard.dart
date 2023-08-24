@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:final_project/Components/ChartTds.dart';
-import 'package:final_project/Models/Irrigation.dart';
+
 import 'package:final_project/Pages/DashboardCards/TanksCardDash.dart';
 import 'package:final_project/Models/Power.dart';
 import 'package:final_project/Models/Production.dart';
-import 'package:final_project/Models/Schedule.dart';
+
 import 'package:final_project/Models/SingleTank.dart';
 import 'package:final_project/Models/Tanks.dart';
 import 'package:final_project/Pages/DashboardCards/PowerCard.dart';
@@ -13,7 +13,7 @@ import 'package:final_project/Pages/DashboardCards/ScheduleCard.dart';
 import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/Pages/DashboardCards/SystemCard.dart';
 import 'package:final_project/Resources.dart';
-import 'package:final_project/Widgets/alertShow.dart';
+
 import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,23 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScofflding(listView: [DashboardStfl()]);
+    return Scaffold(
+      
+        appBar: AppBar(
+          leading: null,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
+              onPressed: () {
+                Navigator.pushNamed(context, '/Settings');
+              },
+            ),
+          ],
+          title: const Text("Dashboard"),
+        ),
+        body: const AppScofflding(listView: [DashboardStfl()]));
   }
 }
 
@@ -206,6 +222,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             ),
           ),
         ),
+
         CustomCard(
           title: 'TanksSetup',
           child: ElevatedButton(
@@ -249,6 +266,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
                 electricity.batteryLevel = v.toInt().toDouble();
               }),
         ),
+
         const StaggeredGridTile.extent(
           mainAxisExtent: 100,
           crossAxisCellCount: 3,
