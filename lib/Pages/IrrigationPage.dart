@@ -17,7 +17,7 @@ class _IrrigationPageState extends State<IrrigationPage> {
   late List<IrrigationCard> irrigationCard;
   @override
   void initState() {
-    List<Irrigation> allIrrigations = objectbox.irregation.getAll();
+    List<Irrigation> allIrrigations = objectbox.irrigation.getAll();
     super.initState();
 
     irrigationCard = [];
@@ -49,7 +49,6 @@ class _IrrigationPageState extends State<IrrigationPage> {
               children: irrigationCard,
             ),
           )),
-   
     );
   }
 }

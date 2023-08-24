@@ -84,7 +84,7 @@ class _TankPageState extends State<TankPageStfl>
       isFilling = tankData[tankData.length - 1].isFilling;
     }
     max = (tankData.length / (sat + 1)) * 7;
-    max = max < 20 ? 20 : max;
+    max = max < 1000 ? 1000 : max;
     unit = 0;
     levelData = tankData.map<LiveData>((tnk) {
       final u = unit;
@@ -92,7 +92,7 @@ class _TankPageState extends State<TankPageStfl>
       return LiveData(u, tnk.level);
     }).toList();
     // debugPrint('unit at initState:$unit');
-    var qi = objectbox.irregation
+    var qi = objectbox.irrigation
         .query(Irrigation_.tankID.equals(widget.tankID))
         .build();
     // debugPrint(qi.describe());
@@ -112,17 +112,13 @@ class _TankPageState extends State<TankPageStfl>
         CustomCard(
           cols: 4,
           rows: 1.3,
-          child: Expanded(
-            flex: 4,
-            child: TankVolume(
-                xMax: max,
-                xMin: 0,
-                yMax: 100,
-                yMin: 0,
-                chartData: levelData,
-                onRendererCreated: (controller) =>
-                    chartController = controller),
-          ),
+          child: TankVolume(
+              xMax: max,
+              xMin: 0,
+              yMax: 100,
+              yMin: 0,
+              chartData: levelData,
+              onRendererCreated: (controller) => chartController = controller),
         ),
         StatsBody(
             icon: Icons.takeout_dining_rounded,

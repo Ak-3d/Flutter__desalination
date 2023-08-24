@@ -1,13 +1,17 @@
+import 'dart:math';
+
 import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/ConnectionHandler.dart';
+import 'package:final_project/Models/Production.dart';
 import 'package:final_project/Models/Tanks.dart';
 import 'package:final_project/Pages/DashboardCards/StatsCard.dart';
 import 'package:final_project/main.dart';
+import 'package:final_project/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Resources.dart';
-import 'dart:math';
+import '../Models/ActuatorStatus.dart';
 
 // ignore: must_be_immutable
 class Pump extends StatelessWidget {
@@ -105,8 +109,7 @@ class LiveData {
 }
 
 class SystemPage extends StatelessWidget {
-  final int tankId;
-  const SystemPage({Key? key, this.tankId = 1}) : super(key: key);
+  const SystemPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +125,7 @@ class SystemPage extends StatelessWidget {
             child: StaggeredGrid.count(
               crossAxisCount: 1,
               mainAxisSpacing: 10,
-              children: [SystemPageStfl(tankId: tankId)],
+              children: const [SystemPageStfl()],
             ),
           )),
     );
@@ -130,8 +133,7 @@ class SystemPage extends StatelessWidget {
 }
 
 class SystemPageStfl extends StatefulWidget {
-  final int tankId;
-  const SystemPageStfl({Key? key, this.tankId = 1}) : super(key: key);
+  const SystemPageStfl({Key? key}) : super(key: key);
 
   @override
   State<SystemPageStfl> createState() => _SystemPageStflState();
@@ -141,31 +143,58 @@ class _SystemPageStflState extends State<SystemPageStfl>
     implements ConnectionInterface {
   late ChartSeriesController chartController;
   late List<LiveData> levelData;
+
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
+  late Production production;
+  late ActuatorStatus actuatorStatus;
   late Tanks tank;
-  String tankName = '';
-  double tdsValue = 0;
-  double temp = 0;
-  double perFlow = 0;
-  double conFlow = 0;
+
   double totalWater = 0;
   int efficiency = 0;
+
+  late double maxX;
+  int step = 1;
+  double t = 0;
 
   @override
   void initState() {
     super.initState();
+    ciw.setInterface(this);
 
     levelData = [];
-    for (int i = 0; i < 200; i++) {
-      Random r = new Random();
-      levelData.add(LiveData(0.1 * i.toDouble(), (r.nextInt(1000)).toDouble()));
-    }
+    final now = DateTime.now();
+    final sat = ((now.weekday + 2) % 7) + 1;
+
+    production = Production(0, 0, 0, 0);
+    actuatorStatus = ActuatorStatus();
+
+    //database query
+    var q = objectbox.production
+        .query(Production_.createdDate.greaterOrEqual(
+            now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .order(Production_.createdDate)
+        .build(); //~/ gives
+
+    levelData = [LiveData(0, 0)];
+    t += 1;
+    levelData.addAll(q.find().map<LiveData>((e) {
+      double temp = t;
+      t += step;
+      return LiveData(temp, e.tdsValue);
+    }).toList());
+
+    maxX = levelData.length / (7 - sat) * 7;
+    maxX = maxX < 1000 ? 1000 : maxX;
+    // for (int i = 0; i < 200; i++) {
+    //   Random r = Random();
+    //   levelData.add(LiveData(0.1 * i.toDouble(), (r.nextInt(1000)).toDouble()));
+    // }
     // DataBase call
-    if (objectbox.tanks.contains(widget.tankId)) {
-      tank = objectbox.tanks.get(widget.tankId)!;
-      tankName = tank.plantName;
-      tdsValue = tank.tdsValue;
-    }
+    // if (objectbox.tanks.contains(widget.tankId)) {
+    //   tank = objectbox.tanks.get(widget.tankId)!;
+    //   tankName = tank.plantName;
+    //   tdsValue = tank.tdsValue;
+    // }
   }
 
   @override
@@ -177,6 +206,17 @@ class _SystemPageStflState extends State<SystemPageStfl>
           mainAxisSpacing: 20,
           crossAxisSpacing: 10,
           children: [
+            StatsBody(
+              title: 'Temperature',
+              data: "${production.temperatureValue} C",
+              icon: Icons.thermostat_rounded,
+            ),
+            PlaceHolderIcon(),
+            StatsBody(
+              title: 'TDS Value',
+              data: "${production.tdsValue} PPM",
+              icon: Icons.spa_rounded,
+            ),
             CustomCard(
               cols: 3,
               rows: 1.25,
@@ -186,7 +226,7 @@ class _SystemPageStflState extends State<SystemPageStfl>
                     Expanded(
                       flex: 4,
                       child: TDSChart(
-                          xMax: 7,
+                          xMax: maxX,
                           xMin: 0,
                           yMax: 1000,
                           yMin: 0,
@@ -195,21 +235,6 @@ class _SystemPageStflState extends State<SystemPageStfl>
                               chartController = controller),
                     ),
                   ]),
-            ),
-            StatsBody(
-              title: 'Tank name',
-              data: "$tankName ",
-              icon: Icons.takeout_dining_rounded,
-            ),
-            StatsBody(
-              title: 'Temperature',
-              data: "$temp C",
-              icon: Icons.thermostat_rounded,
-            ),
-            StatsBody(
-              title: 'TDS Value',
-              data: "$tdsValue PPM",
-              icon: Icons.spa_rounded,
             ),
             CustomCard(
               cols: 3,
@@ -222,12 +247,12 @@ class _SystemPageStflState extends State<SystemPageStfl>
                 children: [
                   StatsBody(
                     title: "Permeate Discharge:",
-                    data: "$perFlow Lpm",
+                    data: "${production.flowWaterPermeate} Lpm",
                     icon: Icons.water_outlined,
                   ),
                   StatsBody(
                       title: "Concentrated Discharge:",
-                      data: "$conFlow Lpm",
+                      data: "${production.flowWaterConcentrate} Lpm",
                       icon: Icons.waterfall_chart_rounded),
                 ],
               ),
@@ -271,11 +296,11 @@ class _SystemPageStflState extends State<SystemPageStfl>
                               const Spacer(
                                 flex: 1,
                               ),
-                              Pump("Input Pump", true),
+                              Pump("Input Pump", actuatorStatus.inPumps),
                               const Spacer(
                                 flex: 1,
                               ),
-                              Pump("Main Pump", true),
+                              Pump("Main Pump", actuatorStatus.mainPump),
                               const Spacer(
                                 flex: 1,
                               ),
@@ -289,11 +314,11 @@ class _SystemPageStflState extends State<SystemPageStfl>
                             const Spacer(
                               flex: 1,
                             ),
-                            Pump("Plant Pump", true),
+                            Pump("Plant Pump", actuatorStatus.plantPump),
                             const Spacer(
                               flex: 1,
                             ),
-                            Pump("Plant Valve", false),
+                            Pump("Plant Valve", actuatorStatus.plantValve),
                             const Spacer(
                               flex: 1,
                             ),
@@ -306,11 +331,11 @@ class _SystemPageStflState extends State<SystemPageStfl>
                             const Spacer(
                               flex: 1,
                             ),
-                            Pump("Drinking Pump", false),
+                            Pump("Drinking Pump", actuatorStatus.drinkPump),
                             const Spacer(
                               flex: 1,
                             ),
-                            Pump("Drinking Valve", true),
+                            Pump("Drinking Valve", actuatorStatus.drinkValve),
                             const Spacer(
                               flex: 1,
                             ),
@@ -329,6 +354,13 @@ class _SystemPageStflState extends State<SystemPageStfl>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    ciw.dispose();
+  }
+
+  @override
   void connected() {
     // TODO: implement connected
   }
@@ -340,6 +372,52 @@ class _SystemPageStflState extends State<SystemPageStfl>
 
   @override
   void listen(Map<int, dynamic> data) {
-    // TODO: implement listen
+    if (!mounted || data.isEmpty) return;
+
+    final prodMap = data[ObjName.production.index];
+    if (prodMap != null) {
+      _updateProduction(prodMap);
+    }
+
+    final actMap = data[ObjName.pumpsAndValves.index];
+    if (actMap != null) {
+      setState(() {
+        // actuatorStatus.inPumps = actMap[ActutureStatusData.inPumps.index];
+        actuatorStatus.mainPump =
+            actMap[ActutureStatusData.mainPump.index] == "1";
+        actuatorStatus.drinkPump =
+            actMap[ActutureStatusData.drinkPump.index] == "1";
+        actuatorStatus.drinkValve =
+            actMap[ActutureStatusData.drinkValve.index] == "1";
+        actuatorStatus.plantPump =
+            actMap[ActutureStatusData.plantPump.index] == "1";
+        actuatorStatus.plantValve =
+            actMap[ActutureStatusData.plantValve.index] == "1";
+      });
+    }
+  }
+
+  void _updateProduction(Map<int, dynamic> prodMap) {
+    double tds = double.parse(prodMap[ProductionData.tds.index]!);
+    setState(() {
+      production.flowWaterConcentrate =
+          double.parse(prodMap[ProductionData.conFlow.index]!);
+      production.flowWaterPermeate =
+          double.parse(prodMap[ProductionData.preFlow.index]!);
+      production.tdsValue = tds;
+      production.temperatureValue =
+          double.parse(prodMap[ProductionData.temperature.index]!);
+    });
+
+    if (t >= maxX) {
+      t = 0;
+      chartController.updateDataSource(
+          removedDataIndexes:
+              List<int>.generate(levelData.length, (index) => index));
+      levelData.clear();
+    }
+    levelData.add(LiveData(t, tds));
+    t += 1;
+    chartController.updateDataSource(addedDataIndex: levelData.length - 1);
   }
 }
