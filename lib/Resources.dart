@@ -5,7 +5,7 @@ class Resources {
   static const bgcolor = Color(0xFFE0DFE6);
   static const bgcolor_100 = Color(0xFFF1F1F4);
   static const txtColor = Color(0x00000000);
-
+static const txtColorSwitch = Color.fromARGB(255, 254, 253, 253);
   static const chartColor = primaryColor; // Color.fromARGB(255, 44, 82, 90);
   static const chartColorGrid = Color.fromARGB(168, 20, 184, 184);
   static const chartAxisColor = Color.fromARGB(255, 255, 255, 255);

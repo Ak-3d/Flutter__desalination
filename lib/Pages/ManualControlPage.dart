@@ -91,7 +91,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                               });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color:Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
@@ -147,7 +147,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                               });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color:Resources.txtColorSwitch)),
                           )),
                     ),
                     StatsBody(
@@ -192,7 +192,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                               });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color:Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
@@ -248,7 +248,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                               });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color:Resources.txtColorSwitch)),
                           )),
                     ),
                     StatsBody(
@@ -293,7 +293,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                               });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
