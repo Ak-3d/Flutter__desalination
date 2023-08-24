@@ -228,6 +228,13 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           ),
         ),
         CustomCard(
+          title: 'ManualControlPage',
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/ManualControlPage'),
+            child: const Text('ManualControlPage'),
+          ),
+        ),
+        CustomCard(
           child: Slider(
               value: value,
               min: 0,
