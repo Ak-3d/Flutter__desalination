@@ -48,7 +48,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
         cols: 2,
         rows: 1,
         child: TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/SchedulePage'),
+          onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

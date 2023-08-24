@@ -21,6 +21,30 @@ class AppScofflding extends StatelessWidget {
       CustomCard.defaultRows = 1;
     }
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple[900],
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/Settings');
+            },
+          ),
+        ],
+      ),
       backgroundColor: Resources.bgcolor,
       // appBar: AppBar(
       //   title: Text(title),
@@ -33,7 +57,6 @@ class AppScofflding extends StatelessWidget {
         ),
       ),
       bottomSheet: Row(
-        //TODO this is temprary
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
@@ -49,7 +72,7 @@ class AppScofflding extends StatelessWidget {
             },
           ),
           ElevatedButton(
-            child: Text('connect direct'),
+            child: const Text('connect direct'),
             onPressed: () async {
               final service = FlutterBackgroundService();
               var isRunning = await service.isRunning();

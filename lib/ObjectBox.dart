@@ -86,10 +86,14 @@ class ObjectBox {
 
   void _putDummyProduction() {
     production.removeAll();
+    irrigation.removeAll();
     // final List<Production> ps = [];
-    for (var i = 0; i < 500; i++) {
-      Production p = Production(500 + 500 * sin(i * 3.14 / 100), 10, 10, 10);
-      production.put(p);
+    for (int i = 0; i < 100; i++) {
+      // Production p = Production(500 + 500 * sin(i * 3.14 / 100), 10, 10, 10);
+      Irrigation ir =
+          Irrigation(i.toDouble(), 'plantName', 10, 25, 10, DateTime.now());
+      irrigation.put(ir);
+      // production.put(p);
       // ps.add(p);
     }
     // production.putMany(ps);

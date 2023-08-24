@@ -95,6 +95,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 
 void tryReconnect(String origin) {
   String d = 'trying again from: $origin';
+  srv.invoke('event', {'event': '${ConnectionStatus.disconnected.index}'});
   debugPrint(d); //TODO Delete
   updateNotification(d);
 
@@ -133,19 +134,24 @@ void udpConnected(Stream<dynamic> udp) {
   }, cancelOnError: true);
 }
 
-void webSocketConnected(Stream<dynamic>? websocket) {
-  updateNotification('Connected to websocket');
-
-  websocket!.listen((data) {
-    srv.invoke('update', {'data': data});
-    updateNotification(data.toString());
-  }, onError: (e) {
-    connectionHandler.closeWebsocket();
-    tryReconnect('websocket error');
-  }, onDone: () {
-    connectionHandler.closeWebsocket();
-    tryReconnect('websocket done');
-  }, cancelOnError: true);
+void webSocketConnected(Stream<dynamic>? websocket) async {
+  try {
+    websocket!.listen((data) {
+      srv.invoke('update', {'data': data});
+      updateNotification(data.toString());
+    }, onError: (e) {
+      connectionHandler.closeWebsocket();
+      tryReconnect('websocket error');
+    }, onDone: () {
+      connectionHandler.closeWebsocket();
+      tryReconnect('websocket done');
+    }, cancelOnError: true);
+    await websocket.first;
+    updateNotification('Connected to websocket');
+    srv.invoke('event', {'event': '${ConnectionStatus.connected.index}'});
+  } catch (e) {
+    tryReconnect('websocket connection error');
+  }
 }
 
 updateNotification(String txt) {
