@@ -20,7 +20,11 @@ class _ManualControlPageState extends State<ManualControlPage>
   bool drinkPump = false;
   bool plantValve = false;
   bool drinkValve = false;
-
+  TextEditingController tdsController = TextEditingController();
+  FocusNode tdsFocusNode = FocusNode();
+  bool tdsHasFocus = false;
+  final formKey = GlobalKey<FormState>();
+  bool validated = true;
   ConnectionInterfaceWrapper ciw = ConnectionInterfaceWrapper();
   @override
   void initState() {
@@ -46,7 +50,7 @@ class _ManualControlPageState extends State<ManualControlPage>
                 rows: 0.5,
                 title: "Main System:",
                 child: StaggeredGrid.count(
-                  crossAxisCount: 2,
+                  crossAxisCount: 3,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                   children: [
@@ -87,14 +91,35 @@ class _ManualControlPageState extends State<ManualControlPage>
                               // setState(() {
                               //   mainPump = !mainPump;
                               // });
-                                FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'mainpump:${!mainPump ? 0 : 1}'});
+                              FlutterBackgroundService().invoke('Send',
+                                  {'msg': 'mainpump:${!mainPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
                                 style:
                                     TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
+                    CustomCard(
+                        cols: 1,
+                        rows: 0.3,
+                        child: TextField(
+                          controller: tdsController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: "Please Enter TDS Value",
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              FlutterBackgroundService()
+                                  .invoke('Send', {'msg': 'setTds:${500}'});
+                            }else
+                            {
+                               FlutterBackgroundService()
+                                  .invoke('Send', {'msg': 'setTds:$value'});
+                            }
+                          },
+                        )),
                   ],
                 ),
               ),
@@ -144,8 +169,8 @@ class _ManualControlPageState extends State<ManualControlPage>
                               // setState(() {
                               //   drinkPump = !drinkPump;
                               // });
-                                FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'drinkpump:${!drinkPump ? 0 : 1}'});
+                              FlutterBackgroundService().invoke('Send',
+                                  {'msg': 'drinkpump:${!drinkPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
                                 style:
@@ -248,8 +273,8 @@ class _ManualControlPageState extends State<ManualControlPage>
                               // setState(() {
                               //   plantPump = !plantPump;
                               // });
-                                FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'plantpump:${!plantPump ? 0 : 1}'});
+                              FlutterBackgroundService().invoke('Send',
+                                  {'msg': 'plantpump:${!plantPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
                                 style:
@@ -293,9 +318,8 @@ class _ManualControlPageState extends State<ManualControlPage>
                               // setState(() {
                               //   plantValve = !plantValve;
                               // });
-                                FlutterBackgroundService().invoke('Send', {
-                                  'msg': 'plantvalve:${!plantValve ? 0 : 1}'
-                                });
+                              FlutterBackgroundService().invoke('Send',
+                                  {'msg': 'plantvalve:${!plantValve ? 0 : 1}'});
                             },
                             child: Text("Switch",
                                 style:
@@ -327,15 +351,18 @@ class _ManualControlPageState extends State<ManualControlPage>
     final pumpValve = data[ObjName.pumpsAndValves.index];
     if (pumpValve != null) {
       setState(() {
-        mainPump =
-            (pumpValve[ActutureStatusData.mainPump.index] == '0') ? true : false;
-        drinkPump =
-            (pumpValve[ActutureStatusData.drinkPump.index] == '0') ? true : false;
+        mainPump = (pumpValve[ActutureStatusData.mainPump.index] == '0')
+            ? true
+            : false;
+        drinkPump = (pumpValve[ActutureStatusData.drinkPump.index] == '0')
+            ? true
+            : false;
         drinkValve = (pumpValve[ActutureStatusData.drinkValve.index] == '0')
             ? true
             : false;
-        plantPump =
-            (pumpValve[ActutureStatusData.plantPump.index] == '0') ? true : false;
+        plantPump = (pumpValve[ActutureStatusData.plantPump.index] == '0')
+            ? true
+            : false;
         plantValve = (pumpValve[ActutureStatusData.plantValve.index] == '0')
             ? true
             : false;
