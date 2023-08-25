@@ -31,23 +31,7 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-        appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: 'Settings',
-              onPressed: () {
-                Navigator.pushNamed(context, '/Settings');
-              },
-            ),
-          ],
-          title: const Text("Dashboard"),
-        ),
-        body: const AppScofflding(listView: [DashboardStfl()]));
+    return const AppScofflding(listView: [DashboardStfl()]);
   }
 }
 
@@ -93,8 +77,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   late Map<int, SingleTank> mapLiveTanks;
 
   void quryDatabase() {
-    DateTime nowTemp = DateTime.now();
-    final weekDay = ((nowTemp.weekday + 1) % 7) + 1;
+    // DateTime nowTemp = DateTime.now();
 
     //**STATS
     final elects = objectbox.power
@@ -158,8 +141,8 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     quryDatabase();
 
     //Safety
-    FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
-    FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:0'});
+    FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:1'});
+    FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:1'});
 
     production = Production(0, 0, 0, 0);
     dataGood = List<ColoredData>.generate(
@@ -335,7 +318,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             double.parse(powerMap[PowerData.voltageIn.index]);
         electricity.duration = int.parse(powerMap[PowerData.duration.index]);
         electricity.isBattery =
-            powerMap[PowerData.isBattery.index]?.toString() == '1' ?? false;
+            powerMap[PowerData.isBattery.index]?.toString() == '1';
       });
     }
 
@@ -396,9 +379,9 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           scheduling.levels[i] =
               mapLiveTanks[scheduling.ports[i]]!.level; //index is port for now
           if (scheduling.ports[i] == 1) {
-            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:1'});
+            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:0'});
           } else if (scheduling.ports[i] == 2) {
-            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:1'});
+            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
           }
         }
       } else if (scheduling.status[i] == Status.running) {
@@ -413,9 +396,9 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
           scheduling.status[i] = Status.finished;
           scheduling.index++;
           if (scheduling.ports[i] == 1) {
-            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:0'});
+            FlutterBackgroundService().invoke('Send', {'msg': 'drinkpump:1'});
           } else if (scheduling.ports[i] == 2) {
-            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:0'});
+            FlutterBackgroundService().invoke('Send', {'msg': 'plantpump:1'});
           }
           objectbox.irrigation.put(scheduling.irrigations[i]);
         }
