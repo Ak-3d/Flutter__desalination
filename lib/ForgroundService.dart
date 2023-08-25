@@ -95,7 +95,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 
 void tryReconnect(String origin) {
   String d = 'trying again from: $origin';
-  srv.invoke('event', {'event': '${ConnectionStatus.disconnected.index}'});
+  srv.invoke('update', {'event': '${ConnectionStatus.disconnected.index}'});
   debugPrint(d); //TODO Delete
   updateNotification(d);
 
@@ -123,6 +123,8 @@ void udpConnected(Stream<dynamic> udp) {
       return;
     }
     webSocketConnected(webSocket);
+    srv.invoke('update', {'event': '${ConnectionStatus.connected.index}'});
+    updateNotification('Connected to websocket');
   }, onError: (e) {
     if (connectionHandler.isWebsocketCreated) return;
     connectionHandler.closeUDP();
@@ -146,9 +148,6 @@ void webSocketConnected(Stream<dynamic>? websocket) async {
       connectionHandler.closeWebsocket();
       tryReconnect('websocket done');
     }, cancelOnError: true);
-    await websocket.first;
-    updateNotification('Connected to websocket');
-    srv.invoke('event', {'event': '${ConnectionStatus.connected.index}'});
   } catch (e) {
     tryReconnect('websocket connection error');
   }
@@ -217,7 +216,8 @@ void onStart(ServiceInstance service) async {
   });
 
   // connectDirectly('192.168.43.133');
-  connect();
+  connectDirectly('192.168.0.114');
+  // connect();
 }
 
 void connect() async {

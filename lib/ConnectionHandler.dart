@@ -113,10 +113,8 @@ class ConnectionInterfaceWrapper {
           FlutterBackgroundService().on('update').listen((data) {
         if (data == null) return;
         try {
-          var event = data['event'];
-          if (event != null) {
-            var stat = event['event'];
-
+          var stat = data['event'];
+          if (stat != null) {
             if (stat == '${ConnectionStatus.connected.index}') {
               ci.connected();
             } else if (stat == '${ConnectionStatus.disconnected.index}') {

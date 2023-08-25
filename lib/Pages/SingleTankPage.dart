@@ -20,20 +20,10 @@ class SingleTankPage extends StatelessWidget {
     final tank = objectbox.tanks.get(tankID);
     // debugPrint('this must be built only once if it is stateless');
     return Scaffold(
-      appBar: AppBar(
-        title: Text(" ${tank!.plantName} Tank"),
-      ),
-      body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            child: StaggeredGrid.count(
-              crossAxisCount: 1,
-              mainAxisSpacing: 10,
-              children: [TankPageStfl(tankID: tankID)],
-            ),
-          )),
-    );
+        appBar: AppBar(
+          title: Text(" ${tank!.plantName} Tank"),
+        ),
+        body: TankPageStfl(tankID: tankID));
     // AppScofflding(listView: [TankPageStfl(tankID: tankID)]);
   }
 }
@@ -104,46 +94,54 @@ class _TankPageState extends State<TankPageStfl>
 
   @override
   Widget build(BuildContext context) {
-    return StaggeredGrid.count(
-      crossAxisCount: 4,
-      mainAxisSpacing: 30,
-      crossAxisSpacing: 20,
-      children: [
-        CustomCard(
-          cols: 4,
-          rows: 1.3,
-          child: TankVolume(
-              xMax: max,
-              xMin: 0,
-              yMax: 100,
-              yMin: 0,
-              chartData: levelData,
-              onRendererCreated: (controller) => chartController = controller),
-        ),
-        StatsBody(
-            icon: Icons.takeout_dining_rounded,
-            title: "Tank Name:",
-            data: tank.plantName),
-        CustomCard(
-          cols: 2,
-          rows: 0.7,
-          child:
-              Tank(tankTitle: "tank Level", value: level, isFilling: isFilling),
-        ),
-        StatsBody(
-            icon: isFilling ? Icons.battery_full : Icons.battery_0_bar,
-            title: "Tank State :",
-            data: '${isFilling ? "Full" : "NOT Full"} '),
-        StatsBody(
-            icon: Icons.spa_outlined,
-            title: "TDS Value :",
-            data: "${tank.tdsValue} PPM"),
-        StatsBody(
-            icon: Icons.water,
-            title: "Total Production :",
-            data: '$totalIrrigation  Liter'),
-      ],
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: StaggeredGrid.count(
+            crossAxisCount: 4,
+            mainAxisSpacing: 30,
+            crossAxisSpacing: 20,
+            children: [
+              CustomCard(
+                cols: 4,
+                rows: 1.3,
+                child: TankVolume(
+                    xMax: max,
+                    xMin: 0,
+                    yMax: 100,
+                    yMin: 0,
+                    chartData: levelData,
+                    onRendererCreated: (controller) =>
+                        chartController = controller),
+              ),
+              StatsBody(
+                  icon: Icons.takeout_dining_rounded,
+                  title: "Tank Name:",
+                  data: tank.plantName),
+              CustomCard(
+                cols: 2,
+                rows: 0.7,
+                child: Tank(
+                    tankTitle: "tank Level",
+                    value: level,
+                    isFilling: isFilling),
+              ),
+              StatsBody(
+                  icon: isFilling ? Icons.battery_full : Icons.battery_0_bar,
+                  title: "Tank State :",
+                  data: '${isFilling ? "Full" : "NOT Full"} '),
+              StatsBody(
+                  icon: Icons.spa_outlined,
+                  title: "TDS Value :",
+                  data: "${tank.tdsValue} PPM"),
+              StatsBody(
+                  icon: Icons.water,
+                  title: "Total Production :",
+                  data: '$totalIrrigation  Liter'),
+            ],
+          ),
+        ));
   }
 
   @override
@@ -165,19 +163,24 @@ class _TankPageState extends State<TankPageStfl>
 
   @override
   void listen(data) {
-    var obj = data['stank'];
+    if (!mounted) return;
+
+    var obj = data[ObjName.liveTank.index];
     if (obj == null) return;
 
-    isFilling = obj['isFill'] == '1';
-    final level = double.parse(obj['level']);
+    for (var t in obj) {
+      if (t[SingleTanksData.port.index] != '${tank.portNumber}') return;
+      final level = double.parse(t[SingleTanksData.level.index]);
 
-    if (mounted) {
-      //this to double check that the page is disposed
-      setState(() {
-        this.level = level;
-      });
+      if (mounted) {
+        //this to double check that the page is disposed
+        setState(() {
+          isFilling = t[SingleTanksData.isFilling.index] == '1';
+          this.level = level;
+        });
+      }
+      updateGraph(level);
     }
-    updateGraph(level);
 
     // debugPrint('unit: $unit');
     // debugPrint('listenning in tank page');

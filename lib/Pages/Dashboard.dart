@@ -87,13 +87,22 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
         .find();
     electricity = elects.isEmpty ? Power(0, 0, 0, 0, false, 0) : elects[0];
 
-    totalPower = elects.fold<double>(
-        0,
-        (previousValue, element) =>
-            ((element.currentOut * 36) + previousValue)); //TODO 10***
+    totalPower = elects
+        .fold<double>(
+            0,
+            (previousValue, element) =>
+                ((element.currentOut * 36) + previousValue))
+        .toInt()
+        .toDouble(); //TODO 10***
 
-    totalProduction = objectbox.production.getAll().fold<double>(0,
-        (previousValue, element) => previousValue + element.flowWaterPermeate);
+    totalProduction = objectbox.production
+        .getAll()
+        .fold<double>(
+            0,
+            (previousValue, element) =>
+                previousValue + element.flowWaterPermeate)
+        .toInt()
+        .toDouble();
 
     //**TANKS
     tanks =
@@ -205,51 +214,49 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
             ),
           ),
         ),
-
-        CustomCard(
-          title: 'TanksSetup',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
-            child: const Text('TanksSetup'),
-          ),
-        ),
-        CustomCard(
-          title: 'SystemPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/SystemPage'),
-            child: const Text('SystemPage'),
-          ),
-        ),
-        CustomCard(
-          title: 'IrrigationPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
-            child: const Text('IrrigationPage'),
-          ),
-        ),
-        CustomCard(
-          title: 'ManualControlPage',
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/ManualControlPage'),
-            child: const Text('ManualControlPage'),
-          ),
-        ),
-        CustomCard(
-          child: Slider(
-              value: value,
-              min: 0,
-              max: 100,
-              onChanged: (v) {
-                setState(() {
-                  value = v;
-                  production.flowWaterPermeate = v.toInt().toDouble();
-                });
-                updateCirculeChart(cGood, dataGood, v.toInt());
-                // dischargeCtrl.changeSpeed(v);
-                electricity.batteryLevel = v.toInt().toDouble();
-              }),
-        ),
-
+        // CustomCard(
+        //   title: 'TanksSetup',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/TanksPage'),
+        //     child: const Text('TanksSetup'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'SystemPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/SystemPage'),
+        //     child: const Text('SystemPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'IrrigationPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/IrrigationPage'),
+        //     child: const Text('IrrigationPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   title: 'ManualControlPage',
+        //   child: ElevatedButton(
+        //     onPressed: () => Navigator.pushNamed(context, '/ManualControlPage'),
+        //     child: const Text('ManualControlPage'),
+        //   ),
+        // ),
+        // CustomCard(
+        //   child: Slider(
+        //       value: value,
+        //       min: 0,
+        //       max: 100,
+        //       onChanged: (v) {
+        //         setState(() {
+        //           value = v;
+        //           production.flowWaterPermeate = v.toInt().toDouble();
+        //         });
+        //         updateCirculeChart(cGood, dataGood, v.toInt());
+        //         // dischargeCtrl.changeSpeed(v);
+        //         electricity.batteryLevel = v.toInt().toDouble();
+        //       }),
+        // ),
         const StaggeredGridTile.extent(
           mainAxisExtent: 100,
           crossAxisCellCount: 3,
@@ -269,6 +276,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
 
   @override
   void connected() {
+    if (!mounted) return;
     setState(() {
       status = 'Connected';
     });
@@ -285,6 +293,10 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   @override
   void listen(data) {
     if (!mounted) return;
+
+    setState(() {
+      status = 'Connected';
+    });
 
     final prodMap = data[ObjName.production.index];
     if (prodMap != null) {
@@ -326,10 +338,10 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
     if (tanksMap != null) {
       for (var i = 0; i < tanksMap.length; i++) {
         setState(() {
-          liveTanks[i].level =
-              double.parse(tanksMap[i][SingleTanksData.level.index]);
-          liveTanks[i].isFilling =
-              tanksMap[i][SingleTanksData.isFilling.index] == '1';
+          mapLiveTanks[int.parse(tanksMap[i][SingleTanksData.port.index])]!
+              .level = double.parse(tanksMap[i][SingleTanksData.level.index]);
+          mapLiveTanks[int.parse(tanksMap[i][SingleTanksData.port.index])]!
+              .isFilling = tanksMap[i][SingleTanksData.isFilling.index] == '1';
         });
       }
     }

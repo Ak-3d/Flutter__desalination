@@ -1,4 +1,3 @@
-
 import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/ConnectionHandler.dart';
 import 'package:final_project/Models/Production.dart';
@@ -176,14 +175,17 @@ class _SystemPageStflState extends State<SystemPageStfl>
 
     levelData = [LiveData(0, 0)];
     t += 1;
-    levelData.addAll(q.find().map<LiveData>((e) {
-      double temp = t;
-      t += step;
-      return LiveData(temp, e.tdsValue);
-    }).toList());
+    // levelData.addAll(q.find().map<LiveData>((e) {
+    //   double temp = t;
+    //   t += step;
+    //   return LiveData(temp, e.tdsValue);
+    // }).toList());
 
-    maxX = levelData.length / (7 - sat) * 7;
-    maxX = maxX < 1000 ? 1000 : maxX;
+    // maxX = levelData.length / (7 - sat) * 7;
+    // maxX = maxX < 1000 ? 1000 : maxX;
+
+    maxX = 1000;
+
     // for (int i = 0; i < 200; i++) {
     //   Random r = Random();
     //   levelData.add(LiveData(0.1 * i.toDouble(), (r.nextInt(1000)).toDouble()));
@@ -210,7 +212,7 @@ class _SystemPageStflState extends State<SystemPageStfl>
               data: "${production.temperatureValue} C",
               icon: Icons.thermostat_rounded,
             ),
-            PlaceHolderIcon(),
+            const PlaceHolderIcon(),
             StatsBody(
               title: 'TDS Value',
               data: "${production.tdsValue} PPM",

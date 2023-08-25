@@ -66,7 +66,7 @@ class PowerCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            '${electricity.batteryLevel} %',
+                            '${electricity.batteryLevel.toInt()} %',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
@@ -78,7 +78,7 @@ class PowerCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            '${electricity.currentOut * 36 / 1000} WH',
+                            '${(electricity.currentOut * 36 * 100).toInt() / 100} WH',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
