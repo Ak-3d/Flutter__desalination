@@ -84,14 +84,15 @@ class _ManualControlPageState extends State<ManualControlPage>
                               /////// HERE
                             ),
                             onPressed: () {
-                              setState(() {
-                                mainPump = !mainPump;
+                              // setState(() {
+                              //   mainPump = !mainPump;
+                              // });
                                 FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'mainpump:${mainPump ? 1 : 0}'});
-                              });
+                                    {'msg': 'mainpump:${!mainPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
-                                style: TextStyle(color:Resources.txtColorSwitch)),
+                                style:
+                                    TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
@@ -140,14 +141,15 @@ class _ManualControlPageState extends State<ManualControlPage>
                               /////// HERE
                             ),
                             onPressed: () {
-                              setState(() {
-                                drinkPump = !drinkPump;
+                              // setState(() {
+                              //   drinkPump = !drinkPump;
+                              // });
                                 FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'drinkpump:${drinkPump ? 1 : 0}'});
-                              });
+                                    {'msg': 'drinkpump:${!drinkPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
-                                style: TextStyle(color:Resources.txtColorSwitch)),
+                                style:
+                                    TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                     StatsBody(
@@ -184,15 +186,17 @@ class _ManualControlPageState extends State<ManualControlPage>
                               /////// HERE
                             ),
                             onPressed: () {
-                              setState(() {
-                                drinkValve = !drinkValve;
-                                FlutterBackgroundService().invoke('Send', {
-                                  'msg': 'drinkvalve:${drinkValve ? 1 : 0}'
-                                });
-                              });
+                              // setState(() {
+
+                              //    drinkValve = !drinkValve;
+
+                              // });
+                              FlutterBackgroundService().invoke('Send',
+                                  {'msg': 'drinkvalve:${!drinkValve ? 0 : 1}'});
                             },
                             child: Text("Switch",
-                                style: TextStyle(color:Resources.txtColorSwitch)),
+                                style:
+                                    TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
@@ -241,14 +245,15 @@ class _ManualControlPageState extends State<ManualControlPage>
                               /////// HERE
                             ),
                             onPressed: () {
-                              setState(() {
-                                plantPump = !plantPump;
+                              // setState(() {
+                              //   plantPump = !plantPump;
+                              // });
                                 FlutterBackgroundService().invoke('Send',
-                                    {'msg': 'plantpump:${plantPump ? 1 : 0}'});
-                              });
+                                    {'msg': 'plantpump:${!plantPump ? 0 : 1}'});
                             },
                             child: Text("Switch",
-                                style: TextStyle(color:Resources.txtColorSwitch)),
+                                style:
+                                    TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                     StatsBody(
@@ -285,15 +290,16 @@ class _ManualControlPageState extends State<ManualControlPage>
                               /////// HERE
                             ),
                             onPressed: () {
-                              setState(() {
-                                plantValve = !plantValve;
+                              // setState(() {
+                              //   plantValve = !plantValve;
+                              // });
                                 FlutterBackgroundService().invoke('Send', {
-                                  'msg': 'plantvalve:${plantValve ? 1 : 0}'
+                                  'msg': 'plantvalve:${!plantValve ? 0 : 1}'
                                 });
-                              });
                             },
                             child: Text("Switch",
-                                style: TextStyle(color: Resources.txtColorSwitch)),
+                                style:
+                                    TextStyle(color: Resources.txtColorSwitch)),
                           )),
                     ),
                   ],
@@ -321,15 +327,18 @@ class _ManualControlPageState extends State<ManualControlPage>
     final pumpValve = data[ObjName.pumpsAndValves.index];
     if (pumpValve != null) {
       setState(() {
-        mainPump = pumpValve[PumpsAndValvesData.mainPump.index] ? true : false;
+        mainPump =
+            (pumpValve[ActutureStatusData.mainPump.index] == '0') ? true : false;
         drinkPump =
-            pumpValve[PumpsAndValvesData.drinkPump.index] ? true : false;
-        drinkValve =
-            pumpValve[PumpsAndValvesData.drinkValve.index] ? true : false;
+            (pumpValve[ActutureStatusData.drinkPump.index] == '0') ? true : false;
+        drinkValve = (pumpValve[ActutureStatusData.drinkValve.index] == '0')
+            ? true
+            : false;
         plantPump =
-            pumpValve[PumpsAndValvesData.plantPump.index] ? true : false;
-        plantValve =
-            pumpValve[PumpsAndValvesData.plantValve.index] ? true : false;
+            (pumpValve[ActutureStatusData.plantPump.index] == '0') ? true : false;
+        plantValve = (pumpValve[ActutureStatusData.plantValve.index] == '0')
+            ? true
+            : false;
       });
     }
   }

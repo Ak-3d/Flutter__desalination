@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:final_project/Components/CustomCard.dart';
 import 'package:final_project/ConnectionHandler.dart';
@@ -384,15 +383,15 @@ class _SystemPageStflState extends State<SystemPageStfl>
       setState(() {
         // actuatorStatus.inPumps = actMap[ActutureStatusData.inPumps.index];
         actuatorStatus.mainPump =
-            actMap[ActutureStatusData.mainPump.index] == "1";
+            actMap[ActutureStatusData.mainPump.index] == "0";
         actuatorStatus.drinkPump =
-            actMap[ActutureStatusData.drinkPump.index] == "1";
+            actMap[ActutureStatusData.drinkPump.index] == "0";
         actuatorStatus.drinkValve =
-            actMap[ActutureStatusData.drinkValve.index] == "1";
+            actMap[ActutureStatusData.drinkValve.index] == "0";
         actuatorStatus.plantPump =
-            actMap[ActutureStatusData.plantPump.index] == "1";
+            actMap[ActutureStatusData.plantPump.index] == "0";
         actuatorStatus.plantValve =
-            actMap[ActutureStatusData.plantValve.index] == "1";
+            actMap[ActutureStatusData.plantValve.index] == "0";
       });
     }
   }
