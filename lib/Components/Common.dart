@@ -56,79 +56,79 @@ class AppScofflding extends StatelessWidget {
           children: listView,
         ),
       ),
-      // bottomSheet: Row(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     ElevatedButton(
-      //       child: Text(foregroundTxt),
-      //       onPressed: () async {
-      //         final service = FlutterBackgroundService();
-      //         var isRunning = await service.isRunning();
-      //         if (isRunning) {
-      //           service.invoke("stopService");
-      //         } else {
-      //           service.startService();
-      //         }
-      //       },
-      //     ),
-      //     ElevatedButton(
-      //       child: const Text('connect direct'),
-      //       onPressed: () async {
-      //         final service = FlutterBackgroundService();
-      //         var isRunning = await service.isRunning();
-      //         if (isRunning) {
-      //           service.invoke("ConnectDirectly", {"ip": "192.168.43.133"});
-      //         } else {
-      //           service.startService();
-      //         }
-      //       },
-      //     ),
-      //     Row(
-      //       children: [
-      //         ElevatedButton(
-      //           child: const Text('plant 0'),
-      //           onPressed: () async {
-      //             final service = FlutterBackgroundService();
-      //             var isRunning = await service.isRunning();
-      //             if (isRunning) {
-      //               service.invoke("Send", {"msg": "plant:0"});
-      //             }
-      //           },
-      //         ),
-      //         ElevatedButton(
-      //           child: const Text('plant 1'),
-      //           onPressed: () async {
-      //             final service = FlutterBackgroundService();
-      //             var isRunning = await service.isRunning();
-      //             if (isRunning) {
-      //               service.invoke("Send", {"msg": "plant:1"});
-      //             }
-      //           },
-      //         ),
-      //         ElevatedButton(
-      //           child: const Text('mainpump 1'),
-      //           onPressed: () async {
-      //             final service = FlutterBackgroundService();
-      //             var isRunning = await service.isRunning();
-      //             if (isRunning) {
-      //               service.invoke("Send", {"msg": "mainpump:1"});
-      //             }
-      //           },
-      //         ),
-      //         ElevatedButton(
-      //           child: const Text('mainpump 0'),
-      //           onPressed: () async {
-      //             final service = FlutterBackgroundService();
-      //             var isRunning = await service.isRunning();
-      //             if (isRunning) {
-      //               service.invoke("Send", {"msg": "mainpump:0"});
-      //             }
-      //           },
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
+      bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            child: Text(foregroundTxt),
+            onPressed: () async {
+              final service = FlutterBackgroundService();
+              var isRunning = await service.isRunning();
+              if (isRunning) {
+                service.invoke("stopService");
+              } else {
+                service.startService();
+              }
+            },
+          ),
+          //     ElevatedButton(
+          //       child: const Text('connect direct'),
+          //       onPressed: () async {
+          //         final service = FlutterBackgroundService();
+          //         var isRunning = await service.isRunning();
+          //         if (isRunning) {
+          //           service.invoke("ConnectDirectly", {"ip": "192.168.43.133"});
+          //         } else {
+          //           service.startService();
+          //         }
+          //       },
+          //     ),
+          //     Row(
+          //       children: [
+          //         ElevatedButton(
+          //           child: const Text('plant 0'),
+          //           onPressed: () async {
+          //             final service = FlutterBackgroundService();
+          //             var isRunning = await service.isRunning();
+          //             if (isRunning) {
+          //               service.invoke("Send", {"msg": "plant:0"});
+          //             }
+          //           },
+          //         ),
+          //         ElevatedButton(
+          //           child: const Text('plant 1'),
+          //           onPressed: () async {
+          //             final service = FlutterBackgroundService();
+          //             var isRunning = await service.isRunning();
+          //             if (isRunning) {
+          //               service.invoke("Send", {"msg": "plant:1"});
+          //             }
+          //           },
+          //         ),
+          //         ElevatedButton(
+          //           child: const Text('mainpump 1'),
+          //           onPressed: () async {
+          //             final service = FlutterBackgroundService();
+          //             var isRunning = await service.isRunning();
+          //             if (isRunning) {
+          //               service.invoke("Send", {"msg": "mainpump:1"});
+          //             }
+          //           },
+          //         ),
+          //         ElevatedButton(
+          //           child: const Text('mainpump 0'),
+          //           onPressed: () async {
+          //             final service = FlutterBackgroundService();
+          //             var isRunning = await service.isRunning();
+          //             if (isRunning) {
+          //               service.invoke("Send", {"msg": "mainpump:0"});
+          //             }
+          //           },
+          //         ),
+          //       ],
+          //     ),
+        ],
+      ),
     );
   }
 }
