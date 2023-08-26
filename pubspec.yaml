@@ -43,7 +43,7 @@ dependencies:
   
   objectbox: ^2.1.0
   objectbox_flutter_libs: any
-
+  flutter_launcher_icons: any
   flutter_local_notifications: ^15.1.0+1
   flutter_background_service: ^3.0.1
   flutter_background_service_android: ^4.0.1
@@ -51,7 +51,10 @@ dependencies:
   settings_ui: ^2.0.2
  
   
-  
+flutter_icons:
+  android: "launcher_icon"  
+  ios: true
+  image_path: "assets/icon/icon.png"
   # flutter_settings_screens: ^0.3.3-null-safety+2
   
 dev_dependencies:
@@ -83,6 +86,7 @@ flutter:
       - assets/images/logo.png
       - assets/projectV2.pdf
       - PDFs/projectV2.pdf
+      - assets/icon/icon.png
   #   - images/a_dot_ham.jpeg
   #  assets:projectV2
   #   - assets/projectV2.pdf
