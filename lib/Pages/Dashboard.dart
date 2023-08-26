@@ -91,7 +91,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
         .fold<double>(
             0,
             (previousValue, element) =>
-                ((element.currentOut * 36) + previousValue))
+                ((element.currentOut * 36) / 1000 + previousValue))
         .toInt()
         .toDouble(); //TODO 10***
 
@@ -179,7 +179,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
         ),
         StatsBody(
           title: 'Total Power Saved',
-          data: '$totalPower kW',
+          data: '$totalPower WH',
           icon: Icons.electrical_services,
         ),
         StatsBody(
@@ -311,8 +311,8 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
         production.tdsValue = double.parse(prodMap[ProductionData.tds.index]);
       });
 
-      var toDeg = (production.flowWaterPermeate / 2000 * 360).toInt();
-      updateCirculeChart(cGood, dataGood, toDeg);
+      // var toDeg = (production.flowWaterPermeate / 2000 * 360).toInt();
+      updateCirculeChart(cGood, dataGood, production.flowWaterPermeate.toInt());
       updateCirculeChart(
           cWaste, dataWaste, production.flowWaterConcentrate.toInt());
     }
@@ -350,7 +350,7 @@ class _Dashboard extends State<DashboardStfl> implements ConnectionInterface {
   List<int> degI = List<int>.generate(360, (index) => index);
   void updateCirculeChart(controller, coloredData, int discharage) {
     const Color c = Resources.primaryColor;
-    discharage = (discharage * 3.6).toInt();
+    discharage = (360 / 12 * discharage).toInt();
     for (var i = 0; i < coloredData.length; i++) {
       coloredData[i] =
           ColoredData(100 / 3, '$i', i <= discharage ? c : Colors.white);

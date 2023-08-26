@@ -66,7 +66,7 @@ class _ChartTdsState extends State<TDSChart> {
     return SafeArea(
         child: SfCartesianChart(
             title: ChartTitle(
-              text: "TDS During Current week",
+              text: "Today's TDS Changes",
               textStyle: Theme.of(context).textTheme.bodyLarge,
             ),
             series: <LineSeries<LiveData, double>>[
@@ -74,6 +74,7 @@ class _ChartTdsState extends State<TDSChart> {
                 onRendererCreated: widget.onRendererCreated,
                 dataSource: widget.chartData,
                 color: Resources.chartColor,
+                // xValueMapper: (LiveData sales, _) => sales.time * 0.3,
                 xValueMapper: (LiveData sales, _) => sales.time,
                 yValueMapper: (LiveData sales, _) => sales.speed,
               )
@@ -84,7 +85,7 @@ class _ChartTdsState extends State<TDSChart> {
               edgeLabelPlacement: EdgeLabelPlacement.shift,
               maximum: widget.xMin,
               minimum: widget.xMax,
-              title: AxisTitle(text: "Days"),
+              title: AxisTitle(text: "Unit in time"),
               // axisLine:
               //     const AxisLine(width: 1, color: Resources.chartAxisColor),
             ),
@@ -153,7 +154,7 @@ class _SystemPageStflState extends State<SystemPageStfl>
   late double maxX;
   int step = 1;
   double t = 0;
-
+  double v = 0;
   @override
   void initState() {
     super.initState();
@@ -168,22 +169,26 @@ class _SystemPageStflState extends State<SystemPageStfl>
 
     //database query
     var q = objectbox.production
-        .query(Production_.createdDate.greaterOrEqual(
-            now.subtract(Duration(days: sat)).millisecondsSinceEpoch))
+        .query(Production_.createdDate.greaterOrEqual(now
+            .subtract(Duration(hours: now.hour, minutes: now.minute))
+            .millisecondsSinceEpoch))
         .order(Production_.createdDate)
         .build(); //~/ gives
 
+    q.limit = 800;
+
     levelData = [LiveData(0, 0)];
     t += 1;
-    // levelData.addAll(q.find().map<LiveData>((e) {
-    //   double temp = t;
-    //   t += step;
-    //   return LiveData(temp, e.tdsValue);
-    // }).toList());
+    levelData.addAll(q.find().map<LiveData>((e) {
+      double temp = t;
+      t += step;
+      return LiveData(temp, e.tdsValue);
+    }).toList());
 
     // maxX = levelData.length / (7 - sat) * 7;
     // maxX = maxX < 1000 ? 1000 : maxX;
 
+    // maxX = 600;
     maxX = 1000;
 
     // for (int i = 0; i < 200; i++) {
@@ -213,6 +218,17 @@ class _SystemPageStflState extends State<SystemPageStfl>
               icon: Icons.thermostat_rounded,
             ),
             const PlaceHolderIcon(),
+            // CustomCard(
+            //   child: Slider(
+            //       value: v,
+            //       onChanged: (val) {
+            //         setState(() {
+            //           v = val;
+            //         });
+
+            //         update
+            //       }),
+            // ),
             StatsBody(
               title: 'TDS Value',
               data: "${production.tdsValue} PPM",
@@ -268,7 +284,7 @@ class _SystemPageStflState extends State<SystemPageStfl>
                 crossAxisSpacing: 10,
                 children: [
                   StatsBody(
-                    title: "Current Week Production",
+                    title: "Today's Production",
                     data: "$totalWater liter/week",
                     icon: Icons.battery_full,
                   ),

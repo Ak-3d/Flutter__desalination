@@ -59,8 +59,9 @@ class _TankPageState extends State<TankPageStfl>
     final sat = ((now.weekday + 2) % 7) + 1;
     final hours = now.hour;
 
-    final lastSat =
-        now.subtract(Duration(days: sat, hours: hours)).millisecondsSinceEpoch;
+    final lastSat = now
+        .subtract(Duration(hours: hours, minutes: now.minute))
+        .millisecondsSinceEpoch;
 
     var builder = objectbox.singleTank
         .query(SingleTank_.createdDate.greaterOrEqual(lastSat));
@@ -73,8 +74,9 @@ class _TankPageState extends State<TankPageStfl>
       level = tankData[tankData.length - 1].level;
       isFilling = tankData[tankData.length - 1].isFilling;
     }
-    max = (tankData.length / (sat + 1)) * 7;
-    max = max < 1000 ? 1000 : max;
+    // max = (tankData.length / (sat + 1)) * 7;
+    // max = max < 1000 ? 1000 : max;
+    max = 1000;
     unit = 0;
     levelData = tankData.map<LiveData>((tnk) {
       final u = unit;
