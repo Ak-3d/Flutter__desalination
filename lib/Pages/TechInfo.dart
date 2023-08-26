@@ -118,16 +118,6 @@ class _TechInfoState extends State<TechInfo> {
               FullRow('Vcc “5v”', '---', '---', '77'),
               FullRow('Vcc “12v”', '---', '---', '50'),
               FullRow('ground', '---', '---', '76&60'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
-              FullRow('1', '1', '1', '1'),
             ],
           ),
         ),
@@ -144,19 +134,13 @@ class _TechInfoState extends State<TechInfo> {
             //  border: Border.symmetric(inside: BorderSide(color: Resources.bgcolor_100))
             borderRadius: BorderRadius.all(Radius.circular(30))),
         children: [
-          Container(
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 53, 19, 108) ,
-                 borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(10))),
-               
-            child: RowCell(
-              content: a,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Resources.bgcolor,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Pacifico',
-              ),
+          RowCell(
+            content: a,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Color.fromARGB(255, 0, 0, 0),
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Pacifico',
             ),
           ),
           RowCell(
